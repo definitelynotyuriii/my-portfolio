@@ -1,9 +1,38 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const projectImage = "https://via.placeholder.com/400x250";
 const projectVideo = "";
 
 export default function Home() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const [status, setStatus] = useState("");
+
+  const onChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    if (!form.name || !form.email || !form.message) {
+      setStatus("Please fill out all fields.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      setStatus("Please enter a valid email.");
+      return;
+    }
+
+    setStatus("Message ready! (backend not connected yet)");
+  };
+
   return (
     <>
       <div className="home">
@@ -17,15 +46,6 @@ export default function Home() {
             <p className="lead fade-in delay-1">
               Aspiring Software Engineer / Game Developer
             </p>
-
-            <div className="btn-group fade-in delay-3">
-              <Link to="/projects" className="btn primary">
-                View Projects
-              </Link>
-              <Link to="/contact" className="btn ghost">
-                Contact Me
-              </Link>
-            </div>
           </div>
 
           {/* CARD */}
@@ -57,6 +77,52 @@ export default function Home() {
               )
             )}
           </div>
+        </section>
+
+        {/* ✅ SEND MESSAGE FORM (NEW) */}
+        <section className="contact-mini">
+          <h2>Send a Message</h2>
+
+          <form className="form-card" onSubmit={onSubmit}>
+            <div className="form-grid">
+              <div>
+                <label>Name</label>
+                <input
+                  name="name"
+                  placeholder="Your Name"
+                  value={form.name}
+                  onChange={onChange}
+                />
+              </div>
+
+              <div>
+                <label>Email</label>
+                <input
+                  name="email"
+                  type="email"
+                  placeholder="delacruztristan02@gmail.com"
+                  value={form.email}
+                  onChange={onChange}
+                />
+              </div>
+            </div>
+
+            <div className="msg-box">
+              <label>Message</label>
+              <textarea
+                name="message"
+                rows="5"
+                placeholder="Tell me about your project..."
+                value={form.message}
+                onChange={onChange}
+              />
+            </div>
+
+            <div className="form-bottom">
+              <button type="submit">Send Message</button>
+              <span className="status">{status}</span>
+            </div>
+          </form>
         </section>
       </div>
 
@@ -99,13 +165,6 @@ export default function Home() {
           color: #aaa;
         }
 
-        .desc {
-          margin-top: 10px;
-          line-height: 1.6;
-          color: #bbb;
-        }
-
-        /* BUTTONS */
         .btn-group {
           margin-top: 20px;
           display: flex;
@@ -140,26 +199,14 @@ export default function Home() {
           transform: translateY(-3px);
         }
 
-        /* HERO CARD (FIXED DESIGN) */
+        /* HERO CARD */
         .hero-card {
           background: rgba(26, 26, 36, 0.85);
           padding: 24px;
           border-radius: 20px;
           width: 300px;
           text-align: center;
-          transition: 0.3s ease;
-          backdrop-filter: blur(10px);
           border: 1px solid rgba(255, 255, 255, 0.08);
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 12px;
-        }
-
-        .hero-card:hover {
-          transform: translateY(-5px);
         }
 
         .hero-card img {
@@ -168,28 +215,12 @@ export default function Home() {
           object-fit: cover;
           border-radius: 50%;
           border: 4px solid #6c63ff;
-          box-shadow: 0 0 20px rgba(108, 99, 255, 0.4);
-          transition: 0.3s ease;
-        }
-
-        .hero-card img:hover {
-          transform: scale(1.05);
-          box-shadow: 0 0 30px rgba(108, 99, 255, 0.6);
-        }
-
-        .hero-card video {
-          width: 100%;
-          border-radius: 12px;
-          object-fit: cover;
         }
 
         .mini-info {
-          margin-top: 8px;
           font-size: 13px;
           color: #aaa;
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
+          margin-top: 10px;
         }
 
         /* ABOUT */
@@ -213,32 +244,76 @@ export default function Home() {
           padding: 8px 12px;
           border-radius: 20px;
           font-size: 13px;
-          transition: 0.3s ease;
         }
 
-        .badge:hover {
+        /* FORM */
+        .contact-mini {
+          margin-top: 80px;
+        }
+
+        .contact-mini h2 {
+          font-size: 28px;
+          margin-bottom: 15px;
+        }
+
+        .form-card {
+          background: rgba(26, 26, 36, 0.85);
+          padding: 20px;
+          border-radius: 16px;
+          border: 1px solid rgba(255,255,255,0.08);
+          max-width: 700px;
+        }
+
+        .form-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+        }
+
+        label {
+          font-size: 13px;
+          color: #aaa;
+          display: block;
+          margin-bottom: 5px;
+        }
+
+        input, textarea {
+          width: 100%;
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #333;
+          background: #12121a;
+          color: #fff;
+        }
+
+        .msg-box {
+          margin-top: 12px;
+        }
+
+        .form-bottom {
+          display: flex;
+          gap: 12px;
+          margin-top: 12px;
+          align-items: center;
+        }
+
+        button {
           background: #6c63ff;
-          transform: scale(1.05);
+          color: white;
+          border: none;
+          padding: 10px 16px;
+          border-radius: 8px;
+          cursor: pointer;
         }
 
-        /* ANIMATION */
-        .fade-in {
-          opacity: 0;
-          animation: fadeIn 0.8s forwards;
+        .status {
+          font-size: 13px;
+          color: #aaa;
         }
 
-        .delay-1 { animation-delay: 0.2s; }
-        .delay-2 { animation-delay: 0.4s; }
-        .delay-3 { animation-delay: 0.6s; }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
+        @media (max-width: 900px) {
+          .form-grid {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>
