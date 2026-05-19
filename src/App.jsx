@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Routes, Route, NavLink } from "react-router-dom";
 import Projects from "./pages/Projects.jsx";
 import Certificates from "./pages/Certificates.jsx";
@@ -27,6 +27,7 @@ function Navbar() {
 function Home() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState({ msg: "", type: "" });
+  const glitchRef = useRef(null);
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -45,7 +46,49 @@ function Home() {
 
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
-  const skills = ["HTML", "CSS", "JavaScript", "Java", "Python", "React", "SQL", "Git", "Game Dev"];
+  // Glitch name swap effect
+  useEffect(() => {
+    const el = glitchRef.current;
+    if (!el) return;
+    const names = ["Tristan", "Yuri"];
+    let idx = 0;
+    const interval = setInterval(() => {
+      idx = (idx + 1) % names.length;
+      setTimeout(() => {
+        el.textContent = names[idx];
+        el.setAttribute("data-text", names[idx]);
+      }, 2550);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Scroll reveal effect
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("revealed");
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  const skills = [
+    { name: "HTML",       logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
+    { name: "CSS",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" },
+    { name: "JavaScript", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
+    { name: "Java",       logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" },
+    { name: "Python",     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
+    { name: "React",      logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+    { name: "SQL",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
+    { name: "Git",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
+    { name: "Game Dev",   logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg" },
+  ];
 
   const education = [
     {
@@ -82,8 +125,10 @@ function Home() {
           </div>
           <h1 className="hero-name">
             Hi, I'm<br />
-            <span className="accent-text">Tristan</span>{" "}
-            <span className="accent2-text">Dela Cruz</span>
+            <span className="glitch-wrap">
+              <span className="glitch-text" ref={glitchRef} data-text="Tristan">Tristan</span>
+            </span>{" "}
+            <span className="accent2-text"></span>
           </h1>
           <p className="hero-sub">
             Aspiring Software Engineer and Game Developer, focused on continuous learning and improving skills through consistent hard work and practice. Passionate about Designing, efficient code and developing immersive digital experiences. Always exploring new technologies and challenging myself to grow and become better in software and game development.
@@ -100,9 +145,16 @@ function Home() {
 
         {/* PROFILE CARD */}
         <div className="profile-card">
+          <div className="card-scan-line" />
+          <div className="corner corner-tl" />
+          <div className="corner corner-tr" />
+          <div className="corner corner-bl" />
+          <div className="corner corner-br" />
           <div className="avatar-wrap">
             <img src="/imgs/TRISTAN.jpeg" alt="Tristan Dela Cruz" />
             <div className="avatar-ring" />
+            <div className="avatar-ring2" />
+            <div className="orbit-dot" />
           </div>
           <div className="profile-name">Tristan Dela Cruz</div>
           <div className="profile-role">Computer Engineering Student</div>
@@ -115,33 +167,46 @@ function Home() {
           <div className="avail-badge">
             <span className="avail-dot" /> Available for hire
           </div>
+          <div className="stat-chips">
+            <div className="stat-chip chip-float-1">
+              <span className="stat-num">3+</span>
+              <span className="stat-label">Years Learning</span>
+            </div>
+            <div className="stat-chip chip-float-2">
+              <span className="stat-num">9</span>
+              <span className="stat-label">Skills</span>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* SKILLS */}
-      <section className="section" id="about-sec">
+      <section className="section reveal" id="about-sec">
         <div className="section-header">
           <span className="section-num">01</span>
           <span className="section-label">Skills &amp; Technologies</span>
           <div className="section-line" />
         </div>
         <div className="skills-grid">
-          {skills.map((s) => (
-            <span className="skill-pill" key={s}>{s}</span>
+          {skills.map((s, i) => (
+            <div className="skill-pill" key={s.name} style={{ animationDelay: `${i * 0.07}s` }}>
+              <img src={s.logo} alt={s.name} className="skill-logo" />
+              <span>{s.name}</span>
+            </div>
           ))}
         </div>
       </section>
 
       {/* EDUCATION */}
-      <section className="section" id="edu-sec">
+      <section className="section reveal" id="edu-sec">
         <div className="section-header">
           <span className="section-num">02</span>
           <span className="section-label">Education</span>
           <div className="section-line" />
         </div>
         <div className="edu-list">
-          {education.map((e) => (
-            <div className="edu-card" key={e.school}>
+          {education.map((e, i) => (
+            <div className="edu-card reveal" key={e.school} style={{ animationDelay: `${i * 0.12}s` }}>
               <div className="edu-icon">{e.icon}</div>
               <div>
                 <div className="edu-school">{e.school}</div>
@@ -159,7 +224,7 @@ function Home() {
       </section>
 
       {/* CONTACT */}
-      <section className="section" id="contact-sec">
+      <section className="section reveal" id="contact-sec">
         <div className="section-header">
           <span className="section-num">03</span>
           <span className="section-label">Send a Message</span>
@@ -196,7 +261,6 @@ function Home() {
 export default function App() {
   return (
     <>
-      {/* BACKGROUND ORBS — visible site-wide */}
       <div className="orb orb1" />
       <div className="orb orb2" />
       <div className="orb orb3" />
@@ -214,7 +278,6 @@ export default function App() {
 
       <Footer />
 
-      {/* ─── ALL STYLES ─────────────────────────────────────────────────────── */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
@@ -242,191 +305,131 @@ export default function App() {
         }
 
         /* ── BACKGROUND ─────────────────────────────────────────── */
-        .orb {
-          position: fixed;
-          border-radius: 50%;
-          filter: blur(100px);
-          pointer-events: none;
-          z-index: 0;
-        }
-        .orb1 {
-          width: 600px; height: 600px;
-          background: rgba(124,108,250,0.13);
-          top: -150px; right: -150px;
-          animation: orbFloat 10s ease-in-out infinite alternate;
-        }
-        .orb2 {
-          width: 450px; height: 450px;
-          background: rgba(250,108,159,0.08);
-          bottom: 100px; left: -120px;
-          animation: orbFloat 14s ease-in-out infinite alternate-reverse;
-        }
-        .orb3 {
-          width: 300px; height: 300px;
-          background: rgba(100,200,255,0.05);
-          top: 50%; left: 50%;
-          transform: translate(-50%, -50%);
-          animation: orbFloat 18s ease-in-out infinite alternate;
-        }
-        @keyframes orbFloat {
-          from { transform: translateY(0px); }
-          to   { transform: translateY(30px); }
-        }
+        .orb { position: fixed; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0; }
+        .orb1 { width: 600px; height: 600px; background: rgba(124,108,250,0.13); top: -150px; right: -150px; animation: orbFloat 10s ease-in-out infinite alternate; }
+        .orb2 { width: 450px; height: 450px; background: rgba(250,108,159,0.08); bottom: 100px; left: -120px; animation: orbFloat 14s ease-in-out infinite alternate-reverse; }
+        .orb3 { width: 300px; height: 300px; background: rgba(100,200,255,0.05); top: 50%; left: 50%; transform: translate(-50%, -50%); animation: orbFloat 18s ease-in-out infinite alternate; }
+        @keyframes orbFloat { from { transform: translateY(0px); } to { transform: translateY(30px); } }
 
         /* ── CONTAINER ──────────────────────────────────────────── */
-        .container {
-          width: 100%;
-          max-width: 1000px;
-          margin: 0 auto;
-          position: relative;
-          z-index: 1;
-        }
+        .container { width: 100%; max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
 
         /* ── NAVBAR ─────────────────────────────────────────────── */
-        .navbar {
-          position: sticky;
-          top: 0;
-          z-index: 100;
-          background: rgba(8,8,16,0.8);
-          backdrop-filter: blur(16px);
-          border-bottom: 1px solid var(--border);
-        }
-        .nav-inner {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 16px 24px;
-        }
-        .nav-brand {
-          font-family: 'Syne', sans-serif;
-          font-weight: 800;
-          font-size: 20px;
-          color: var(--text);
-          letter-spacing: -0.5px;
-        }
+        .navbar { position: sticky; top: 0; z-index: 100; background: rgba(8,8,16,0.8); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; }
+        .nav-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--text); letter-spacing: -0.5px; }
         .brand-dot { color: var(--accent); }
         .nav-links { display: flex; gap: 24px; }
-        .nav-links a {
-          text-decoration: none;
-          color: var(--muted);
-          font-size: 14px;
-          position: relative;
-          transition: color 0.2s;
-          padding: 4px 0;
-        }
+        .nav-links a { text-decoration: none; color: var(--muted); font-size: 14px; position: relative; transition: color 0.2s; padding: 4px 0; }
         .nav-links a:hover { color: var(--text); }
-        .nav-links a::after {
-          content: "";
-          position: absolute;
-          left: 0; bottom: -2px;
-          width: 0%; height: 1.5px;
-          background: var(--accent);
-          transition: width 0.25s ease;
-        }
+        .nav-links a::after { content: ""; position: absolute; left: 0; bottom: -2px; width: 0%; height: 1.5px; background: var(--accent); transition: width 0.25s ease; }
         .nav-links a:hover::after { width: 100%; }
         .nav-links a.active { color: var(--accent); }
         .nav-links a.active::after { width: 100%; }
 
         /* ── MAIN ───────────────────────────────────────────────── */
         .main-content { padding: 60px 24px 100px; }
-
-        /* ── HOME WRAP ──────────────────────────────────────────── */
         .home-wrap { display: flex; flex-direction: column; gap: 0; }
 
         /* ── HERO ───────────────────────────────────────────────── */
-        .hero {
-          display: grid;
-          grid-template-columns: 1fr auto;
-          gap: 48px;
-          align-items: center;
-          margin-bottom: 96px;
-          animation: fadeSlideUp 0.6s 0.05s ease both;
-        }
+        .hero { display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center; margin-bottom: 96px; animation: fadeSlideUp 0.6s 0.05s ease both; }
         .hero-left { display: flex; flex-direction: column; gap: 22px; }
-
-        .hero-tag {
-          display: inline-flex; align-items: center; gap: 8px;
-          background: rgba(124,108,250,0.1); border: 1px solid rgba(124,108,250,0.22);
-          padding: 6px 14px; border-radius: 100px; font-size: 12px; color: #a89ef5;
-          width: fit-content;
-        }
-        .hero-tag-dot {
-          display: inline-block; width: 6px; height: 6px;
-          border-radius: 50%; background: var(--accent);
-          animation: pulse 2s infinite;
-        }
-
-        /* ── FIXED: name is smaller and tighter ── */
-        .hero-name {
-          font-family: 'Syne', sans-serif;
-          font-weight: 700;
-          font-size: clamp(28px, 4.5vw, 44px);
-          line-height: 1.1;
-          letter-spacing: -1px;
-        }
+        .hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(124,108,250,0.1); border: 1px solid rgba(124,108,250,0.22); padding: 6px 14px; border-radius: 100px; font-size: 12px; color: #a89ef5; width: fit-content; }
+        .hero-tag-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+        .hero-name { font-family: 'Syne', sans-serif; font-weight: 600; font-size: clamp(30px, 4.5vw, 44px); line-height: 1.0; letter-spacing: 1px; }
         .accent-text  { color: var(--accent); }
         .accent2-text { color: var(--accent2); }
 
-        .hero-sub { font-size: 15px; color: var(--muted); line-height: 1.75; max-width: 400px; }
+        /* ── GLITCH NAME EFFECT ─────────────────────────────────── */
+        .glitch-wrap { display: inline-block; position: relative; }
+        .glitch-text { display: inline-block; color: var(--accent); position: relative; animation: glitchCycle 3s infinite; }
+        .glitch-text::before, .glitch-text::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; overflow: hidden; color: var(--accent); }
+        .glitch-text::before { left: 2px; text-shadow: -2px 0 #fa6c9f; clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%); animation: glitchTop 3s infinite; }
+        .glitch-text::after  { left: -2px; text-shadow: 2px 0 #00eaff; clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%); animation: glitchBot 3s infinite; }
+        @keyframes glitchCycle {
+          0%, 85%   { transform: none; opacity: 1; }
+          86%       { transform: skewX(-8deg); opacity: 0.9; }
+          87%       { transform: skewX(6deg) translateX(4px); }
+          88%       { transform: none; }
+          89%       { transform: translateX(-3px) skewX(3deg); }
+          90%       { transform: none; }
+          91%       { opacity: 0; }
+          92%       { opacity: 1; }
+          93%       { transform: skewX(-4deg); }
+          94%, 100% { transform: none; opacity: 1; }
+        }
+        @keyframes glitchTop {
+          0%, 85%        { opacity: 0; transform: none; }
+          86%            { opacity: 1; transform: translateX(-4px); clip-path: polygon(0 15%, 100% 15%, 100% 35%, 0 35%); }
+          87%            { transform: translateX(4px); clip-path: polygon(0 25%, 100% 25%, 100% 45%, 0 45%); }
+          88%, 91%, 100% { opacity: 0; transform: none; }
+          89%, 90%       { opacity: 1; transform: translateX(-2px); }
+        }
+        @keyframes glitchBot {
+          0%, 85%        { opacity: 0; transform: none; }
+          86%            { opacity: 1; transform: translateX(4px); clip-path: polygon(0 55%, 100% 55%, 100% 75%, 0 75%); }
+          87%            { transform: translateX(-4px); clip-path: polygon(0 65%, 100% 65%, 100% 85%, 0 85%); }
+          88%, 91%, 100% { opacity: 0; transform: none; }
+          89%, 90%       { opacity: 1; transform: translateX(2px); }
+        }
 
+        .hero-sub { font-size: 15px; color: var(--muted); line-height: 1.75; max-width: 400px; }
         .hero-btns { display: flex; gap: 12px; }
-        .btn-primary {
-          background: var(--accent); color: white; border: none;
-          padding: 11px 22px; border-radius: 10px; font-size: 14px;
-          font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer;
-          transition: transform 0.2s, box-shadow 0.2s;
-        }
+        .btn-primary { background: var(--accent); color: white; border: none; padding: 11px 22px; border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,108,250,0.35); }
-        .btn-ghost {
-          background: transparent; color: var(--muted);
-          border: 1px solid var(--border); padding: 11px 22px;
-          border-radius: 10px; font-size: 14px;
-          font-family: 'DM Sans', sans-serif; cursor: pointer;
-          transition: color 0.2s, border-color 0.2s, transform 0.2s;
-        }
+        .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 11px 22px; border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: color 0.2s, border-color 0.2s, transform 0.2s; }
         .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
 
         /* ── PROFILE CARD ───────────────────────────────────────── */
-        .profile-card {
-          width: 400px; flex-shrink: 0;
-          background: var(--card); border: 1px solid var(--border);
-          border-radius: 20px; padding: 28px 20px; text-align: center;
-          display: flex; flex-direction: column; gap: 14px; align-items: center;
-          animation: fadeSlideUp 0.6s 0.15s ease both;
-        }
-
-        /* ── FIXED: avatar bigger ── */
+        .profile-card { width: 400px; flex-shrink: 0; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px 20px; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center; animation: fadeSlideUp 0.6s 0.15s ease both; position: relative; overflow: hidden; transition: border-color 0.4s, box-shadow 0.4s; }
+        .profile-card:hover { border-color: rgba(124,108,250,0.45); box-shadow: 0 0 40px rgba(124,108,250,0.12), 0 0 80px rgba(250,108,159,0.06); }
+        .card-scan-line { position: absolute; top: -100%; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, rgba(124,108,250,0.6), rgba(0,234,255,0.4), transparent); pointer-events: none; z-index: 2; }
+        .profile-card:hover .card-scan-line { animation: scanDown 1.2s ease forwards; }
+        @keyframes scanDown { 0% { top: -2px; opacity: 1; } 100% { top: 105%; opacity: 0; } }
+        .corner { position: absolute; width: 14px; height: 14px; pointer-events: none; z-index: 3; opacity: 0; transition: opacity 0.3s; }
+        .profile-card:hover .corner { opacity: 1; }
+        .corner-tl { top: 10px; left: 10px; border-top: 1.5px solid var(--accent); border-left: 1.5px solid var(--accent); }
+        .corner-tr { top: 10px; right: 10px; border-top: 1.5px solid var(--accent); border-right: 1.5px solid var(--accent); }
+        .corner-bl { bottom: 10px; left: 10px; border-bottom: 1.5px solid var(--accent); border-left: 1.5px solid var(--accent); }
+        .corner-br { bottom: 10px; right: 10px; border-bottom: 1.5px solid var(--accent); border-right: 1.5px solid var(--accent); }
         .avatar-wrap { position: relative; width: 250px; height: 250px; }
-        .avatar-wrap img {
-          width: 100%; height: 100%; object-fit: cover;
-          border-radius: 50%; border: 3px solid var(--accent); display: block;
-        }
-        .avatar-ring {
-          position: absolute; inset: -8px; border-radius: 50%;
-          border: 1.5px dashed rgba(124,108,250,0.35);
-          animation: spin 14s linear infinite;
-        }
-        .profile-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; }
+        .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 3px solid var(--accent); display: block; transition: border-color 0.4s, filter 0.4s; }
+        .profile-card:hover .avatar-wrap img { border-color: #00eaff; filter: drop-shadow(0 0 12px rgba(124,108,250,0.5)); }
+        .avatar-ring { position: absolute; inset: -8px; border-radius: 50%; border: 1.5px dashed rgba(124,108,250,0.35); animation: spin 14s linear infinite; }
+        .avatar-ring2 { position: absolute; inset: -16px; border-radius: 50%; border: 1px solid rgba(0,234,255,0); animation: spin 6s linear infinite reverse; transition: border-color 0.4s; }
+        .profile-card:hover .avatar-ring2 { border-color: rgba(0,234,255,0.2); }
+        .orbit-dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); top: -4px; left: calc(50% - 4px); transform-origin: 50% calc(125px + 4px); animation: orbitSpin 4s linear infinite; box-shadow: 0 0 8px var(--accent); opacity: 0; transition: opacity 0.3s; }
+        .profile-card:hover .orbit-dot { opacity: 1; }
+        @keyframes orbitSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .profile-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; transition: color 0.3s; }
+        .profile-card:hover .profile-name { color: #00eaff; }
         .profile-role { font-size: 12px; color: var(--muted); line-height: 1.5; }
         .profile-info { display: flex; flex-direction: column; gap: 6px; width: 100%; }
-        .profile-info-row {
-          display: flex;
-          align-items: center;
-          justify-content: center;  /* ← add this line */
-          gap: 6px;                 /* ← also increase gap so icon and text have breathing room */
-          font-size: 12px;
-          color: var(--muted);
-          padding: 0 4px;
-        }
-        .avail-badge {
-          display: inline-flex; align-items: center; gap: 6px; font-size: 11px;
-          background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2);
-          color: #34d399; padding: 4px 12px; border-radius: 100px;
-        }
+        .profile-info-row { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: var(--muted); padding: 0 4px; }
+        .avail-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2); color: #34d399; padding: 4px 12px; border-radius: 100px; }
         .avail-dot { width: 5px; height: 5px; border-radius: 50%; background: #34d399; animation: pulse 2s infinite; }
+        .stat-chips { display: flex; gap: 10px; justify-content: center; margin-top: 4px; }
+        .stat-chip { background: rgba(124,108,250,0.08); border: 1px solid rgba(124,108,250,0.2); border-radius: 12px; padding: 8px 16px; text-align: center; display: flex; flex-direction: column; gap: 2px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
+        .profile-card:hover .stat-chip { background: rgba(124,108,250,0.14); border-color: rgba(124,108,250,0.4); }
+        .stat-num { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: var(--accent); }
+        .stat-label { font-size: 10px; color: var(--muted); }
+        .chip-float-1 { animation: chipFloat 3s ease-in-out infinite; }
+        .chip-float-2 { animation: chipFloat 3s ease-in-out infinite 0.5s; }
+        @keyframes chipFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+        /* ── SCROLL REVEAL ──────────────────────────────────────── */
+        .reveal {
+          opacity: 0;
+          transform: translateY(32px);
+          transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+        .reveal.revealed {
+          opacity: 1;
+          transform: translateY(0);
+        }
 
         /* ── SECTIONS ───────────────────────────────────────────── */
-        .section { margin-bottom: 72px; animation: fadeSlideUp 0.6s 0.2s ease both; }
+        .section { margin-bottom: 72px; }
         .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
         .section-line { flex: 1; height: 1px; background: var(--border); }
         .section-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; white-space: nowrap; }
@@ -437,9 +440,22 @@ export default function App() {
         .skill-pill {
           background: var(--bg3); border: 1px solid var(--border);
           padding: 8px 18px; border-radius: 100px; font-size: 13px; color: var(--text);
-          transition: background 0.2s, border-color 0.2s, transform 0.2s; cursor: default;
+          display: flex; align-items: center; gap: 8px;
+          opacity: 0;
+          transform: translateY(16px) scale(0.95);
+          animation: pillPop 0.4s ease forwards;
+          transition: background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+          cursor: default;
         }
-        .skill-pill:hover { background: rgba(124,108,250,0.14); border-color: rgba(124,108,250,0.4); transform: translateY(-2px); }
+        @keyframes pillPop { to { opacity: 1; transform: translateY(0) scale(1); } }
+        .skill-pill:hover {
+          background: rgba(124,108,250,0.14);
+          border-color: rgba(124,108,250,0.4);
+          transform: translateY(-3px) scale(1.05);
+          box-shadow: 0 6px 20px rgba(124,108,250,0.2);
+        }
+        .skill-logo { width: 18px; height: 18px; object-fit: contain; display: block; transition: transform 0.3s; }
+        .skill-pill:hover .skill-logo { transform: rotate(10deg) scale(1.2); }
 
         /* ── EDUCATION ──────────────────────────────────────────── */
         .edu-list { display: flex; flex-direction: column; gap: 16px; }
@@ -447,63 +463,39 @@ export default function App() {
           background: var(--card); border: 1px solid var(--border); border-radius: 16px;
           padding: 20px 24px; display: grid; grid-template-columns: 48px 1fr auto;
           gap: 16px; align-items: start;
-          transition: border-color 0.25s, transform 0.25s;
+          opacity: 0; transform: translateX(-20px);
+          transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s, opacity 0.5s;
         }
-        .edu-card:hover { border-color: rgba(124,108,250,0.3); transform: translateX(5px); }
-        .edu-icon {
-          width: 48px; height: 48px; background: rgba(124,108,250,0.1);
-          border: 1px solid rgba(124,108,250,0.2); border-radius: 12px;
-          display: flex; align-items: center; justify-content: center; font-size: 22px;
-        }
+        .edu-card.revealed { opacity: 1; transform: translateX(0); }
+        .edu-card:hover { border-color: rgba(124,108,250,0.3); transform: translateX(5px); box-shadow: 0 4px 24px rgba(124,108,250,0.08); }
+        .edu-icon { width: 48px; height: 48px; background: rgba(124,108,250,0.1); border: 1px solid rgba(124,108,250,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
         .edu-school { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 3px; }
         .edu-degree { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
         .edu-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-        .edu-tag {
-          font-size: 11px; padding: 3px 10px; border-radius: 100px;
-          background: rgba(124,108,250,0.1); border: 1px solid rgba(124,108,250,0.2); color: #a89ef5;
-        }
-        .edu-year {
-          font-size: 12px; color: var(--muted); white-space: nowrap;
-          background: var(--bg3); padding: 4px 10px; border-radius: 6px; height: fit-content;
-        }
+        .edu-tag { font-size: 11px; padding: 3px 10px; border-radius: 100px; background: rgba(124,108,250,0.1); border: 1px solid rgba(124,108,250,0.2); color: #a89ef5; transition: background 0.2s, transform 0.2s; }
+        .edu-tag:hover { background: rgba(124,108,250,0.22); transform: scale(1.05); }
+        .edu-year { font-size: 12px; color: var(--muted); white-space: nowrap; background: var(--bg3); padding: 4px 10px; border-radius: 6px; height: fit-content; }
 
         /* ── CONTACT FORM ───────────────────────────────────────── */
-        .contact-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; }
+        .contact-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; transition: border-color 0.3s, box-shadow 0.3s; }
+        .contact-card:hover { border-color: rgba(124,108,250,0.25); box-shadow: 0 0 30px rgba(124,108,250,0.07); }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
         .field { display: flex; flex-direction: column; gap: 6px; }
         .field label { font-size: 12px; color: var(--muted); letter-spacing: 0.03em; }
-        .field input, .field textarea {
-          background: var(--bg3); border: 1px solid var(--border);
-          color: var(--text); padding: 11px 14px; border-radius: 10px;
-          font-size: 14px; font-family: 'DM Sans', sans-serif;
-          outline: none; transition: border-color 0.2s, box-shadow 0.2s;
-          resize: none; width: 100%;
-        }
-        .field input:focus, .field textarea:focus {
-          border-color: rgba(124,108,250,0.5);
-          box-shadow: 0 0 0 3px rgba(124,108,250,0.1);
-        }
+        .field input, .field textarea { background: var(--bg3); border: 1px solid var(--border); color: var(--text); padding: 11px 14px; border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; resize: none; width: 100%; }
+        .field input:focus, .field textarea:focus { border-color: rgba(124,108,250,0.5); box-shadow: 0 0 0 3px rgba(124,108,250,0.1); transform: translateY(-1px); }
         .form-foot { display: flex; align-items: center; gap: 16px; margin-top: 16px; }
         .status-msg { font-size: 13px; color: var(--muted); }
         .status-ok  { color: #34d399; }
         .status-err { color: #f87171; }
 
         /* ── FOOTER ─────────────────────────────────────────────── */
-        footer {
-          text-align: center;
-          padding: 30px;
-          color: var(--muted);
-          font-size: 13px;
-          border-top: 1px solid var(--border);
-          margin-top: 60px;
-          position: relative;
-          z-index: 1;
-        }
+        footer { text-align: center; padding: 30px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); margin-top: 60px; position: relative; z-index: 1; }
 
         /* ── ANIMATIONS ─────────────────────────────────────────── */
         @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
-        @keyframes spin   { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         /* ── RESPONSIVE ─────────────────────────────────────────── */
         @media (max-width: 800px) {
@@ -516,15 +508,7 @@ export default function App() {
           .nav-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
         }
 
-       .location-icon {
-          color: #DC143C;
-          font-size: 12px;
-          margin-right: 0px;
-        }
-
-        flex-shrink: 0;
-        transform: translateY(-1px);
-}
+        .location-icon { color: #DC143C; font-size: 12px; margin-right: 0px; flex-shrink: 0; transform: translateY(-1px); }
       `}</style>
     </>
   );
