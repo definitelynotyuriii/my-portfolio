@@ -70,12 +70,12 @@ const SOFTWARE = [
     tag: "Fullstack",
   },
   {
-    title: "Game Project",
+    title: "Game Development",
     description:
-      "A 2D game built as part of my Game Development studies. Features sprite animations, collision detection, and a simple level system.",
-    tech: ["Python", "Pygame", "OOP"],
-    imageSrc: "/imgs/projects/game.png", // 👈 replace with your image
-    repo: "https://github.com/yourname/game",
+      "Were created a Roblox mountain climbing game featuring a checkpoint system that saves player progress as they advance thorough challenging stages, obstacles, and sleep paths, making gameplay smoother, more rewarding, and fun players exploring the mountain adventure untill they reach the summit.",
+    tech: ["Lua", "Roblox Studio"],
+    imageSrc: "/imgs/roblox-images.png", // 👈 replace with your image
+    repo: "https://www.roblox.com/games/82356767480264/Mount-Lumitaw-Revival",
     tag: "Game Dev",
   },
 ];

@@ -375,13 +375,13 @@ export default function App() {
 
         .hero-sub { font-size: 15px; color: var(--muted); line-height: 1.75; max-width: 400px; }
         .hero-btns { display: flex; gap: 12px; }
-        .btn-primary { background: var(--accent); color: white; border: none; padding: 11px 22px; border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .btn-primary { background: var(--accent); color: white; border: none; padding: 11px 22px; border-radius: 11px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;   margin-top: 18px; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,108,250,0.35); }
         .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 11px 22px; border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: color 0.2s, border-color 0.2s, transform 0.2s; }
         .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
 
         /* ── PROFILE CARD ───────────────────────────────────────── */
-        .profile-card { width: 400px; flex-shrink: 0; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px 20px; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center; animation: fadeSlideUp 0.6s 0.15s ease both; position: relative; overflow: hidden; transition: border-color 0.4s, box-shadow 0.4s; }
+        .profile-card { width: 400px; flex-shrink: 0; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px 20px; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center; animation: fadeSlideUp 0.6s 0.15s ease both; position: relative; overflow: hidden; transition: border-color 0.4s, box-shadow 0.4s;  }
         .profile-card:hover { border-color: rgba(124,108,250,0.45); box-shadow: 0 0 40px rgba(124,108,250,0.12), 0 0 80px rgba(250,108,159,0.06); }
         .card-scan-line { position: absolute; top: -100%; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, rgba(124,108,250,0.6), rgba(0,234,255,0.4), transparent); pointer-events: none; z-index: 2; }
         .profile-card:hover .card-scan-line { animation: scanDown 1.2s ease forwards; }
@@ -484,7 +484,12 @@ export default function App() {
         .field label { font-size: 12px; color: var(--muted); letter-spacing: 0.03em; }
         .field input, .field textarea { background: var(--bg3); border: 1px solid var(--border); color: var(--text); padding: 11px 14px; border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; resize: none; width: 100%; }
         .field input:focus, .field textarea:focus { border-color: rgba(124,108,250,0.5); box-shadow: 0 0 0 3px rgba(124,108,250,0.1); transform: translateY(-1px); }
-        .form-foot { display: flex; align-items: center; gap: 16px; margin-top: 16px; }
+        .form-foot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
         .status-msg { font-size: 13px; color: var(--muted); }
         .status-ok  { color: #34d399; }
         .status-err { color: #f87171; }
