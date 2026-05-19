@@ -30,7 +30,7 @@ function ProjectCard({ title, description, tech = [], imageSrc, videoSrc, repo, 
         <div className="proj-links">
           {repo && (
             <a className="proj-btn-ghost" href={repo} target="_blank" rel="noreferrer">
-              ↗ GitHub
+              ↗ Visit
             </a>
           )}
           {demo && (
@@ -53,20 +53,20 @@ const SOFTWARE = [
   {
     title: "Portfolio Website",
     description:
-      "A clean, responsive personal portfolio built with React and Vite. Features smooth animations, dark theme, and a fully custom CSS design system — no UI library used.",
-    tech: ["React", "Vite", "CSS", "React Router"],
-    imageSrc: "/imgs/projects/portfolio.png", // 👈 replace with your image
+      "A clean, responsive personal portfolio built with React. Features smooth animations, dark theme, and a fully custom CSS design.",
+    tech: ["HTML", "CSS", "JavaScript", "React"],
+    imageSrc: "/imgs/my-portfolio.jpg", // 👈 replace with your image
     repo: "https://github.com/yourname/portfolio",
     demo: "https://your-portfolio.example.com",
     tag: "Web",
   },
   {
-    title: "Task Tracker App",
+    title: "Baguio-Tourist-System",
     description:
-      "Full-stack task manager with JWT authentication, CRUD operations, and a MongoDB backend. Users can create, assign, and track tasks with deadlines.",
-    tech: ["React", "Node.js", "Express", "MongoDB"],
-    imageSrc: "/imgs/projects/task-tracker.png", // 👈 replace with your image
-    repo: "https://github.com/yourname/task-tracker",
+      "We built this website together with my collaborator to help users easily explore tourist spots in Baguio. It features an AI chatbot system that provides quick suggestions, travel information, and guidance. The platform makes discovering attractions simple, interactive, and convenient, giving users a smooth and enjoyable experience when planning their visit.",
+    tech: ["HTML", "CSS", "JavaScript", "SQL"],
+    imageSrc: "/imgs/logos.png", // 👈 replace with your image
+    repo: "https://baguio-tourist-system.vercel.app/",
     tag: "Fullstack",
   },
   {

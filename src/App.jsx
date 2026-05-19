@@ -86,8 +86,7 @@ function Home() {
             <span className="accent2-text">Dela Cruz</span>
           </h1>
           <p className="hero-sub">
-            Aspiring Software Engineer &amp; Game Developer based in the Philippines —
-            crafting clean code and immersive digital experiences.
+            Aspiring Software Engineer and Game Developer, focused on continuous learning and improving skills through consistent hard work and practice. Passionate about Designing, efficient code and developing immersive digital experiences. Always exploring new technologies and challenging myself to grow and become better in software and game development.
           </p>
           <div className="hero-btns">
             <button className="btn-primary" onClick={() => scrollTo("contact-sec")}>
