@@ -5,6 +5,7 @@ import Certificates from "./pages/Certificates.jsx";
 import Contact from "./pages/Contact.jsx";
 import Footer from "./components/Footer.jsx";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import emailjs from "@emailjs/browser";
 
 // ─── NAVBAR ────────────────────────────────────────────────────────────────────
 function Navbar() {
@@ -31,20 +32,45 @@ function Home() {
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const onSubmit = () => {
-    const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!form.name || !form.email || !form.message) {
-      setStatus({ msg: "Please fill out all fields.", type: "err" });
-      return;
-    }
-    if (!emailRx.test(form.email)) {
-      setStatus({ msg: "Please enter a valid email.", type: "err" });
-      return;
-    }
-    setStatus({ msg: "✓ Message ready! (backend not connected yet)", type: "ok" });
-  };
+ const onSubmit = (e) => {
+  e.preventDefault();
 
-  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!form.name || !form.email || !form.message) {
+    setStatus({ msg: "Please fill out all fields.", type: "err" });
+    return;
+  }
+
+  if (!emailRx.test(form.email)) {
+    setStatus({ msg: "Please enter a valid email.", type: "err" });
+    return;
+  }
+
+  setStatus({ msg: "Sending message...", type: "ok" });
+
+  emailjs
+    .send(
+      "service_tristan",
+      "template_59t258s",
+      {
+        from_name: form.name,
+        from_email: form.email,
+        message: form.message,
+      },
+      "9iV7VLjN5HDK-hak4"
+    )
+    .then(() => {
+      setStatus({ msg: "✓ Message sent successfully!", type: "ok" });
+      setForm({ name: "", email: "", message: "" });
+    })
+    .catch(() => {
+      setStatus({ msg: "❌ Failed to send message.", type: "err" });
+    });
+};
+
+const scrollTo = (id) =>
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   // Glitch name swap effect
   useEffect(() => {
