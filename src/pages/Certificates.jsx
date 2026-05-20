@@ -1,66 +1,217 @@
+import { useEffect, useRef } from "react";
 import CertificateCard from "../components/CertificateCard.jsx";
 
 const certImg = "https://via.placeholder.com/300x200";
 
+const certificates = [
+  {
+    title: "Intro to React",
+    issuer: "FreeCodeCamp",
+    date: "2025",
+    imageSrc: certImg,
+    link: "https://example.com/cert/react",
+  },
+  {
+    title: "Python for Everybody",
+    issuer: "Coursera",
+    date: "2024",
+    imageSrc: certImg,
+  },
+  {
+    title: "Computer System Servicing",
+    issuer: "Tesda",
+    date: "2022",
+    imageSrc: certImg,
+  },
+];
+
 export default function Certificates() {
-  const certificates = [
-    {
-      title: "Intro to React",
-      issuer: "FreeCodeCamp",
-      date: "2025",
-      imageSrc: certImg,
-      link: "https://example.com/cert/react",
-    },
-    {
-      title: "Python for Everybody",
-      issuer: "Coursera",
-      date: "2024",
-      imageSrc: certImg,
-    },
-    {
-      title: "Embedded Systems Basics",
-      issuer: "Udemy",
-      date: "2024",
-      imageSrc: certImg,
-    },
-  ];
+  const sectionRef = useRef(null);
+  const cardsRef = useRef([]);
+
+  useEffect(() => {
+    // Heading animation
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    cardsRef.current.forEach((card) => card && observer.observe(card));
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <>
-      <section className="cert-section">
-        <h2>Certificates</h2>
-        <p className="sub">Selected certifications and coursework</p>
+      <section className="cert-section" ref={sectionRef}>
 
+        {/* Header */}
+        <div className="cert-header">
+          <div className="cert-label">
+            <span className="cert-label-line" />
+            <span className="cert-label-text">Achievements</span>
+            <span className="cert-label-line" />
+          </div>
+          <h2 className="cert-title">Certificates</h2>
+          <p className="cert-sub">Selected certifications and coursework</p>
+        </div>
+
+        {/* Grid */}
         <div className="cert-grid">
-          {certificates.map((c) => (
-            <CertificateCard key={c.title} {...c} />
+          {certificates.map((c, i) => (
+            <div
+              key={c.title}
+              className="cert-card-wrap"
+              ref={(el) => (cardsRef.current[i] = el)}
+              style={{ animationDelay: `${i * 0.12}s`, transitionDelay: `${i * 0.12}s` }}
+            >
+              <CertificateCard {...c} />
+            </div>
           ))}
         </div>
+
+        {/* Count badge */}
+        <div className="cert-count">
+          <span className="cert-count-num">{certificates.length}</span>
+          <span className="cert-count-label">Certifications earned</span>
+        </div>
+
       </section>
 
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+        /* ── Animations ── */
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(28px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        @keyframes lineGrow {
+          from { width: 0; }
+          to   { width: 40px; }
+        }
+        @keyframes countUp {
+          from { opacity: 0; transform: scale(0.7); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+
+        /* ── Section ── */
         .cert-section {
-          padding: 60px 10%;
-          max-width: 1100px;
+          padding: 60px 10px;
+          max-width: 1000px;
           margin: 0 auto;
           color: #eaeaea;
+          font-family: 'DM Sans', sans-serif;
         }
 
-        .cert-section h2 {
-          font-size: 32px;
-          margin-bottom: 6px;
+        /* ── Header ── */
+        .cert-header {
+          text-align: center;
+          margin-bottom: 48px;
+          animation: fadeUp 0.6s ease both;
         }
 
-        .sub {
-          color: #888;
-          margin-bottom: 25px;
+        .cert-label {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 12px;
         }
 
-        /* GRID */
+        .cert-label-line {
+          display: inline-block;
+          height: 1px;
+          width: 40px;
+          background: linear-gradient(90deg, transparent, #7c6cfa);
+          animation: lineGrow 0.8s 0.3s ease both;
+        }
+
+        .cert-label-line:last-child {
+          background: linear-gradient(90deg, #7c6cfa, transparent);
+        }
+
+        .cert-label-text {
+          font-size: 11px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: #7c6cfa;
+          font-weight: 500;
+          animation: fadeIn 0.6s 0.2s ease both;
+        }
+
+        .cert-title {
+          font-family: 'Syne', sans-serif;
+          font-size: clamp(28px, 5vw, 42px);
+          font-weight: 800;
+          color: #f1f5f9;
+          margin: 0 0 10px;
+          letter-spacing: -0.5px;
+          animation: fadeUp 0.6s 0.1s ease both;
+        }
+
+        .cert-sub {
+          font-size: 14px;
+          color: #64748b;
+          margin: 0;
+          font-weight: 300;
+          animation: fadeUp 0.6s 0.2s ease both;
+        }
+
+        /* ── Grid ── */
         .cert-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
           gap: 20px;
+          margin-bottom: 40px;
+        }
+
+        /* ── Card wrapper animation ── */
+        .cert-card-wrap {
+          opacity: 0;
+          transform: translateY(32px);
+          transition: opacity 0.55s ease, transform 0.55s ease;
+        }
+
+        .cert-card-wrap.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        /* ── Count badge ── */
+        .cert-count {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
+          margin-top: 8px;
+          animation: countUp 0.6s 0.4s ease both;
+        }
+
+        .cert-count-num {
+          font-family: 'Syne', sans-serif;
+          font-size: 40px;
+          font-weight: 800;
+          color: #7c6cfa;
+          line-height: 1;
+        }
+
+        .cert-count-label {
+          font-size: 12px;
+          color: #475569;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          font-weight: 300;
         }
       `}</style>
     </>

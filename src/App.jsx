@@ -12,7 +12,7 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="container nav-inner">
-        <div className="nav-brand">T<span className="brand-dot">.</span>dev</div>
+        <div className="nav-brand">PORT<span className="brand-dot">FO</span>LIO</div>
         <div className="nav-links">
           <NavLink to="/" end>Home</NavLink>
           <NavLink to="/projects">Projects</NavLink>
@@ -163,9 +163,12 @@ const scrollTo = (id) =>
             <button className="btn-primary" onClick={() => scrollTo("contact-sec")}>
               ✉ Get in touch
             </button>
-            <button className="btn-ghost">
-              ↓ Resume
-            </button>
+          <a href="/MY-CV.pdf"
+          download
+          className="btn-ghost"
+          >
+          CV
+          </a>
           </div>
         </div>
 

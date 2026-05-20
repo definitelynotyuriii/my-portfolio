@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaGithub, FaInstagram, FaEnvelope, FaLinkedin } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
 const socials = [
   {
@@ -7,7 +8,7 @@ const socials = [
     href: "https://mail.google.com/mail/?view=cm&fs=1&to=delacruztristan02@gmail.com",
     Icon: FaEnvelope,
     accent: "#a78bfa",
-    glow: "rgba(167,139,250,0.25)",
+    glow: "rgba(167,139,250,0.18)",
     desc: "delacruztristan02@gmail.com",
   },
   {
@@ -15,15 +16,15 @@ const socials = [
     href: "https://www.linkedin.com/in/tristan-dela-cruz-268143374/",
     Icon: FaLinkedin,
     accent: "#38bdf8",
-    glow: "rgba(56,189,248,0.25)",
+    glow: "rgba(56,189,248,0.18)",
     desc: "tristan-dela-cruz",
   },
   {
     label: "GitHub",
     href: "https://github.com/definitelynotyuriii",
     Icon: FaGithub,
-    accent: "#e2e8f0",
-    glow: "rgba(226,232,240,0.2)",
+    accent: "#94a3b8",
+    glow: "rgba(148,163,184,0.18)",
     desc: "definitelynotyuriii",
   },
   {
@@ -31,38 +32,70 @@ const socials = [
     href: "https://www.instagram.com/smthtrstn_/",
     Icon: FaInstagram,
     accent: "#f472b6",
-    glow: "rgba(244,114,182,0.25)",
+    glow: "rgba(244,114,182,0.18)",
     desc: "@smthtrstn_",
   },
 ];
 
+// ── Replace with your actual image path or import ────────────────────────────
+const AVATAR_SRC = "/imgs/YURI.jpeg"; // e.g. import avatarImg from "./assets/photo.jpg"
+// ─────────────────────────────────────────────────────────────────────────────                                                                
+
+// Page transition variants (used by AnimatePresence in your router/layout)
+export const pageVariants = {
+  initial: { opacity: 0, y: 30 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+  exit:    { opacity: 0, y: -20, transition: { duration: 0.3, ease: "easeIn" } },
+};
+
+// Stagger children (card header, body rows)
+const containerVariants = {
+  animate: { transition: { staggerChildren: 0.07, delayChildren: 0.15 } },
+};
+
+const itemVariants = {
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+};
+
 function Logo() {
   return (
     <div className="logo-wrap">
-      <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" className="logo-svg">
+      <svg
+        viewBox="0 0 52 52"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="logo-svg"
+      >
         <defs>
-          <linearGradient id="ring1" x1="0" y1="0" x2="56" y2="56" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#a78bfa" />
-            <stop offset="1" stopColor="#38bdf8" />
-          </linearGradient>
-          <linearGradient id="ring2" x1="56" y1="0" x2="0" y2="56" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#f472b6" />
-            <stop offset="1" stopColor="#a78bfa" />
-          </linearGradient>
-          <filter id="glow-logo">
-            <feGaussianBlur stdDeviation="2.5" result="blur" />
-            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-          </filter>
+          <clipPath id="avatar-clip">
+            <circle cx="26" cy="26" r="16" />
+          </clipPath>
         </defs>
-        <circle cx="28" cy="28" r="24" stroke="url(#ring1)" strokeWidth="1.5" strokeDasharray="4 3" filter="url(#glow-logo)" className="spin-slow" />
-        <circle cx="28" cy="28" r="16" stroke="url(#ring2)" strokeWidth="1" strokeDasharray="2 4" filter="url(#glow-logo)" className="spin-rev" />
-        <circle cx="28" cy="28" r="8" fill="url(#ring1)" opacity="0.9" />
-        <circle cx="28" cy="12" r="2.5" fill="#a78bfa" />
-        <circle cx="44" cy="28" r="2.5" fill="#38bdf8" />
-        <circle cx="28" cy="44" r="2.5" fill="#f472b6" />
-        <circle cx="12" cy="28" r="2.5" fill="#a78bfa" />
+        <circle
+          cx="26" cy="26" r="22"
+          stroke="#a78bfa" strokeWidth="1.2"
+          strokeDasharray="4 3" opacity="0.6"
+          className="spin-slow"
+        />
+        <circle
+          cx="26" cy="26" r="14"
+          stroke="#38bdf8" strokeWidth="0.8"
+          strokeDasharray="2 4" opacity="0.5"
+          className="pulse-ring"
+        />
+        <circle cx="26" cy="4"  r="2" fill="#a78bfa" opacity="0.5" />
+        <circle cx="48" cy="26" r="2" fill="#38bdf8" opacity="0.5" />
+        <circle cx="26" cy="48" r="2" fill="#f472b6" opacity="0.5" />
+        <circle cx="4"  cy="26" r="2" fill="#a78bfa" opacity="0.5" />
+        <image
+          href={AVATAR_SRC}
+          x="10" y="10"
+          width="32" height="32"
+          clipPath="url(#avatar-clip)"
+          preserveAspectRatio="xMidYMid slice"
+        />
       </svg>
-      <span className="logo-text">TD</span>
     </div>
   );
 }
@@ -71,69 +104,96 @@ export default function Contact() {
   const [hovered, setHovered] = useState(null);
 
   return (
-    <>
-      <section className="contact-root">
-        <div className="contact-inner">
+    // ── Wrap with motion.section for page-level enter/exit transition ──
+    // AnimatePresence must wrap your <Routes> in main App for exit to fire.
+    <motion.section
+      className="contact-root"
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
+      <motion.div
+        className="contact-card"
+        variants={containerVariants}
+        initial="initial"
+        animate="animate"
+      >
 
-          <div className="header-row">
-            <Logo />
-            <div>
-              <h2 className="heading">Get In Touch</h2>
-              <p className="subheading">Let's build something together</p>
-            </div>
+        {/* ── Header ── */}
+        <motion.div className="card-header" variants={itemVariants}>
+          <Logo />
+          <div className="header-text">
+            <h2 className="heading">Contact Me</h2>
+            <p className="subheading">For more Information</p>
           </div>
+        </motion.div>
 
-          <div className="divider" />
+        <div className="divider" />
 
-          <p className="body-text">
-            I'm open to collaborations, opportunities, or just a good conversation.
-            Reach out through any of the channels below.
-          </p>
+        {/* ── Body ── */}
+        <div className="card-body">
+          <motion.p className="bio" variants={itemVariants}>
+            I'm open to collaborations, opportunities, learning new things.
+          </motion.p>
 
-          <div className="socials-grid">
+          <div className="socials">
             {socials.map(({ label, href, Icon, accent, glow, desc }) => (
-              <a
+              <motion.a
                 key={label}
                 href={href}
                 target="_blank"
                 rel="noreferrer"
-                className={`social-card ${hovered === label ? "active" : ""}`}
+                className={`social-link ${hovered === label ? "active" : ""}`}
                 onMouseEnter={() => setHovered(label)}
                 onMouseLeave={() => setHovered(null)}
                 style={{ "--accent": accent, "--glow": glow }}
+                variants={itemVariants}
+                whileHover={{ x: 5 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
+                <div className="accent-bar" />
                 <div className="icon-wrap">
                   <Icon />
-                  <div className="icon-glow" />
                 </div>
                 <div className="social-info">
                   <span className="social-label">{label}</span>
                   <span className="social-desc">{desc}</span>
                 </div>
                 <svg className="arrow" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path
+                    d="M3 8h10M9 4l4 4-4 4"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
-              </a>
+              </motion.a>
             ))}
           </div>
-
-          <p className="footer-note">Based in the Philippines · Available for remote work</p>
         </div>
-      </section>
+
+        {/* ── Footer ── */}
+        <motion.div className="card-footer" variants={itemVariants}>
+          <span className="availability-dot" />
+          <span className="footer-text">
+            Based in the Philippines
+          </span>
+        </motion.div>
+
+      </motion.div>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap');
-        @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+        @keyframes spin-slow {
+          to { transform: rotate(360deg); }
+        }
+        @keyframes pulse-ring {
+          0%, 100% { opacity: 0.3; }
+          50%       { opacity: 0.7; }
+        }
 
         .contact-root {
           min-height: 100vh;
@@ -144,231 +204,156 @@ export default function Contact() {
           font-family: 'DM Sans', sans-serif;
         }
 
-        .contact-inner {
+        .contact-card {
           width: 100%;
-          max-width: 540px;
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.07);
-          border-radius: 24px;
-          padding: 44px 40px;
-          backdrop-filter: blur(12px);
-          position: relative;
+          max-width: 800px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 0.5px solid rgba(255, 255, 255, 0.08);
+          border-radius: 20px;
           overflow: hidden;
         }
 
-        .contact-inner::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(167,139,250,0.07) 0%, transparent 70%);
-          pointer-events: none;
-        }
-
-        .header-row {
+       .card-header {
           display: flex;
+          flex-direction: column;
           align-items: center;
-          gap: 18px;
-          margin-bottom: 28px;
+          text-align: center;
+          gap: 12px;
+          padding: 28px 28px 0;
         }
 
-        /* LOGO */
         .logo-wrap {
-          position: relative;
-          width: 56px;
-          height: 56px;
-          flex-shrink: 0;
+          width: 120px; height: 120px;
+          position: relative; flex-shrink: 0;
+        }
+        .logo-svg { width: 120px; height: 120px; }
+
+        .spin-slow {
+          animation: spin-slow 12s linear infinite;
+          transform-origin: 26px 26px;
+        }
+        .pulse-ring {
+          animation: pulse-ring 3s ease infinite;
         }
 
-        .logo-svg {
-          width: 56px;
-          height: 56px;
-          position: absolute;
-          inset: 0;
-        }
-
-        .logo-text {
-          position: absolute;
-          inset: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-family: 'Syne', sans-serif;
-          font-weight: 700;
-          font-size: 13px;
-          color: #fff;
-          letter-spacing: 0.5px;
-          z-index: 2;
-        }
-
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); transform-origin: 28px 28px; }
-          to { transform: rotate(360deg); transform-origin: 28px 28px; }
-        }
-
-        @keyframes spin-rev {
-          from { transform: rotate(0deg); transform-origin: 28px 28px; }
-          to { transform: rotate(-360deg); transform-origin: 28px 28px; }
-        }
-
-        .spin-slow { animation: spin-slow 12s linear infinite; }
-        .spin-rev { animation: spin-rev 8s linear infinite; }
+        .header-text { flex: 1; }
 
         .heading {
           font-family: 'Syne', sans-serif;
-          font-size: 26px;
-          font-weight: 700;
-          color: #f1f5f9;
-          margin: 0 0 4px;
+          font-size: 22px; font-weight: 700;
+          color: #f1f5f9; margin: 0 0 3px;
           letter-spacing: -0.3px;
+          text-align: center;
         }
 
         .subheading {
-          font-size: 14px;
-          color: #64748b;
-          margin: 0;
-          font-weight: 300;
+          font-size: 13px; color: #64748b;
+          margin: 0; font-weight: 300;
+          text-align: center;
         }
 
         .divider {
-          height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08) 40%, rgba(255,255,255,0.08) 60%, transparent);
-          margin-bottom: 24px;
+          height: 0.5px;
+          background: rgba(255, 255, 255, 0.07);
+          margin: 22px 28px 0;
         }
 
-        .body-text {
-          font-size: 14px;
-          color: #94a3b8;
-          line-height: 1.7;
-          margin: 0 0 32px;
-          font-weight: 300;
+        .card-body { padding: 20px 28px 28px; }
+
+        .bio {
+          font-size: 13px; line-height: 1.75;
+          color: #64748b; margin: 0 0 22px; font-weight: 300;
+          text-align: center;
         }
 
-        .socials-grid {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
+        .socials {
+          display: flex; flex-direction: column; gap: 8px;
         }
 
-        .social-card {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          padding: 14px 16px;
-          border-radius: 14px;
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.06);
-          text-decoration: none;
-          transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        .social-link {
           position: relative;
-          overflow: hidden;
+          display: flex; align-items: center; gap: 14px;
+          padding: 12px 14px; border-radius: 12px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 0.5px solid rgba(255, 255, 255, 0.06);
+          text-decoration: none; overflow: hidden;
+          transition:
+            background  0.22s ease,
+            border-color 0.22s ease,
+            box-shadow  0.22s ease;
         }
 
-        .social-card::before {
-          content: '';
+        .social-link:hover,
+        .social-link.active {
+          background: rgba(255, 255, 255, 0.06);
+          border-color: rgba(255, 255, 255, 0.12);
+          box-shadow: 0 0 20px var(--glow);
+        }
+
+        .accent-bar {
           position: absolute;
-          left: 0;
-          top: 0;
-          bottom: 0;
-          width: 3px;
-          background: var(--accent);
-          border-radius: 0 2px 2px 0;
-          opacity: 0;
-          transition: opacity 0.25s ease;
+          left: 0; top: 8px; bottom: 8px;
+          width: 3px; border-radius: 0 2px 2px 0;
+          background: var(--accent); opacity: 0;
+          transition: opacity 0.22s ease;
         }
-
-        .social-card:hover,
-        .social-card.active {
-          background: rgba(255,255,255,0.06);
-          border-color: rgba(255,255,255,0.12);
-          transform: translateX(4px);
-          box-shadow: 0 0 24px var(--glow);
-        }
-
-        .social-card:hover::before,
-        .social-card.active::before {
-          opacity: 1;
-        }
+        .social-link:hover .accent-bar,
+        .social-link.active .accent-bar { opacity: 1; }
 
         .icon-wrap {
-          width: 38px;
-          height: 38px;
-          border-radius: 10px;
-          background: rgba(255,255,255,0.05);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-          position: relative;
-          transition: background 0.25s ease;
-          font-size: 18px;
+          width: 36px; height: 36px; border-radius: 9px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 0.5px solid rgba(255, 255, 255, 0.06);
+          display: flex; align-items: center; justify-content: center;
+          flex-shrink: 0; font-size: 17px; color: #64748b;
+          transition: color 0.22s ease, background 0.22s ease;
+        }
+        .social-link:hover .icon-wrap,
+        .social-link.active .icon-wrap {
           color: var(--accent);
-        }
-
-        .social-card:hover .icon-wrap {
-          background: rgba(255,255,255,0.08);
-        }
-
-        .icon-glow {
-          position: absolute;
-          inset: 0;
-          border-radius: 10px;
-          background: var(--glow);
-          opacity: 0;
-          transition: opacity 0.25s ease;
-          pointer-events: none;
-        }
-
-        .social-card:hover .icon-glow {
-          opacity: 1;
+          background: rgba(255, 255, 255, 0.08);
         }
 
         .social-info {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 2px;
+          flex: 1; display: flex; flex-direction: column; gap: 2px;
         }
-
         .social-label {
-          font-size: 14px;
-          font-weight: 500;
-          color: #e2e8f0;
-          letter-spacing: 0.1px;
+          font-size: 13px; font-weight: 500;
+          color: #e2e8f0; letter-spacing: 0.1px;
         }
-
         .social-desc {
-          font-size: 12px;
-          color: #475569;
-          font-weight: 300;
-          transition: color 0.25s ease;
+          font-size: 12px; color: #475569; font-weight: 300;
+          transition: color 0.22s ease;
         }
-
-        .social-card:hover .social-desc {
-          color: #64748b;
-        }
+        .social-link:hover .social-desc { color: #64748b; }
 
         .arrow {
-          width: 16px;
-          height: 16px;
+          width: 15px; height: 15px; flex-shrink: 0;
           color: #334155;
-          transition: color 0.25s ease, transform 0.25s ease;
+          transition: color 0.22s ease, transform 0.22s ease;
+        }
+        .social-link:hover .arrow,
+        .social-link.active .arrow {
+          color: var(--accent);
+          transform: translateX(3px);
+        }
+
+        .card-footer {
+          border-top: 0.5px solid rgba(255, 255, 255, 0.07);
+          padding: 14px 28px;
+          display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .availability-dot {
+          width: 6px; height: 6px; border-radius: 50%;
+          background: #22c55e;
+          box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
           flex-shrink: 0;
         }
-
-        .social-card:hover .arrow {
-          color: var(--accent);
-          transform: translateX(2px);
-        }
-
-        .footer-note {
-          font-size: 12px;
-          color: #334155;
-          text-align: center;
-          margin: 28px 0 0;
-          font-weight: 300;
-          letter-spacing: 0.3px;
+        .footer-text {
+          font-size: 12px; color: #334155;
+          font-weight: 300; letter-spacing: 0.2px;
         }
       `}</style>
-    </>
+    </motion.section>
   );
 }
