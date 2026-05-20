@@ -55,7 +55,7 @@ const SOFTWARE = [
     description:
       "A clean, responsive personal portfolio built with React. Features smooth animations, dark theme, and a fully custom CSS design.",
     tech: ["HTML", "CSS", "JavaScript", "React"],
-    imageSrc: "/imgs/my-portfolio.jpg", // 👈 replace with your image
+    imageSrc: "/imgs/my-portfolio.jpg", 
     repo: "https://github.com/yourname/portfolio",
     demo: "https://your-portfolio.example.com",
     tag: "Web",
@@ -65,7 +65,7 @@ const SOFTWARE = [
     description:
       "We built this website together with my collaborator to help users easily explore tourist spots in Baguio. It features an AI chatbot system that provides quick suggestions, travel information, and guidance. The platform makes discovering attractions simple, interactive, and convenient, giving users a smooth and enjoyable experience when planning their visit.",
     tech: ["HTML", "CSS", "JavaScript", "SQL"],
-    imageSrc: "/imgs/logos.png", // 👈 replace with your image
+    imageSrc: "/imgs/logos.png", 
     repo: "https://baguio-tourist-system.vercel.app/",
     tag: "Fullstack",
   },
@@ -74,7 +74,7 @@ const SOFTWARE = [
     description:
       "Were created a Roblox mountain climbing game featuring a checkpoint system that saves player progress as they advance thorough challenging stages, obstacles, and sleep paths, making gameplay smoother, more rewarding, and fun players exploring the mountain adventure untill they reach the summit.",
     tech: ["Lua", "Roblox Studio"],
-    imageSrc: "/imgs/roblox-images.png", // 👈 replace with your image
+    imageSrc: "/imgs/roblox-images.png", 
     repo: "https://www.roblox.com/games/82356767480264/Mount-Lumitaw-Revival",
     tag: "Game Dev",
   },
@@ -82,30 +82,30 @@ const SOFTWARE = [
 
 const HARDWARE = [
   {
-    title: "IoT Sensor Logger",
+    title: "Hand Gestures OpenCv and Mediapipe",
     description:
-      "ESP32-based temperature and humidity logger that sends data to a web dashboard in real time. Built with REST API communication and Chart.js visualization.",
+      "I made simple project which hand gestures using arduino, Python, C++.",
     tech: ["C++", "ESP32", "REST API", "Chart.js"],
-    imageSrc: "/imgs/projects/iot-sensor.png", // 👈 replace with your image
-    repo: "https://github.com/yourname/iot-logger",
-    tag: "IoT",
+    imageSrc: "/imgs/HAND.jpg", 
+    tag: "Arduino",
   },
   {
-    title: "Smart Home Controller",
+    title: "Vendo Machine using IC-based",
     description:
-      "Arduino-based home automation prototype that controls lights and fans via a mobile app. Uses Bluetooth communication and relay modules.",
-    tech: ["Arduino", "C++", "Bluetooth", "Relay Module"],
-    imageSrc: "/imgs/projects/smart-home.png", // 👈 replace with your image
-    tag: "Embedded",
+      "We built a vending machine prototype using an IC on a breadboard with an MB102 power supply",
+    tech: ["IC", "Breadboard", "MB-102"],
+    imageSrc: "/imgs/IC.jpg", 
+    tag: "IC",
   },
   {
-    title: "Line Following Robot",
+    title: "PCB Power Supply",
     description:
-      "A simple autonomous robot built for a school competition. Uses IR sensors to detect and follow a black line path on a white surface.",
+      "I designed a PCB power supply system with an enclosed casing for protection and stability. The circuit was carefully laid out to ensure proper voltage regulation and safe current flow. The casing provided durability and organization, making the design more practical, reliable, and ready for real world electronic applications and testing.",
     tech: ["Arduino", "IR Sensors", "Motor Driver", "C++"],
-    imageSrc: "/imgs/projects/robot.png", // 👈 replace with your image
-    tag: "Robotics",
+    imageSrc: "/imgs/PS.jpg", 
+    tag: "PCB",
   },
+  
 ];
 
 // ─── PROJECTS PAGE ─────────────────────────────────────────────────────────────
