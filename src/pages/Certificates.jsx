@@ -75,7 +75,6 @@ export default function Certificates() {
             <span className="cert-label-line" />
           </div>
           <h2 className="cert-title">Certificates</h2>
-          <p className="cert-sub">Selected certifications and coursework</p>
         </div>
 
         <div className="cert-grid">

@@ -122,9 +122,6 @@ export default function Projects() {
         <div className="projects-header">
           <div className="projects-eyebrow">my work</div>
           <h2 className="projects-title">Projects</h2>
-          <p className="projects-sub">
-            A collection of software and hardware things I've built — from web apps to embedded systems.
-          </p>
         </div>
 
         {/* TABS */}

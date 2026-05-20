@@ -14,10 +14,10 @@ function Navbar() {
       <div className="container nav-inner">
         <div className="nav-brand">PORT<span className="brand-dot">FO</span>LIO</div>
         <div className="nav-links">
-          <NavLink to="/" end>Home</NavLink>
-          <NavLink to="/projects">Projects</NavLink>
-          <NavLink to="/certificates">Certificates</NavLink>
-          <NavLink to="/contact">Contact</NavLink>
+          <NavLink to="/" end>HOME</NavLink>
+          <NavLink to="/projects">PROJECTS</NavLink>
+          <NavLink to="/certificates">CERTIFICATES</NavLink>
+          <NavLink to="/contact">CONTACT</NavLink>
         </div>
       </div>
     </nav>
