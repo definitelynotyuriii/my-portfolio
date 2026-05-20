@@ -30,47 +30,53 @@ function Home() {
   const [status, setStatus] = useState({ msg: "", type: "" });
   const glitchRef = useRef(null);
 
+  // ── Photo glitch state ──
+  const photos = ["/imgs/bakin.jpeg", "/imgs/YURI.jpeg"];
+  const [imgIndex, setImgIndex] = useState(0);
+  const [isGlitching, setIsGlitching] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsGlitching(true);
+      setTimeout(() => {
+        setImgIndex((prev) => (prev + 1) % photos.length);
+        setTimeout(() => setIsGlitching(false), 400);
+      }, 300);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
- const onSubmit = (e) => {
-  e.preventDefault();
-
-  const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  if (!form.name || !form.email || !form.message) {
-    setStatus({ msg: "Please fill out all fields.", type: "err" });
-    return;
-  }
-
-  if (!emailRx.test(form.email)) {
-    setStatus({ msg: "Please enter a valid email.", type: "err" });
-    return;
-  }
-
-  setStatus({ msg: "Sending message...", type: "ok" });
-
-  emailjs
-    .send(
-      "service_tristan",
-      "template_59t258s",
-      {
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!form.name || !form.email || !form.message) {
+      setStatus({ msg: "Please fill out all fields.", type: "err" });
+      return;
+    }
+    if (!emailRx.test(form.email)) {
+      setStatus({ msg: "Please enter a valid email.", type: "err" });
+      return;
+    }
+    setStatus({ msg: "Sending message...", type: "ok" });
+    emailjs
+      .send("service_tristan", "template_59t258s", {
         from_name: form.name,
         from_email: form.email,
         message: form.message,
-      },
-      "9iV7VLjN5HDK-hak4"
-    )
-    .then(() => {
-      setStatus({ msg: "✓ Message sent successfully!", type: "ok" });
-      setForm({ name: "", email: "", message: "" });
-    })
-    .catch(() => {
-      setStatus({ msg: "❌ Failed to send message.", type: "err" });
-    });
-};
+      }, "9iV7VLjN5HDK-hak4")
+      .then(() => {
+        setStatus({ msg: "✓ Message sent successfully!", type: "ok" });
+        setForm({ name: "", email: "", message: "" });
+      })
+      .catch(() => {
+        setStatus({ msg: "❌ Failed to send message.", type: "err" });
+      });
+  };
 
-const scrollTo = (id) =>
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  const scrollTo = (id) =>
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   // Glitch name swap effect
   useEffect(() => {
@@ -93,9 +99,7 @@ const scrollTo = (id) =>
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("revealed");
-          }
+          if (entry.isIntersecting) entry.target.classList.add("revealed");
         });
       },
       { threshold: 0.15 }
@@ -110,6 +114,7 @@ const scrollTo = (id) =>
     { name: "JavaScript", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
     { name: "Java",       logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" },
     { name: "Python",     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
+    { name: "C++",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" },
     { name: "React",      logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
     { name: "SQL",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
     { name: "Git",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
@@ -121,22 +126,15 @@ const scrollTo = (id) =>
       icon: "🏛️",
       school: "University of Baguio",
       degree: "Bachelor of Science in Computer Engineering",
-      tags: ["Algorithms", "Data Structures", "Electronics", "Software Engineering"],
+      tags: ["Algorithms", "Logics", "Electronics", "Software&Hardware Engineering","Calculus"],
       year: "2022 – Present",
     },
     {
       icon: "🏫",
-      school: "Senior High School",
-      degree: "STEM Strand — Science, Technology, Engineering & Mathematics",
-      tags: ["Physics", "Calculus", "Research"],
+      school: "TUAO VOCATIONAL AND TECHNICAL SCHOOL CULUNG ANNEX",
+      degree: "ICT — Information Communication and Technology",
+      tags: ["Hardware", "Computer System Servicing", "Software"],
       year: "2020 – 2022",
-    },
-    {
-      icon: "🎓",
-      school: "Online Certifications",
-      degree: "Self-paced learning — Web Development & Game Development",
-      tags: ["React", "Game Design", "UI/UX Basics"],
-      year: "Ongoing",
     },
   ];
 
@@ -163,12 +161,7 @@ const scrollTo = (id) =>
             <button className="btn-primary" onClick={() => scrollTo("contact-sec")}>
               ✉ Get in touch
             </button>
-          <a href="/MY-CV.pdf"
-          download
-          className="btn-ghost"
-          >
-          CV
-          </a>
+            <a href="/MY-CV.pdf" download className="btn-ghost">DOWNLOAD CV</a>
           </div>
         </div>
 
@@ -179,12 +172,33 @@ const scrollTo = (id) =>
           <div className="corner corner-tr" />
           <div className="corner corner-bl" />
           <div className="corner corner-br" />
+
+          {/* ── GLITCH AVATAR ── */}
           <div className="avatar-wrap">
-            <img src="/imgs/TRISTAN.jpeg" alt="Tristan Dela Cruz" />
+            <div className={`glitch-img-wrap ${isGlitching ? "is-glitching" : ""}`}>
+              {photos.map((src, i) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt={`Tristan photo ${i + 1}`}
+                  className={`avatar-img ${imgIndex === i ? "img-active" : ""}`}
+                />
+              ))}
+              {/* RGB split layers */}
+              <div
+                className="glitch-layer glitch-r"
+                style={{ backgroundImage: `url(${photos[imgIndex]})` }}
+              />
+              <div
+                className="glitch-layer glitch-b"
+                style={{ backgroundImage: `url(${photos[imgIndex]})` }}
+              />
+            </div>
             <div className="avatar-ring" />
             <div className="avatar-ring2" />
             <div className="orbit-dot" />
           </div>
+
           <div className="profile-name">Tristan Dela Cruz</div>
           <div className="profile-role">Computer Engineering Student</div>
           <div className="profile-info">
@@ -196,16 +210,6 @@ const scrollTo = (id) =>
           <div className="avail-badge">
             <span className="avail-dot" /> Available for hire
           </div>
-          <div className="stat-chips">
-            <div className="stat-chip chip-float-1">
-              <span className="stat-num">3+</span>
-              <span className="stat-label">Years Learning</span>
-            </div>
-            <div className="stat-chip chip-float-2">
-              <span className="stat-num">9</span>
-              <span className="stat-label">Skills</span>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -213,7 +217,7 @@ const scrollTo = (id) =>
       <section className="section reveal" id="about-sec">
         <div className="section-header">
           <span className="section-num">01</span>
-          <span className="section-label">Skills &amp; Technologies</span>
+          <span className="section-label">Skills </span>
           <div className="section-line" />
         </div>
         <div className="skills-grid">
@@ -404,13 +408,13 @@ export default function App() {
 
         .hero-sub { font-size: 15px; color: var(--muted); line-height: 1.75; max-width: 400px; }
         .hero-btns { display: flex; gap: 12px; }
-        .btn-primary { background: var(--accent); color: white; border: none; padding: 11px 22px; border-radius: 11px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;   margin-top: 18px; }
+        .btn-primary { background: var(--accent); color: white; border: none; padding: 11px 22px; border-radius: 11px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 18px; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,108,250,0.35); }
-        .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 11px 22px; border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: color 0.2s, border-color 0.2s, transform 0.2s; }
+        .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 11px 22px; border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: color 0.2s, border-color 0.2s, transform 0.2s; text-decoration: none; display: inline-flex; align-items: center; margin-top: 18px; }
         .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
 
         /* ── PROFILE CARD ───────────────────────────────────────── */
-        .profile-card { width: 400px; flex-shrink: 0; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px 20px; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center; animation: fadeSlideUp 0.6s 0.15s ease both; position: relative; overflow: hidden; transition: border-color 0.4s, box-shadow 0.4s;  }
+        .profile-card { width: 400px; flex-shrink: 0; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px 20px; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center; animation: fadeSlideUp 0.6s 0.15s ease both; position: relative; overflow: hidden; transition: border-color 0.4s, box-shadow 0.4s; }
         .profile-card:hover { border-color: rgba(124,108,250,0.45); box-shadow: 0 0 40px rgba(124,108,250,0.12), 0 0 80px rgba(250,108,159,0.06); }
         .card-scan-line { position: absolute; top: -100%; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, rgba(124,108,250,0.6), rgba(0,234,255,0.4), transparent); pointer-events: none; z-index: 2; }
         .profile-card:hover .card-scan-line { animation: scanDown 1.2s ease forwards; }
@@ -421,15 +425,88 @@ export default function App() {
         .corner-tr { top: 10px; right: 10px; border-top: 1.5px solid var(--accent); border-right: 1.5px solid var(--accent); }
         .corner-bl { bottom: 10px; left: 10px; border-bottom: 1.5px solid var(--accent); border-left: 1.5px solid var(--accent); }
         .corner-br { bottom: 10px; right: 10px; border-bottom: 1.5px solid var(--accent); border-right: 1.5px solid var(--accent); }
+
+        /* ── AVATAR & GLITCH IMAGE ──────────────────────────────── */
         .avatar-wrap { position: relative; width: 250px; height: 250px; }
-        .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 3px solid var(--accent); display: block; transition: border-color 0.4s, filter 0.4s; }
-        .profile-card:hover .avatar-wrap img { border-color: #00eaff; filter: drop-shadow(0 0 12px rgba(124,108,250,0.5)); }
         .avatar-ring { position: absolute; inset: -8px; border-radius: 50%; border: 1.5px dashed rgba(124,108,250,0.35); animation: spin 14s linear infinite; }
         .avatar-ring2 { position: absolute; inset: -16px; border-radius: 50%; border: 1px solid rgba(0,234,255,0); animation: spin 6s linear infinite reverse; transition: border-color 0.4s; }
         .profile-card:hover .avatar-ring2 { border-color: rgba(0,234,255,0.2); }
         .orbit-dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); top: -4px; left: calc(50% - 4px); transform-origin: 50% calc(125px + 4px); animation: orbitSpin 4s linear infinite; box-shadow: 0 0 8px var(--accent); opacity: 0; transition: opacity 0.3s; }
         .profile-card:hover .orbit-dot { opacity: 1; }
         @keyframes orbitSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .glitch-img-wrap {
+          position: relative;
+          width: 250px;
+          height: 250px;
+          border-radius: 50%;
+          overflow: hidden;
+          border: 3px solid var(--accent);
+          transition: border-color 0.4s;
+        }
+        .profile-card:hover .glitch-img-wrap {
+          border-color: #00eaff;
+          filter: drop-shadow(0 0 12px rgba(124,108,250,0.5));
+        }
+
+        .avatar-img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 50%;
+          opacity: 0;
+          transition: opacity 0.05s;
+        }
+        .avatar-img.img-active { opacity: 1; }
+
+        /* RGB split layers */
+        .glitch-layer {
+          position: absolute;
+          inset: 0;
+          border-radius: 50%;
+          background-size: cover;
+          background-position: center;
+          opacity: 0;
+          pointer-events: none;
+        }
+        .glitch-img-wrap.is-glitching .avatar-img.img-active {
+          animation: imgFlicker 0.65s steps(3) forwards;
+        }
+        .glitch-img-wrap.is-glitching .glitch-r {
+          opacity: 1;
+          animation: glitchR 0.65s steps(4) forwards;
+        }
+        .glitch-img-wrap.is-glitching .glitch-b {
+          opacity: 1;
+          animation: glitchB 0.65s steps(4) forwards;
+        }
+
+        @keyframes imgFlicker {
+          0%   { opacity: 1; }
+          15%  { opacity: 0.2; }
+          30%  { opacity: 0.9; }
+          50%  { opacity: 0.1; }
+          65%  { opacity: 0.85; }
+          80%  { opacity: 0.15; }
+          100% { opacity: 1; }
+        }
+        @keyframes glitchR {
+          0%   { transform: translateX(-7px) skewX(-4deg); mix-blend-mode: screen; background-color: rgba(250,108,159,0.3); clip-path: polygon(0 10%, 100% 10%, 100% 30%, 0 30%); opacity: 0.75; }
+          25%  { transform: translateX(6px); clip-path: polygon(0 50%, 100% 50%, 100% 68%, 0 68%); }
+          50%  { transform: translateX(-4px) skewX(3deg); clip-path: polygon(0 72%, 100% 72%, 100% 88%, 0 88%); }
+          75%  { transform: translateX(3px); clip-path: polygon(0 25%, 100% 25%, 100% 42%, 0 42%); opacity: 0.4; }
+          100% { transform: translateX(0); opacity: 0; clip-path: none; }
+        }
+        @keyframes glitchB {
+          0%   { transform: translateX(7px) skewX(4deg); mix-blend-mode: screen; background-color: rgba(0,234,255,0.25); clip-path: polygon(0 58%, 100% 58%, 100% 78%, 0 78%); opacity: 0.75; }
+          25%  { transform: translateX(-6px); clip-path: polygon(0 18%, 100% 18%, 100% 38%, 0 38%); }
+          50%  { transform: translateX(4px) skewX(-3deg); clip-path: polygon(0 40%, 100% 40%, 100% 58%, 0 58%); }
+          75%  { transform: translateX(-3px); clip-path: polygon(0 78%, 100% 78%, 100% 92%, 0 92%); opacity: 0.35; }
+          100% { transform: translateX(0); opacity: 0; clip-path: none; }
+        }
+
         .profile-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; transition: color 0.3s; }
         .profile-card:hover .profile-name { color: #00eaff; }
         .profile-role { font-size: 12px; color: var(--muted); line-height: 1.5; }
@@ -437,8 +514,6 @@ export default function App() {
         .profile-info-row { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: var(--muted); padding: 0 4px; }
         .avail-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2); color: #34d399; padding: 4px 12px; border-radius: 100px; }
         .avail-dot { width: 5px; height: 5px; border-radius: 50%; background: #34d399; animation: pulse 2s infinite; }
-        .stat-chips { display: flex; gap: 10px; justify-content: center; margin-top: 4px; }
-        .stat-chip { background: rgba(124,108,250,0.08); border: 1px solid rgba(124,108,250,0.2); border-radius: 12px; padding: 8px 16px; text-align: center; display: flex; flex-direction: column; gap: 2px; transition: transform 0.3s, background 0.3s, border-color 0.3s; }
         .profile-card:hover .stat-chip { background: rgba(124,108,250,0.14); border-color: rgba(124,108,250,0.4); }
         .stat-num { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: var(--accent); }
         .stat-label { font-size: 10px; color: var(--muted); }
@@ -447,15 +522,8 @@ export default function App() {
         @keyframes chipFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
         /* ── SCROLL REVEAL ──────────────────────────────────────── */
-        .reveal {
-          opacity: 0;
-          transform: translateY(32px);
-          transition: opacity 0.65s ease, transform 0.65s ease;
-        }
-        .reveal.revealed {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.65s ease, transform 0.65s ease; }
+        .reveal.revealed { opacity: 1; transform: translateY(0); }
 
         /* ── SECTIONS ───────────────────────────────────────────── */
         .section { margin-bottom: 72px; }
@@ -466,35 +534,15 @@ export default function App() {
 
         /* ── SKILLS ─────────────────────────────────────────────── */
         .skills-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-        .skill-pill {
-          background: var(--bg3); border: 1px solid var(--border);
-          padding: 8px 18px; border-radius: 100px; font-size: 13px; color: var(--text);
-          display: flex; align-items: center; gap: 8px;
-          opacity: 0;
-          transform: translateY(16px) scale(0.95);
-          animation: pillPop 0.4s ease forwards;
-          transition: background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-          cursor: default;
-        }
+        .skill-pill { background: var(--bg3); border: 1px solid var(--border); padding: 8px 18px; border-radius: 100px; font-size: 13px; color: var(--text); display: flex; align-items: center; gap: 8px; opacity: 0; transform: translateY(16px) scale(0.95); animation: pillPop 0.4s ease forwards; transition: background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s; cursor: default; }
         @keyframes pillPop { to { opacity: 1; transform: translateY(0) scale(1); } }
-        .skill-pill:hover {
-          background: rgba(124,108,250,0.14);
-          border-color: rgba(124,108,250,0.4);
-          transform: translateY(-3px) scale(1.05);
-          box-shadow: 0 6px 20px rgba(124,108,250,0.2);
-        }
+        .skill-pill:hover { background: rgba(124,108,250,0.14); border-color: rgba(124,108,250,0.4); transform: translateY(-3px) scale(1.05); box-shadow: 0 6px 20px rgba(124,108,250,0.2); }
         .skill-logo { width: 18px; height: 18px; object-fit: contain; display: block; transition: transform 0.3s; }
         .skill-pill:hover .skill-logo { transform: rotate(10deg) scale(1.2); }
 
         /* ── EDUCATION ──────────────────────────────────────────── */
         .edu-list { display: flex; flex-direction: column; gap: 16px; }
-        .edu-card {
-          background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-          padding: 20px 24px; display: grid; grid-template-columns: 48px 1fr auto;
-          gap: 16px; align-items: start;
-          opacity: 0; transform: translateX(-20px);
-          transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s, opacity 0.5s;
-        }
+        .edu-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; display: grid; grid-template-columns: 48px 1fr auto; gap: 16px; align-items: start; opacity: 0; transform: translateX(-20px); transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s, opacity 0.5s; }
         .edu-card.revealed { opacity: 1; transform: translateX(0); }
         .edu-card:hover { border-color: rgba(124,108,250,0.3); transform: translateX(5px); box-shadow: 0 4px 24px rgba(124,108,250,0.08); }
         .edu-icon { width: 48px; height: 48px; background: rgba(124,108,250,0.1); border: 1px solid rgba(124,108,250,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
@@ -513,12 +561,7 @@ export default function App() {
         .field label { font-size: 12px; color: var(--muted); letter-spacing: 0.03em; }
         .field input, .field textarea { background: var(--bg3); border: 1px solid var(--border); color: var(--text); padding: 11px 14px; border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; resize: none; width: 100%; }
         .field input:focus, .field textarea:focus { border-color: rgba(124,108,250,0.5); box-shadow: 0 0 0 3px rgba(124,108,250,0.1); transform: translateY(-1px); }
-        .form-foot {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-}
+        .form-foot { display: flex; justify-content: center; align-items: center; gap: 16px; }
         .status-msg { font-size: 13px; color: var(--muted); }
         .status-ok  { color: #34d399; }
         .status-err { color: #f87171; }

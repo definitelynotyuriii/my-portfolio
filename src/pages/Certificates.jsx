@@ -1,28 +1,45 @@
 import { useEffect, useRef } from "react";
 import CertificateCard from "../components/CertificateCard.jsx";
 
-const certImg = "https://via.placeholder.com/300x200";
-
 const certificates = [
   {
-    title: "Intro to React",
-    issuer: "FreeCodeCamp",
+    title: "Certificate of Completion",
+    issuer: "University of Baguio",
+    date: "2023",
+    imageSrc: "/imgs/cert.jpg",
+  },
+  {
+    title: "Certificate of Participation",
+    issuer: "University of Baguio",
     date: "2025",
-    imageSrc: certImg,
-    link: "https://example.com/cert/react",
+    imageSrc: "/imgs/certt.jpg",
   },
   {
-    title: "Python for Everybody",
-    issuer: "Coursera",
-    date: "2024",
-    imageSrc: certImg,
+    title: "Certificate of Participation",
+    issuer: "University of Baguio",
+    date: "2022",
+    imageSrc: "/imgs/certtt.jpg",
   },
-  {
-    title: "Computer System Servicing",
+    {
+    title: "Cisco Networking Academy",
+    issuer: "University of Baguio",
+    date: "2022",
+    imageSrc: "/imgs/certttt.jpg",
+  },
+    {
+    title: "Java Intermediate",
+    issuer: "SOLOLEARN",
+    date: "2022",
+    imageSrc: "/imgs/certtttt.jpg",
+  },
+    {
+    title: "Computer System Servicing NCII",
     issuer: "Tesda",
     date: "2022",
-    imageSrc: certImg,
+    imageSrc: "/imgs/tesda.jpg",
   },
+  
+  
 ];
 
 export default function Certificates() {
@@ -30,7 +47,6 @@ export default function Certificates() {
   const cardsRef = useRef([]);
 
   useEffect(() => {
-    // Heading animation
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -52,7 +68,6 @@ export default function Certificates() {
     <>
       <section className="cert-section" ref={sectionRef}>
 
-        {/* Header */}
         <div className="cert-header">
           <div className="cert-label">
             <span className="cert-label-line" />
@@ -63,21 +78,19 @@ export default function Certificates() {
           <p className="cert-sub">Selected certifications and coursework</p>
         </div>
 
-        {/* Grid */}
         <div className="cert-grid">
           {certificates.map((c, i) => (
             <div
               key={c.title}
               className="cert-card-wrap"
               ref={(el) => (cardsRef.current[i] = el)}
-              style={{ animationDelay: `${i * 0.12}s`, transitionDelay: `${i * 0.12}s` }}
+              style={{ transitionDelay: `${i * 0.12}s` }}
             >
               <CertificateCard {...c} />
             </div>
           ))}
         </div>
 
-        {/* Count badge */}
         <div className="cert-count">
           <span className="cert-count-num">{certificates.length}</span>
           <span className="cert-count-label">Certifications earned</span>
@@ -88,7 +101,6 @@ export default function Certificates() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
-        /* ── Animations ── */
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(28px); }
           to   { opacity: 1; transform: translateY(0); }
@@ -106,7 +118,6 @@ export default function Certificates() {
           to   { opacity: 1; transform: scale(1); }
         }
 
-        /* ── Section ── */
         .cert-section {
           padding: 60px 10px;
           max-width: 1000px;
@@ -115,7 +126,6 @@ export default function Certificates() {
           font-family: 'DM Sans', sans-serif;
         }
 
-        /* ── Header ── */
         .cert-header {
           text-align: center;
           margin-bottom: 48px;
@@ -168,7 +178,6 @@ export default function Certificates() {
           animation: fadeUp 0.6s 0.2s ease both;
         }
 
-        /* ── Grid ── */
         .cert-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -176,7 +185,6 @@ export default function Certificates() {
           margin-bottom: 40px;
         }
 
-        /* ── Card wrapper animation ── */
         .cert-card-wrap {
           opacity: 0;
           transform: translateY(32px);
@@ -188,7 +196,6 @@ export default function Certificates() {
           transform: translateY(0);
         }
 
-        /* ── Count badge ── */
         .cert-count {
           display: flex;
           flex-direction: column;

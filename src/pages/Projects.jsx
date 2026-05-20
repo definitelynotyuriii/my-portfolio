@@ -101,7 +101,7 @@ const HARDWARE = [
     title: "PCB Power Supply",
     description:
       "I designed a PCB power supply system with an enclosed casing for protection and stability. The circuit was carefully laid out to ensure proper voltage regulation and safe current flow. The casing provided durability and organization, making the design more practical, reliable, and ready for real world electronic applications and testing.",
-    tech: ["Arduino", "IR Sensors", "Motor Driver", "C++"],
+    tech: ["PCB", "Wirings", "18v Transformer", "PS case"],
     imageSrc: "/imgs/PS.jpg", 
     tag: "PCB",
   },
@@ -133,13 +133,13 @@ export default function Projects() {
             className={`tab-btn ${active === "software" ? "tab-active" : ""}`}
             onClick={() => setActive("software")}
           >
-            💻 Software
+            Software
           </button>
           <button
             className={`tab-btn ${active === "hardware" ? "tab-active" : ""}`}
             onClick={() => setActive("hardware")}
           >
-            🔧 Hardware
+            Hardware
           </button>
         </div>
 
