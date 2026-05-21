@@ -56,8 +56,7 @@ const SOFTWARE = [
       "A clean, responsive personal portfolio built with React. Features smooth animations, dark theme, and a fully custom CSS design.",
     tech: ["HTML", "CSS", "JavaScript", "React"],
     imageSrc: "/imgs/my-portfolio.jpg", 
-    repo: "https://github.com/yourname/portfolio",
-    demo: "https://your-portfolio.example.com",
+    repo: "https://my-portfolio-2026-cemenbakin-yuriii.vercel.app/",
     tag: "Web",
   },
   {
