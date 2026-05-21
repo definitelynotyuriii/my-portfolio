@@ -7,7 +7,146 @@ import Footer from "./components/Footer.jsx";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import emailjs from "@emailjs/browser";
 
-// ─── NAVBAR ────────────────────────────────────────────────────────────────────
+function IntroScreen({ onEnter }) {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoaded(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div
+      onClick={onEnter}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "#080810",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: "pointer",
+        zIndex: 9999,
+        overflow: "hidden",
+        fontFamily: "'Syne', sans-serif",
+      }}
+    >
+      <div style={{
+        position: "absolute", inset: 0,
+        backgroundImage: "linear-gradient(rgba(124,108,250,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(124,108,250,0.05) 1px, transparent 1px)",
+        backgroundSize: "40px 40px",
+      }} />
+
+      <div style={{
+        position: "absolute", width: 500, height: 500, borderRadius: "50%",
+        background: "rgba(124,108,250,0.12)", filter: "blur(100px)",
+        top: "50%", left: "50%", transform: "translate(-50%, -50%)",
+        pointerEvents: "none",
+      }} />
+
+      {[...Array(14)].map((_, i) => (
+        <div key={i} style={{
+          position: "absolute",
+          width: `${3 + (i % 4)}px`, height: `${3 + (i % 4)}px`,
+          borderRadius: "50%", background: i % 3 === 0 ? "#fa6c9f" : "#7c6cfa",
+          left: `${(i * 7.1) % 100}%`,
+          top: `${40 + (i * 4.3) % 50}%`,
+          opacity: 0,
+          animation: `floatDot ${3 + (i % 3)}s ease-in-out infinite`,
+          animationDelay: `${(i * 0.3) % 3}s`,
+        }} />
+      ))}
+
+      <div style={{
+        position: "relative", zIndex: 2, textAlign: "center",
+        display: "flex", flexDirection: "column", alignItems: "center", gap: "18px",
+      }}>
+        <p style={{
+          fontSize: "11px", letterSpacing: "5px", textTransform: "uppercase",
+          color: "#a89ef5", margin: 0,
+          opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(10px)",
+          transition: "opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s",
+        }}>
+          Welcome to my World
+        </p>
+
+        <div style={{
+          width: 160, height: 1, background: "rgba(255,255,255,0.08)", borderRadius: 2, overflow: "hidden",
+          opacity: loaded ? 1 : 0, transition: "opacity 0.4s ease 0.5s",
+        }}>
+          <div style={{
+            height: "100%", background: "linear-gradient(90deg, #7c6cfa, #fa6c9f)",
+            width: loaded ? "100%" : "0%", transition: "width 1.2s ease 0.8s",
+          }} />
+        </div>
+
+        <h1 style={{
+          fontFamily: "'Syne', sans-serif", fontWeight: 800,
+          fontSize: "clamp(36px, 8vw, 64px)", color: "#f0eeff",
+          opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(14px)",
+          transition: "opacity 0.6s ease 0.7s, transform 0.6s ease 0.7s",
+          lineHeight: 1.1, margin: 0,
+        }}>
+          PORT<span style={{ color: "#7c6cfa" }}>FO</span>LIO
+        </h1>
+
+        <p style={{
+          fontSize: "14px", color: "rgba(168,158,245,0.6)", margin: 0,
+          opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(8px)",
+          transition: "opacity 0.6s ease 1.1s, transform 0.6s ease 1.1s",
+          letterSpacing: "0.5px",
+        }}>
+          Tristan · Software Engineer & Game Developer
+        </p>
+
+        <button
+          onClick={(e) => { e.stopPropagation(); onEnter(); }}
+          style={{
+            marginTop: "8px", padding: "11px 32px",
+            border: "1px solid rgba(124,108,250,0.4)",
+            background: "transparent", color: "#a89ef5",
+            fontSize: "12px", borderRadius: "100px", cursor: "pointer",
+            opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(8px)",
+            transition: "opacity 0.6s ease 1.5s, transform 0.6s ease 1.5s, background 0.2s, color 0.2s, box-shadow 0.2s",
+            letterSpacing: "2px", fontFamily: "'Syne', sans-serif", fontWeight: 600,
+            textTransform: "uppercase",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "rgba(124,108,250,0.2)";
+            e.currentTarget.style.color = "#f0eeff";
+            e.currentTarget.style.boxShadow = "0 0 24px rgba(124,108,250,0.3)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "transparent";
+            e.currentTarget.style.color = "#a89ef5";
+            e.currentTarget.style.boxShadow = "none";
+          }}
+        >
+          Enter →
+        </button>
+      </div>
+
+      <p style={{
+        position: "absolute", bottom: 24,
+        fontSize: "11px", color: "rgba(255,255,255,0.15)", letterSpacing: "2px",
+        opacity: loaded ? 1 : 0, transition: "opacity 0.6s ease 2s", margin: 0,
+      }}>
+        CLICK ANYWHERE TO ENTER
+      </p>
+
+      <style>{`
+        @keyframes floatDot {
+          0%   { opacity: 0; transform: translateY(0); }
+          20%  { opacity: 0.6; }
+          80%  { opacity: 0.2; }
+          100% { opacity: 0; transform: translateY(-70px); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 function Navbar() {
   return (
     <nav className="navbar">
@@ -24,13 +163,11 @@ function Navbar() {
   );
 }
 
-// ─── HOME ──────────────────────────────────────────────────────────────────────
 function Home() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState({ msg: "", type: "" });
   const glitchRef = useRef(null);
 
-  // ── Photo glitch state ──
   const photos = ["/imgs/bakin.jpeg", "/imgs/YURI.jpeg"];
   const [imgIndex, setImgIndex] = useState(0);
   const [isGlitching, setIsGlitching] = useState(false);
@@ -78,7 +215,6 @@ function Home() {
   const scrollTo = (id) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
-  // Glitch name swap effect
   useEffect(() => {
     const el = glitchRef.current;
     if (!el) return;
@@ -94,7 +230,6 @@ function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // Scroll reveal effect
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -126,7 +261,7 @@ function Home() {
       icon: "🏛️",
       school: "University of Baguio",
       degree: "Bachelor of Science in Computer Engineering",
-      tags: ["Algorithms", "Logics", "Electronics", "Software&Hardware Engineering","Calculus"],
+      tags: ["Algorithms", "Logics", "Electronics", "Software&Hardware Engineering", "Calculus"],
       year: "2022 – Present",
     },
     {
@@ -140,7 +275,6 @@ function Home() {
 
   return (
     <div className="home-wrap">
-      {/* HERO */}
       <section className="hero">
         <div className="hero-left">
           <div className="hero-tag">
@@ -158,47 +292,30 @@ function Home() {
             Aspiring Software Engineer and Game Developer, focused on continuous learning and improving skills through consistent hard work and practice. Passionate about Designing, efficient code and developing immersive digital experiences. Always exploring new technologies and challenging myself to grow and become better in software and game development.
           </p>
           <div className="hero-btns">
-            <button className="btn-primary" onClick={() => scrollTo("contact-sec")}>
-              ✉ Get in touch
-            </button>
+            <button className="btn-primary" onClick={() => scrollTo("contact-sec")}>✉ Get in touch</button>
             <a href="/MY-CV.pdf" download className="btn-ghost">DOWNLOAD CV</a>
           </div>
         </div>
 
-        {/* PROFILE CARD */}
         <div className="profile-card">
           <div className="card-scan-line" />
           <div className="corner corner-tl" />
           <div className="corner corner-tr" />
           <div className="corner corner-bl" />
           <div className="corner corner-br" />
-
-          {/* ── GLITCH AVATAR ── */}
           <div className="avatar-wrap">
             <div className={`glitch-img-wrap ${isGlitching ? "is-glitching" : ""}`}>
               {photos.map((src, i) => (
-                <img
-                  key={src}
-                  src={src}
-                  alt={`Tristan photo ${i + 1}`}
-                  className={`avatar-img ${imgIndex === i ? "img-active" : ""}`}
-                />
+                <img key={src} src={src} alt={`Tristan photo ${i + 1}`}
+                  className={`avatar-img ${imgIndex === i ? "img-active" : ""}`} />
               ))}
-              {/* RGB split layers */}
-              <div
-                className="glitch-layer glitch-r"
-                style={{ backgroundImage: `url(${photos[imgIndex]})` }}
-              />
-              <div
-                className="glitch-layer glitch-b"
-                style={{ backgroundImage: `url(${photos[imgIndex]})` }}
-              />
+              <div className="glitch-layer glitch-r" style={{ backgroundImage: `url(${photos[imgIndex]})` }} />
+              <div className="glitch-layer glitch-b" style={{ backgroundImage: `url(${photos[imgIndex]})` }} />
             </div>
             <div className="avatar-ring" />
             <div className="avatar-ring2" />
             <div className="orbit-dot" />
           </div>
-
           <div className="profile-name">Tristan Dela Cruz</div>
           <div className="profile-role">Computer Engineering Student</div>
           <div className="profile-info">
@@ -213,11 +330,10 @@ function Home() {
         </div>
       </section>
 
-      {/* SKILLS */}
       <section className="section reveal" id="about-sec">
         <div className="section-header">
           <span className="section-num">01</span>
-          <span className="section-label">Skills </span>
+          <span className="section-label">Skills</span>
           <div className="section-line" />
         </div>
         <div className="skills-grid">
@@ -230,7 +346,6 @@ function Home() {
         </div>
       </section>
 
-      {/* EDUCATION */}
       <section className="section reveal" id="edu-sec">
         <div className="section-header">
           <span className="section-num">02</span>
@@ -245,9 +360,7 @@ function Home() {
                 <div className="edu-school">{e.school}</div>
                 <div className="edu-degree">{e.degree}</div>
                 <div className="edu-tags">
-                  {e.tags.map((t) => (
-                    <span className="edu-tag" key={t}>{t}</span>
-                  ))}
+                  {e.tags.map((t) => (<span className="edu-tag" key={t}>{t}</span>))}
                 </div>
               </div>
               <div className="edu-year">{e.year}</div>
@@ -256,7 +369,6 @@ function Home() {
         </div>
       </section>
 
-      {/* CONTACT */}
       <section className="section reveal" id="contact-sec">
         <div className="section-header">
           <span className="section-num">03</span>
@@ -280,9 +392,7 @@ function Home() {
           </div>
           <div className="form-foot">
             <button className="btn-primary" onClick={onSubmit}>✉ Send Message</button>
-            <span className={`status-msg ${status.type === "ok" ? "status-ok" : "status-err"}`}>
-              {status.msg}
-            </span>
+            <span className={`status-msg ${status.type === "ok" ? "status-ok" : "status-err"}`}>{status.msg}</span>
           </div>
         </div>
       </section>
@@ -290,26 +400,30 @@ function Home() {
   );
 }
 
-// ─── APP ───────────────────────────────────────────────────────────────────────
 export default function App() {
+  const [entered, setEntered] = useState(false);
+
   return (
     <>
-      <div className="orb orb1" />
-      <div className="orb orb2" />
-      <div className="orb orb3" />
+      {!entered && <IntroScreen onEnter={() => setEntered(true)} />}
 
-      <Navbar />
-
-      <main className="container main-content">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/certificates" element={<Certificates />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
-      </main>
-
-      <Footer />
+      {entered && (
+        <>
+          <div className="orb orb1" />
+          <div className="orb orb2" />
+          <div className="orb orb3" />
+          <Navbar />
+          <main className="container main-content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/certificates" element={<Certificates />} />
+              <Route path="/contact" element={<Contact />} />
+            </Routes>
+          </main>
+          <Footer />
+        </>
+      )}
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:wght@300;400;500&display=swap');
@@ -337,17 +451,14 @@ export default function App() {
           position: relative;
         }
 
-        /* ── BACKGROUND ─────────────────────────────────────────── */
         .orb { position: fixed; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0; }
         .orb1 { width: 600px; height: 600px; background: rgba(124,108,250,0.13); top: -150px; right: -150px; animation: orbFloat 10s ease-in-out infinite alternate; }
         .orb2 { width: 450px; height: 450px; background: rgba(250,108,159,0.08); bottom: 100px; left: -120px; animation: orbFloat 14s ease-in-out infinite alternate-reverse; }
         .orb3 { width: 300px; height: 300px; background: rgba(100,200,255,0.05); top: 50%; left: 50%; transform: translate(-50%, -50%); animation: orbFloat 18s ease-in-out infinite alternate; }
         @keyframes orbFloat { from { transform: translateY(0px); } to { transform: translateY(30px); } }
 
-        /* ── CONTAINER ──────────────────────────────────────────── */
         .container { width: 100%; max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
 
-        /* ── NAVBAR ─────────────────────────────────────────────── */
         .navbar { position: sticky; top: 0; z-index: 100; background: rgba(8,8,16,0.8); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
         .nav-inner { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; }
         .nav-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--text); letter-spacing: -0.5px; }
@@ -360,51 +471,25 @@ export default function App() {
         .nav-links a.active { color: var(--accent); }
         .nav-links a.active::after { width: 100%; }
 
-        /* ── MAIN ───────────────────────────────────────────────── */
         .main-content { padding: 60px 24px 100px; }
         .home-wrap { display: flex; flex-direction: column; gap: 0; }
 
-        /* ── HERO ───────────────────────────────────────────────── */
         .hero { display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center; margin-bottom: 96px; animation: fadeSlideUp 0.6s 0.05s ease both; }
         .hero-left { display: flex; flex-direction: column; gap: 22px; }
         .hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(124,108,250,0.1); border: 1px solid rgba(124,108,250,0.22); padding: 6px 14px; border-radius: 100px; font-size: 12px; color: #a89ef5; width: fit-content; }
         .hero-tag-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
         .hero-name { font-family: 'Syne', sans-serif; font-weight: 600; font-size: clamp(30px, 4.5vw, 44px); line-height: 1.0; letter-spacing: 1px; }
-        .accent-text  { color: var(--accent); }
+        .accent-text { color: var(--accent); }
         .accent2-text { color: var(--accent2); }
 
-        /* ── GLITCH NAME EFFECT ─────────────────────────────────── */
         .glitch-wrap { display: inline-block; position: relative; }
         .glitch-text { display: inline-block; color: var(--accent); position: relative; animation: glitchCycle 3s infinite; }
         .glitch-text::before, .glitch-text::after { content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; overflow: hidden; color: var(--accent); }
         .glitch-text::before { left: 2px; text-shadow: -2px 0 #fa6c9f; clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%); animation: glitchTop 3s infinite; }
-        .glitch-text::after  { left: -2px; text-shadow: 2px 0 #00eaff; clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%); animation: glitchBot 3s infinite; }
-        @keyframes glitchCycle {
-          0%, 85%   { transform: none; opacity: 1; }
-          86%       { transform: skewX(-8deg); opacity: 0.9; }
-          87%       { transform: skewX(6deg) translateX(4px); }
-          88%       { transform: none; }
-          89%       { transform: translateX(-3px) skewX(3deg); }
-          90%       { transform: none; }
-          91%       { opacity: 0; }
-          92%       { opacity: 1; }
-          93%       { transform: skewX(-4deg); }
-          94%, 100% { transform: none; opacity: 1; }
-        }
-        @keyframes glitchTop {
-          0%, 85%        { opacity: 0; transform: none; }
-          86%            { opacity: 1; transform: translateX(-4px); clip-path: polygon(0 15%, 100% 15%, 100% 35%, 0 35%); }
-          87%            { transform: translateX(4px); clip-path: polygon(0 25%, 100% 25%, 100% 45%, 0 45%); }
-          88%, 91%, 100% { opacity: 0; transform: none; }
-          89%, 90%       { opacity: 1; transform: translateX(-2px); }
-        }
-        @keyframes glitchBot {
-          0%, 85%        { opacity: 0; transform: none; }
-          86%            { opacity: 1; transform: translateX(4px); clip-path: polygon(0 55%, 100% 55%, 100% 75%, 0 75%); }
-          87%            { transform: translateX(-4px); clip-path: polygon(0 65%, 100% 65%, 100% 85%, 0 85%); }
-          88%, 91%, 100% { opacity: 0; transform: none; }
-          89%, 90%       { opacity: 1; transform: translateX(2px); }
-        }
+        .glitch-text::after { left: -2px; text-shadow: 2px 0 #00eaff; clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%); animation: glitchBot 3s infinite; }
+        @keyframes glitchCycle { 0%, 85% { transform: none; opacity: 1; } 86% { transform: skewX(-8deg); opacity: 0.9; } 87% { transform: skewX(6deg) translateX(4px); } 88% { transform: none; } 89% { transform: translateX(-3px) skewX(3deg); } 90% { transform: none; } 91% { opacity: 0; } 92% { opacity: 1; } 93% { transform: skewX(-4deg); } 94%, 100% { transform: none; opacity: 1; } }
+        @keyframes glitchTop { 0%, 85% { opacity: 0; transform: none; } 86% { opacity: 1; transform: translateX(-4px); clip-path: polygon(0 15%, 100% 15%, 100% 35%, 0 35%); } 87% { transform: translateX(4px); clip-path: polygon(0 25%, 100% 25%, 100% 45%, 0 45%); } 88%, 91%, 100% { opacity: 0; transform: none; } 89%, 90% { opacity: 1; transform: translateX(-2px); } }
+        @keyframes glitchBot { 0%, 85% { opacity: 0; transform: none; } 86% { opacity: 1; transform: translateX(4px); clip-path: polygon(0 55%, 100% 55%, 100% 75%, 0 75%); } 87% { transform: translateX(-4px); clip-path: polygon(0 65%, 100% 65%, 100% 85%, 0 85%); } 88%, 91%, 100% { opacity: 0; transform: none; } 89%, 90% { opacity: 1; transform: translateX(2px); } }
 
         .hero-sub { font-size: 15px; color: var(--muted); line-height: 1.75; max-width: 400px; }
         .hero-btns { display: flex; gap: 12px; }
@@ -413,7 +498,6 @@ export default function App() {
         .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 11px 22px; border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: color 0.2s, border-color 0.2s, transform 0.2s; text-decoration: none; display: inline-flex; align-items: center; margin-top: 18px; }
         .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
 
-        /* ── PROFILE CARD ───────────────────────────────────────── */
         .profile-card { width: 400px; flex-shrink: 0; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px 20px; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center; animation: fadeSlideUp 0.6s 0.15s ease both; position: relative; overflow: hidden; transition: border-color 0.4s, box-shadow 0.4s; }
         .profile-card:hover { border-color: rgba(124,108,250,0.45); box-shadow: 0 0 40px rgba(124,108,250,0.12), 0 0 80px rgba(250,108,159,0.06); }
         .card-scan-line { position: absolute; top: -100%; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, rgba(124,108,250,0.6), rgba(0,234,255,0.4), transparent); pointer-events: none; z-index: 2; }
@@ -426,7 +510,6 @@ export default function App() {
         .corner-bl { bottom: 10px; left: 10px; border-bottom: 1.5px solid var(--accent); border-left: 1.5px solid var(--accent); }
         .corner-br { bottom: 10px; right: 10px; border-bottom: 1.5px solid var(--accent); border-right: 1.5px solid var(--accent); }
 
-        /* ── AVATAR & GLITCH IMAGE ──────────────────────────────── */
         .avatar-wrap { position: relative; width: 250px; height: 250px; }
         .avatar-ring { position: absolute; inset: -8px; border-radius: 50%; border: 1.5px dashed rgba(124,108,250,0.35); animation: spin 14s linear infinite; }
         .avatar-ring2 { position: absolute; inset: -16px; border-radius: 50%; border: 1px solid rgba(0,234,255,0); animation: spin 6s linear infinite reverse; transition: border-color 0.4s; }
@@ -435,77 +518,17 @@ export default function App() {
         .profile-card:hover .orbit-dot { opacity: 1; }
         @keyframes orbitSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        .glitch-img-wrap {
-          position: relative;
-          width: 250px;
-          height: 250px;
-          border-radius: 50%;
-          overflow: hidden;
-          border: 3px solid var(--accent);
-          transition: border-color 0.4s;
-        }
-        .profile-card:hover .glitch-img-wrap {
-          border-color: #00eaff;
-          filter: drop-shadow(0 0 12px rgba(124,108,250,0.5));
-        }
-
-        .avatar-img {
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 50%;
-          opacity: 0;
-          transition: opacity 0.05s;
-        }
+        .glitch-img-wrap { position: relative; width: 250px; height: 250px; border-radius: 50%; overflow: hidden; border: 3px solid var(--accent); transition: border-color 0.4s; }
+        .profile-card:hover .glitch-img-wrap { border-color: #00eaff; filter: drop-shadow(0 0 12px rgba(124,108,250,0.5)); }
+        .avatar-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; opacity: 0; transition: opacity 0.05s; }
         .avatar-img.img-active { opacity: 1; }
-
-        /* RGB split layers */
-        .glitch-layer {
-          position: absolute;
-          inset: 0;
-          border-radius: 50%;
-          background-size: cover;
-          background-position: center;
-          opacity: 0;
-          pointer-events: none;
-        }
-        .glitch-img-wrap.is-glitching .avatar-img.img-active {
-          animation: imgFlicker 0.65s steps(3) forwards;
-        }
-        .glitch-img-wrap.is-glitching .glitch-r {
-          opacity: 1;
-          animation: glitchR 0.65s steps(4) forwards;
-        }
-        .glitch-img-wrap.is-glitching .glitch-b {
-          opacity: 1;
-          animation: glitchB 0.65s steps(4) forwards;
-        }
-
-        @keyframes imgFlicker {
-          0%   { opacity: 1; }
-          15%  { opacity: 0.2; }
-          30%  { opacity: 0.9; }
-          50%  { opacity: 0.1; }
-          65%  { opacity: 0.85; }
-          80%  { opacity: 0.15; }
-          100% { opacity: 1; }
-        }
-        @keyframes glitchR {
-          0%   { transform: translateX(-7px) skewX(-4deg); mix-blend-mode: screen; background-color: rgba(250,108,159,0.3); clip-path: polygon(0 10%, 100% 10%, 100% 30%, 0 30%); opacity: 0.75; }
-          25%  { transform: translateX(6px); clip-path: polygon(0 50%, 100% 50%, 100% 68%, 0 68%); }
-          50%  { transform: translateX(-4px) skewX(3deg); clip-path: polygon(0 72%, 100% 72%, 100% 88%, 0 88%); }
-          75%  { transform: translateX(3px); clip-path: polygon(0 25%, 100% 25%, 100% 42%, 0 42%); opacity: 0.4; }
-          100% { transform: translateX(0); opacity: 0; clip-path: none; }
-        }
-        @keyframes glitchB {
-          0%   { transform: translateX(7px) skewX(4deg); mix-blend-mode: screen; background-color: rgba(0,234,255,0.25); clip-path: polygon(0 58%, 100% 58%, 100% 78%, 0 78%); opacity: 0.75; }
-          25%  { transform: translateX(-6px); clip-path: polygon(0 18%, 100% 18%, 100% 38%, 0 38%); }
-          50%  { transform: translateX(4px) skewX(-3deg); clip-path: polygon(0 40%, 100% 40%, 100% 58%, 0 58%); }
-          75%  { transform: translateX(-3px); clip-path: polygon(0 78%, 100% 78%, 100% 92%, 0 92%); opacity: 0.35; }
-          100% { transform: translateX(0); opacity: 0; clip-path: none; }
-        }
+        .glitch-layer { position: absolute; inset: 0; border-radius: 50%; background-size: cover; background-position: center; opacity: 0; pointer-events: none; }
+        .glitch-img-wrap.is-glitching .avatar-img.img-active { animation: imgFlicker 0.65s steps(3) forwards; }
+        .glitch-img-wrap.is-glitching .glitch-r { opacity: 1; animation: glitchR 0.65s steps(4) forwards; }
+        .glitch-img-wrap.is-glitching .glitch-b { opacity: 1; animation: glitchB 0.65s steps(4) forwards; }
+        @keyframes imgFlicker { 0% { opacity: 1; } 15% { opacity: 0.2; } 30% { opacity: 0.9; } 50% { opacity: 0.1; } 65% { opacity: 0.85; } 80% { opacity: 0.15; } 100% { opacity: 1; } }
+        @keyframes glitchR { 0% { transform: translateX(-7px) skewX(-4deg); mix-blend-mode: screen; background-color: rgba(250,108,159,0.3); clip-path: polygon(0 10%, 100% 10%, 100% 30%, 0 30%); opacity: 0.75; } 25% { transform: translateX(6px); clip-path: polygon(0 50%, 100% 50%, 100% 68%, 0 68%); } 50% { transform: translateX(-4px) skewX(3deg); clip-path: polygon(0 72%, 100% 72%, 100% 88%, 0 88%); } 75% { transform: translateX(3px); clip-path: polygon(0 25%, 100% 25%, 100% 42%, 0 42%); opacity: 0.4; } 100% { transform: translateX(0); opacity: 0; clip-path: none; } }
+        @keyframes glitchB { 0% { transform: translateX(7px) skewX(4deg); mix-blend-mode: screen; background-color: rgba(0,234,255,0.25); clip-path: polygon(0 58%, 100% 58%, 100% 78%, 0 78%); opacity: 0.75; } 25% { transform: translateX(-6px); clip-path: polygon(0 18%, 100% 18%, 100% 38%, 0 38%); } 50% { transform: translateX(4px) skewX(-3deg); clip-path: polygon(0 40%, 100% 40%, 100% 58%, 0 58%); } 75% { transform: translateX(-3px); clip-path: polygon(0 78%, 100% 78%, 100% 92%, 0 92%); opacity: 0.35; } 100% { transform: translateX(0); opacity: 0; clip-path: none; } }
 
         .profile-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; transition: color 0.3s; }
         .profile-card:hover .profile-name { color: #00eaff; }
@@ -514,25 +537,16 @@ export default function App() {
         .profile-info-row { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: var(--muted); padding: 0 4px; }
         .avail-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2); color: #34d399; padding: 4px 12px; border-radius: 100px; }
         .avail-dot { width: 5px; height: 5px; border-radius: 50%; background: #34d399; animation: pulse 2s infinite; }
-        .profile-card:hover .stat-chip { background: rgba(124,108,250,0.14); border-color: rgba(124,108,250,0.4); }
-        .stat-num { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: var(--accent); }
-        .stat-label { font-size: 10px; color: var(--muted); }
-        .chip-float-1 { animation: chipFloat 3s ease-in-out infinite; }
-        .chip-float-2 { animation: chipFloat 3s ease-in-out infinite 0.5s; }
-        @keyframes chipFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
-        /* ── SCROLL REVEAL ──────────────────────────────────────── */
         .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.65s ease, transform 0.65s ease; }
         .reveal.revealed { opacity: 1; transform: translateY(0); }
 
-        /* ── SECTIONS ───────────────────────────────────────────── */
         .section { margin-bottom: 72px; }
         .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
         .section-line { flex: 1; height: 1px; background: var(--border); }
         .section-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; white-space: nowrap; }
         .section-num { font-size: 11px; color: var(--accent); font-weight: 500; letter-spacing: 0.1em; }
 
-        /* ── SKILLS ─────────────────────────────────────────────── */
         .skills-grid { display: flex; flex-wrap: wrap; gap: 10px; }
         .skill-pill { background: var(--bg3); border: 1px solid var(--border); padding: 8px 18px; border-radius: 100px; font-size: 13px; color: var(--text); display: flex; align-items: center; gap: 8px; opacity: 0; transform: translateY(16px) scale(0.95); animation: pillPop 0.4s ease forwards; transition: background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s; cursor: default; }
         @keyframes pillPop { to { opacity: 1; transform: translateY(0) scale(1); } }
@@ -540,7 +554,6 @@ export default function App() {
         .skill-logo { width: 18px; height: 18px; object-fit: contain; display: block; transition: transform 0.3s; }
         .skill-pill:hover .skill-logo { transform: rotate(10deg) scale(1.2); }
 
-        /* ── EDUCATION ──────────────────────────────────────────── */
         .edu-list { display: flex; flex-direction: column; gap: 16px; }
         .edu-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; display: grid; grid-template-columns: 48px 1fr auto; gap: 16px; align-items: start; opacity: 0; transform: translateX(-20px); transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s, opacity 0.5s; }
         .edu-card.revealed { opacity: 1; transform: translateX(0); }
@@ -553,7 +566,6 @@ export default function App() {
         .edu-tag:hover { background: rgba(124,108,250,0.22); transform: scale(1.05); }
         .edu-year { font-size: 12px; color: var(--muted); white-space: nowrap; background: var(--bg3); padding: 4px 10px; border-radius: 6px; height: fit-content; }
 
-        /* ── CONTACT FORM ───────────────────────────────────────── */
         .contact-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; transition: border-color 0.3s, box-shadow 0.3s; }
         .contact-card:hover { border-color: rgba(124,108,250,0.25); box-shadow: 0 0 30px rgba(124,108,250,0.07); }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -563,18 +575,15 @@ export default function App() {
         .field input:focus, .field textarea:focus { border-color: rgba(124,108,250,0.5); box-shadow: 0 0 0 3px rgba(124,108,250,0.1); transform: translateY(-1px); }
         .form-foot { display: flex; justify-content: center; align-items: center; gap: 16px; }
         .status-msg { font-size: 13px; color: var(--muted); }
-        .status-ok  { color: #34d399; }
+        .status-ok { color: #34d399; }
         .status-err { color: #f87171; }
 
-        /* ── FOOTER ─────────────────────────────────────────────── */
         footer { text-align: center; padding: 30px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); margin-top: 60px; position: relative; z-index: 1; }
 
-        /* ── ANIMATIONS ─────────────────────────────────────────── */
         @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* ── RESPONSIVE ─────────────────────────────────────────── */
         @media (max-width: 800px) {
           .hero { grid-template-columns: 1fr; }
           .profile-card { width: 100%; }
