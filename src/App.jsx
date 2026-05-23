@@ -168,7 +168,7 @@ function Home() {
   const [status, setStatus] = useState({ msg: "", type: "" });
   const glitchRef = useRef(null);
 
-  const photos = ["/imgs/bakin.jpeg", "/imgs/YURI.jpeg"];
+  const photos = ["/imgs/TRISTAN.jpeg", "/imgs/YURI.jpeg"];
   const [imgIndex, setImgIndex] = useState(0);
   const [isGlitching, setIsGlitching] = useState(false);
 
