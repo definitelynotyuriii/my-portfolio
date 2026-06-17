@@ -196,7 +196,7 @@ function IntroScreen({ onEnter }) {
   );
 }
 
-function Navbar() {
+function Navbar({ theme, toggleTheme }) {
   return (
     <nav className="navbar">
       <div className="container nav-inner">
@@ -206,6 +206,30 @@ function Navbar() {
           <NavLink to="/projects">PROJECTS</NavLink>
           <NavLink to="/certificates">CERTIFICATES</NavLink>
           <NavLink to="/contact">CONTACT</NavLink>
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {theme === "dark" ? (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <circle cx="12" cy="12" r="4.5" />
+                <line x1="12" y1="2" x2="12" y2="4.5" />
+                <line x1="12" y1="19.5" x2="12" y2="22" />
+                <line x1="4.22" y1="4.22" x2="5.9" y2="5.9" />
+                <line x1="18.1" y1="18.1" x2="19.78" y2="19.78" />
+                <line x1="2" y1="12" x2="4.5" y2="12" />
+                <line x1="19.5" y1="12" x2="22" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.9" y2="18.1" />
+                <line x1="18.1" y1="5.9" x2="19.78" y2="4.22" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+              </svg>
+            )}
+          </button>
         </div>
       </div>
     </nav>
@@ -451,6 +475,18 @@ function Home() {
 
 export default function App() {
   const [entered, setEntered] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved === "light" || saved === "dark") return saved;
+    return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("light", theme === "light");
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
   return (
     <>
@@ -461,7 +497,7 @@ export default function App() {
           <div className="orb orb1" />
           <div className="orb orb2" />
           <div className="orb orb3" />
-          <Navbar />
+          <Navbar theme={theme} toggleTheme={toggleTheme} />
           <main className="container main-content">
             <Routes>
               <Route path="/" element={<Home />} />
@@ -487,6 +523,18 @@ export default function App() {
           --text: #f0eeff;
           --muted: #8885a8;
           --card: rgba(13,13,26,0.92);
+          --navbar-bg: rgba(8,8,16,0.8);
+        }
+
+        :root.light {
+          --bg: #f6f5fb;
+          --bg2: #ffffff;
+          --bg3: #ececf6;
+          --border: rgba(22,22,42,0.09);
+          --text: #16162a;
+          --muted: #5e5b78;
+          --card: rgba(255,255,255,0.88);
+          --navbar-bg: rgba(246,245,251,0.85);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -498,6 +546,7 @@ export default function App() {
           min-height: 100vh;
           overflow-x: hidden;
           position: relative;
+          transition: background 0.3s ease, color 0.3s ease;
         }
 
         .orb { position: fixed; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0; }
@@ -508,7 +557,7 @@ export default function App() {
 
         .container { width: 100%; max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
 
-        .navbar { position: sticky; top: 0; z-index: 100; background: rgba(8,8,16,0.8); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+        .navbar { position: sticky; top: 0; z-index: 100; background: var(--navbar-bg); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); transition: background 0.3s, border-color 0.3s; }
         .nav-inner { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; }
         .nav-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--text); letter-spacing: -0.5px; }
         .brand-dot { color: var(--accent); }
@@ -519,6 +568,11 @@ export default function App() {
         .nav-links a:hover::after { width: 100%; }
         .nav-links a.active { color: var(--accent); }
         .nav-links a.active::after { width: 100%; }
+
+        .theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg3); color: var(--text); cursor: pointer; transition: border-color 0.2s, transform 0.3s, background 0.2s; }
+        .theme-toggle:hover { border-color: rgba(124,108,250,0.4); transform: translateY(-2px) rotate(15deg); }
+        .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .theme-toggle svg { width: 16px; height: 16px; display: block; }
 
         .main-content { padding: 60px 24px 100px; }
         .home-wrap { display: flex; flex-direction: column; gap: 0; }
