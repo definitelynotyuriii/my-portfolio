@@ -121,7 +121,7 @@ export default function Certificates() {
           padding: 60px 10px;
           max-width: 1000px;
           margin: 0 auto;
-          color: #eaeaea;
+          color: var(--text);
           font-family: 'DM Sans', sans-serif;
         }
 
@@ -163,7 +163,7 @@ export default function Certificates() {
           font-family: 'Syne', sans-serif;
           font-size: clamp(28px, 5vw, 42px);
           font-weight: 800;
-          color: #f1f5f9;
+          color: var(--text);
           margin: 0 0 10px;
           letter-spacing: -0.5px;
           animation: fadeUp 0.6s 0.1s ease both;
@@ -171,7 +171,7 @@ export default function Certificates() {
 
         .cert-sub {
           font-size: 14px;
-          color: #64748b;
+          color: var(--muted);
           margin: 0;
           font-weight: 300;
           animation: fadeUp 0.6s 0.2s ease both;
@@ -214,7 +214,7 @@ export default function Certificates() {
 
         .cert-count-label {
           font-size: 12px;
-          color: #475569;
+          color: var(--muted);
           letter-spacing: 0.08em;
           text-transform: uppercase;
           font-weight: 300;

@@ -326,7 +326,7 @@ function Home() {
     { name: "React",      logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
     { name: "SQL",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
     { name: "Git",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
-    { name: "Game Dev",   logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg" },
+    { name: "Game Development",   logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg" },
   ];
 
   const education = [
@@ -345,6 +345,35 @@ function Home() {
       year: "2020 – 2022",
     },
   ];
+
+  const timeline = [
+     {
+      icon: "👩🏻‍💻",
+      title: "Consistently Learning & Growing",
+      tags: ["Self-Taught Developer"],
+      period: "2026 – Present",
+    },
+    {
+      icon: "💻",
+      title: "Started Web Development/Game Development Journey",
+      tags: ["Started Self-learning"],
+      period: "2025",
+    },
+     {
+      icon: "👋",
+      title: "Hello World",
+      tags: ["Wrote my first line of code in Java and Python"],
+      period: "2022",
+    },
+    
+    {
+      icon: "📚",
+      title: "Bachelor of Science in Computer Engineering",
+      tags: ["University of Baguio"],
+      period: "2022",
+    },
+  ];
+  
 
   return (
     <div className="home-wrap">
@@ -442,9 +471,34 @@ function Home() {
         </div>
       </section>
 
-      <section className="section reveal" id="contact-sec">
+      <section className="section reveal" id="timeline-sec">
         <div className="section-header">
           <span className="section-num">03</span>
+          <span className="section-label">Timeline</span>
+          <div className="section-line" />
+        </div>
+        <div className="edu-list">
+          {timeline.map((t, i) => (
+            <div className="edu-card reveal" key={t.title} style={{ animationDelay: `${i * 0.12}s` }}>
+              <div className="edu-icon">{t.icon}</div>
+              <div>
+                <div className="edu-school">{t.title}</div>
+                <div className="edu-degree">{t.subtitle}</div>
+                {t.tags.length > 0 && (
+                  <div className="edu-tags">
+                    {t.tags.map((tag) => (<span className="edu-tag" key={tag}>{tag}</span>))}
+                  </div>
+                )}
+              </div>
+              <div className="edu-year">{t.period}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section reveal" id="contact-sec">
+        <div className="section-header">
+          <span className="section-num">04</span>
           <span className="section-label">Send a Message</span>
           <div className="section-line" />
         </div>

@@ -207,8 +207,8 @@ export default function Contact() {
         .contact-card {
           width: 100%;
           max-width: 800px;
-          background: rgba(255, 255, 255, 0.03);
-          border: 0.5px solid rgba(255, 255, 255, 0.08);
+          background: var(--card);
+          border: 0.5px solid var(--border);
           border-radius: 20px;
           overflow: hidden;
         }
@@ -241,20 +241,20 @@ export default function Contact() {
         .heading {
           font-family: 'Syne', sans-serif;
           font-size: 22px; font-weight: 700;
-          color: #f1f5f9; margin: 0 0 3px;
+          color: var(--text); margin: 0 0 3px;
           letter-spacing: -0.3px;
           text-align: center;
         }
 
         .subheading {
-          font-size: 13px; color: #64748b;
+          font-size: 13px; color: var(--muted);
           margin: 0; font-weight: 300;
           text-align: center;
         }
 
         .divider {
           height: 0.5px;
-          background: rgba(255, 255, 255, 0.07);
+          background: var(--border);
           margin: 22px 28px 0;
         }
 
@@ -262,7 +262,7 @@ export default function Contact() {
 
         .bio {
           font-size: 13px; line-height: 1.75;
-          color: #64748b; margin: 0 0 22px; font-weight: 300;
+          color: var(--muted); margin: 0 0 22px; font-weight: 300;
           text-align: center;
         }
 
@@ -274,8 +274,8 @@ export default function Contact() {
           position: relative;
           display: flex; align-items: center; gap: 14px;
           padding: 12px 14px; border-radius: 12px;
-          background: rgba(255, 255, 255, 0.03);
-          border: 0.5px solid rgba(255, 255, 255, 0.06);
+          background: var(--bg3);
+          border: 0.5px solid var(--border);
           text-decoration: none; overflow: hidden;
           transition:
             background  0.22s ease,
@@ -285,8 +285,7 @@ export default function Contact() {
 
         .social-link:hover,
         .social-link.active {
-          background: rgba(255, 255, 255, 0.06);
-          border-color: rgba(255, 255, 255, 0.12);
+          border-color: var(--accent);
           box-shadow: 0 0 20px var(--glow);
         }
 
@@ -302,16 +301,15 @@ export default function Contact() {
 
         .icon-wrap {
           width: 36px; height: 36px; border-radius: 9px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 0.5px solid rgba(255, 255, 255, 0.06);
+          background: var(--bg3);
+          border: 0.5px solid var(--border);
           display: flex; align-items: center; justify-content: center;
-          flex-shrink: 0; font-size: 17px; color: #64748b;
+          flex-shrink: 0; font-size: 17px; color: var(--muted);
           transition: color 0.22s ease, background 0.22s ease;
         }
         .social-link:hover .icon-wrap,
         .social-link.active .icon-wrap {
           color: var(--accent);
-          background: rgba(255, 255, 255, 0.08);
         }
 
         .social-info {
@@ -319,17 +317,17 @@ export default function Contact() {
         }
         .social-label {
           font-size: 13px; font-weight: 500;
-          color: #e2e8f0; letter-spacing: 0.1px;
+          color: var(--text); letter-spacing: 0.1px;
         }
         .social-desc {
-          font-size: 12px; color: #475569; font-weight: 300;
+          font-size: 12px; color: var(--muted); font-weight: 300;
           transition: color 0.22s ease;
         }
-        .social-link:hover .social-desc { color: #64748b; }
+        .social-link:hover .social-desc { color: var(--text); }
 
         .arrow {
           width: 15px; height: 15px; flex-shrink: 0;
-          color: #334155;
+          color: var(--muted);
           transition: color 0.22s ease, transform 0.22s ease;
         }
         .social-link:hover .arrow,
@@ -339,7 +337,7 @@ export default function Contact() {
         }
 
         .card-footer {
-          border-top: 0.5px solid rgba(255, 255, 255, 0.07);
+          border-top: 0.5px solid var(--border);
           padding: 14px 28px;
           display: flex; align-items: center; justify-content: center; gap: 8px;
         }
@@ -350,7 +348,7 @@ export default function Contact() {
           flex-shrink: 0;
         }
         .footer-text {
-          font-size: 12px; color: #334155;
+          font-size: 12px; color: var(--muted);
           font-weight: 300; letter-spacing: 0.2px;
         }
       `}</style>
