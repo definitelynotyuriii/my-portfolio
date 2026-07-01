@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import CertificateCard from "../components/CertificateCard.jsx";
 
 const certificates = [
@@ -45,6 +45,7 @@ const certificates = [
 export default function Certificates() {
   const sectionRef = useRef(null);
   const cardsRef = useRef([]);
+  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -63,6 +64,23 @@ export default function Certificates() {
 
     return () => observer.disconnect();
   }, []);
+
+  // close modal on Escape key
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "Escape") setSelected(null);
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
+  // lock page scroll while modal is open
+  useEffect(() => {
+    document.body.style.overflow = selected ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selected]);
 
   return (
     <>
@@ -84,6 +102,12 @@ export default function Certificates() {
               className="cert-card-wrap"
               ref={(el) => (cardsRef.current[i] = el)}
               style={{ transitionDelay: `${i * 0.12}s` }}
+              onClick={() => setSelected(c)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") setSelected(c);
+              }}
             >
               <CertificateCard {...c} />
             </div>
@@ -96,6 +120,29 @@ export default function Certificates() {
         </div>
 
       </section>
+
+      {selected && (
+        <div className="cert-modal-overlay" onClick={() => setSelected(null)}>
+          <div className="cert-modal" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="cert-modal-close"
+              onClick={() => setSelected(null)}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+            <img
+              src={selected.imageSrc}
+              alt={selected.title}
+              className="cert-modal-img"
+            />
+            <div className="cert-modal-info">
+              <h3>{selected.title}</h3>
+              <p>{selected.issuer} • {selected.date}</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
@@ -115,6 +162,14 @@ export default function Certificates() {
         @keyframes countUp {
           from { opacity: 0; transform: scale(0.7); }
           to   { opacity: 1; transform: scale(1); }
+        }
+        @keyframes modalFadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        @keyframes modalPopIn {
+          from { opacity: 0; transform: scale(0.92) translateY(12px); }
+          to   { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .cert-section {
@@ -188,11 +243,20 @@ export default function Certificates() {
           opacity: 0;
           transform: translateY(32px);
           transition: opacity 0.55s ease, transform 0.55s ease;
+          cursor: pointer;
         }
 
         .cert-card-wrap.visible {
           opacity: 1;
           transform: translateY(0);
+        }
+
+        .cert-card-wrap:hover {
+          transform: translateY(-4px);
+        }
+
+        .cert-card-wrap.visible:hover {
+          transform: translateY(-4px);
         }
 
         .cert-count {
@@ -217,6 +281,82 @@ export default function Certificates() {
           color: var(--muted);
           letter-spacing: 0.08em;
           text-transform: uppercase;
+          font-weight: 300;
+        }
+
+        .cert-modal-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.75);
+          backdrop-filter: blur(4px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          padding: 24px;
+          animation: modalFadeIn 0.25s ease both;
+        }
+
+        .cert-modal {
+          position: relative;
+          background: var(--bg, #16161e);
+          border-radius: 14px;
+          max-width: 900px;
+          width: 100%;
+          max-height: 90vh;
+          overflow-y: auto;
+          padding: 20px;
+          animation: modalPopIn 0.3s ease both;
+        }
+
+        .cert-modal-close {
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          border: none;
+          background: rgba(255, 255, 255, 0.1);
+          color: var(--text, #fff);
+          font-size: 16px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s ease;
+          z-index: 1;
+        }
+
+        .cert-modal-close:hover {
+          background: rgba(255, 255, 255, 0.2);
+        }
+
+        .cert-modal-img {
+          width: 100%;
+          height: auto;
+          border-radius: 8px;
+          display: block;
+        }
+
+        .cert-modal-info {
+          text-align: center;
+          margin-top: 16px;
+          font-family: 'DM Sans', sans-serif;
+        }
+
+        .cert-modal-info h3 {
+          font-family: 'Syne', sans-serif;
+          font-size: 20px;
+          font-weight: 700;
+          color: var(--text);
+          margin: 0 0 6px;
+        }
+
+        .cert-modal-info p {
+          font-size: 13px;
+          color: var(--muted);
+          margin: 0;
           font-weight: 300;
         }
       `}</style>

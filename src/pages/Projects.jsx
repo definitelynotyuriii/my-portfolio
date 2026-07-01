@@ -298,7 +298,7 @@ export default function Projects() {
           font-family: 'Syne', sans-serif;
           font-weight: 700;
           font-size: 17px;
-          color: var(--text, #f0eeff);
+          color: var(--text, #fafafa);
           margin: 0;
         }
         .proj-desc {
@@ -338,7 +338,7 @@ export default function Projects() {
         }
         .proj-btn-ghost {
           background: transparent;
-          color: var(--muted, #8885a8);
+          color: var(--muted, #fcfcfc);
           text-decoration: none;
           font-size: 13px;
           font-weight: 500;

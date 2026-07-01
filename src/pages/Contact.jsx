@@ -242,7 +242,7 @@ export default function Contact() {
         .heading {
           font-family: 'Syne', sans-serif;
           font-size: 22px; font-weight: 700;
-          color: var(--text); margin: 0 0 3px;
+          color: var(black); margin: 0 0 3px;
           letter-spacing: -0.3px;
           text-align: center;
         }

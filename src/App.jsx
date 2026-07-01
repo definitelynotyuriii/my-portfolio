@@ -211,7 +211,10 @@ function Navbar({ theme, toggleTheme }) {
             className="theme-toggle"
             onClick={toggleTheme}
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-          >
+              style={{
+              transform: "translateX(270px)", // Change 20px to whatever you want
+            }}
+            >
             {theme === "dark" ? (
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <circle cx="12" cy="12" r="4.5" />
@@ -316,19 +319,44 @@ function Home() {
     return () => observer.disconnect();
   }, []);
 
-  const skills = [
-    { name: "HTML",       logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
-    { name: "CSS",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" },
-    { name: "JavaScript", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
-    { name: "Java",       logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" },
-    { name: "Python",     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
-    { name: "C++",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" },
-    { name: "React",      logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
-    { name: "SQL",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
-    { name: "Git",        logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
-    { name: "Game Development",   logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg" },
-  ];
-
+ const skillGroups = [
+  {
+    title: "Frontend",
+    skills: [
+      { name: "HTML",              logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
+      { name: "CSS",               logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" },
+      { name: "ReactJS",             logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+      { name: "Tailwind CSS",      logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+    ],
+  },
+  {
+    title: "Backend",
+    skills: [
+      { name: "JavaScript", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
+      { name: "TypeScript", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
+      { name: "Python",     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
+      { name: "PostreSQL",  logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" },
+    ],
+  },
+  {
+    title: "Other",
+    skills: [
+      { name: "Java",             logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" },
+      { name: "C++",              logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" },
+      { name: "Arduino",          logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg" },
+      { name: "Game Development", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg" },
+    ],
+  },
+  {
+    title: "Tools",
+    skills: [
+      { name: "VS Code",          logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" },
+      { name: "Git",              logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
+      { name: "Github",           logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" },
+      { name: "Vercel",           logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg" },
+    ],
+  },
+];
   const education = [
     {
       icon: "🏛️",
@@ -378,27 +406,6 @@ function Home() {
   return (
     <div className="home-wrap">
       <section className="hero">
-        <div className="hero-left">
-          <div className="hero-tag">
-            <span className="hero-tag-dot" />
-            Open to opportunities
-          </div>
-          <h1 className="hero-name">
-            Hi, I'm<br />
-            <span className="glitch-wrap">
-              <span className="glitch-text" ref={glitchRef} data-text="Tristan">Tristan</span>
-            </span>{" "}
-            <span className="accent2-text"></span>
-          </h1>
-          <p className="hero-sub">
-            Aspiring Software Engineer and Game Developer, focused on continuous learning and improving skills through consistent hard work and practice. Passionate about Designing, efficient code and developing immersive digital experiences. Always exploring new technologies and challenging myself to grow and become better in software and game development.
-          </p>
-          <div className="hero-btns">
-            <button className="btn-primary" onClick={() => scrollTo("contact-sec")}>✉ Get in touch</button>
-            <a href="/MY-CV.pdf" download className="btn-ghost">DOWNLOAD CV</a>
-          </div>
-        </div>
-
         <div className="profile-card">
           <div className="card-scan-line" />
           <div className="corner corner-tl" />
@@ -430,6 +437,27 @@ function Home() {
             <span className="avail-dot" /> Available for hire
           </div>
         </div>
+
+        <div className="hero-left">
+          <div className="hero-tag">
+            <span className="hero-tag-dot" />
+            Open to opportunities
+          </div>
+          <h1 className="hero-name">
+            Hi, I'm<br />
+            <span className="glitch-wrap">
+              <span className="glitch-text" ref={glitchRef} data-text="Tristan">Tristan</span>
+            </span>{" "}
+            <span className="accent2-text"></span>
+          </h1>
+          <p className="hero-sub">
+            Aspiring Software Engineer and Game Developer, focused on continuous learning and improving skills through consistent hard work and practice. Passionate about Designing, efficient code and developing immersive digital experiences. Always exploring new technologies and challenging myself to grow and become better in software and game development.
+          </p>
+          <div className="hero-btns">
+            <button className="btn-primary" onClick={() => scrollTo("contact-sec")}>✉ Get in touch</button>
+            <a href="/MY-CV.pdf" download className="btn-ghost">DOWNLOAD CV</a>
+          </div>
+        </div>
       </section>
 
       <section className="section reveal" id="about-sec">
@@ -438,14 +466,34 @@ function Home() {
           <span className="section-label">Skills</span>
           <div className="section-line" />
         </div>
-        <div className="skills-grid">
-          {skills.map((s, i) => (
-            <div className="skill-pill" key={s.name} style={{ animationDelay: `${i * 0.07}s` }}>
-              <img src={s.logo} alt={s.name} className="skill-logo" />
-              <span>{s.name}</span>
-            </div>
-          ))}
+      {skillGroups.map((group) => (
+  <div className="skill-group" 
+  key={group.title}
+  style={{ marginBottom: "16px" }}  
+  >
+    <h3 
+      className="skill-group-title"
+      style={{
+        fontSize: "14px",
+        fontFamily: "'Syne', sans-serif", 
+        fontWeight: "700", 
+        marginBottom: "14px"
+      }}
+      >
+        {group.title}
+      </h3>
+    <div className="skills-grid">
+      {group.skills.map((s, i) => (
+        <div className="skill-pill" key={s.name} style={{ animationDelay: `${i * 0.07}s` }}>
+          <img 
+          src={s.logo} 
+          alt={s.name} className="skill-logo" />
+          <span>{s.name}</span>
         </div>
+      ))}
+    </div>
+  </div>
+))}
       </section>
 
       <section className="section reveal" id="edu-sec">
@@ -568,7 +616,7 @@ export default function App() {
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
         :root {
-          --accent: #7c6cfa;
+          --accent: #0015ff;
           --accent2: #fa6c9f;
           --bg: #080810;
           --bg2: #0d0d1a;
@@ -585,7 +633,7 @@ export default function App() {
           --bg2: #ffffff;
           --bg3: #ececf6;
           --border: rgba(22,22,42,0.09);
-          --text: #16162a;
+          --text: #5e5b78;
           --muted: #5e5b78;
           --card: rgba(255,255,255,0.88);
           --navbar-bg: rgba(246,245,251,0.85);
@@ -631,11 +679,11 @@ export default function App() {
         .main-content { padding: 60px 24px 100px; }
         .home-wrap { display: flex; flex-direction: column; gap: 0; }
 
-        .hero { display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center; margin-bottom: 96px; animation: fadeSlideUp 0.6s 0.05s ease both; }
-        .hero-left { display: flex; flex-direction: column; gap: 22px; }
-        .hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(124,108,250,0.1); border: 1px solid rgba(124,108,250,0.22); padding: 6px 14px; border-radius: 100px; font-size: 12px; color: #a89ef5; width: fit-content; }
+        .hero { display: grid; grid-template-columns: auto 1fr; gap: 48px; align-items: center; margin-bottom: 96px; animation: fadeSlideUp 0.6s 0.05s ease both; }
+        .hero-left { display: flex; flex-direction: column; gap: 22px;  }
+        .hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(124,108,250,0.1); border: 1px solid rgba(124,108,250,0.22); padding: 6px 14px; border-radius: 100px; font-size: 12px; color: #a89ef5; width: fit-content; margin-left: 100px;}
         .hero-tag-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
-        .hero-name { font-family: 'Syne', sans-serif; font-weight: 600; font-size: clamp(30px, 4.5vw, 44px); line-height: 1.0; letter-spacing: 1px; }
+        .hero-name { font-family: 'Syne', sans-serif; font-weight: 600; font-size: clamp(30px, 4.5vw, 44px); line-height: 1.0; letter-spacing: 1px; margin-left: 100px; }
         .accent-text { color: var(--accent); }
         .accent2-text { color: var(--accent2); }
 
@@ -648,8 +696,8 @@ export default function App() {
         @keyframes glitchTop { 0%, 85% { opacity: 0; transform: none; } 86% { opacity: 1; transform: translateX(-4px); clip-path: polygon(0 15%, 100% 15%, 100% 35%, 0 35%); } 87% { transform: translateX(4px); clip-path: polygon(0 25%, 100% 25%, 100% 45%, 0 45%); } 88%, 91%, 100% { opacity: 0; transform: none; } 89%, 90% { opacity: 1; transform: translateX(-2px); } }
         @keyframes glitchBot { 0%, 85% { opacity: 0; transform: none; } 86% { opacity: 1; transform: translateX(4px); clip-path: polygon(0 55%, 100% 55%, 100% 75%, 0 75%); } 87% { transform: translateX(-4px); clip-path: polygon(0 65%, 100% 65%, 100% 85%, 0 85%); } 88%, 91%, 100% { opacity: 0; transform: none; } 89%, 90% { opacity: 1; transform: translateX(2px); } }
 
-        .hero-sub { font-size: 15px; color: var(--muted); line-height: 1.75; max-width: 400px; }
-        .hero-btns { display: flex; gap: 12px; }
+        .hero-sub { font-size: 15px; color: var(--muted); line-height: 1.75; max-width: 800px; margin-left: 100px; }
+        .hero-btns { display: flex; gap: 18px; align-items: center; margin-top: 10px; margin-left: 100px;}
         .btn-primary { background: var(--accent); color: white; border: none; padding: 11px 22px; border-radius: 11px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; margin-top: 18px; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,108,250,0.35); }
         .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 11px 22px; border-radius: 10px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: color 0.2s, border-color 0.2s, transform 0.2s; text-decoration: none; display: inline-flex; align-items: center; margin-top: 18px; }
@@ -704,11 +752,11 @@ export default function App() {
         .section-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; white-space: nowrap; }
         .section-num { font-size: 11px; color: var(--accent); font-weight: 500; letter-spacing: 0.1em; }
 
-        .skills-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+        .skills-grid { display: flex; flex-wrap: wrap; gap: 22px; }
         .skill-pill { background: var(--bg3); border: 1px solid var(--border); padding: 8px 18px; border-radius: 100px; font-size: 13px; color: var(--text); display: flex; align-items: center; gap: 8px; opacity: 0; transform: translateY(16px) scale(0.95); animation: pillPop 0.4s ease forwards; transition: background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s; cursor: default; }
         @keyframes pillPop { to { opacity: 1; transform: translateY(0) scale(1); } }
         .skill-pill:hover { background: rgba(124,108,250,0.14); border-color: rgba(124,108,250,0.4); transform: translateY(-3px) scale(1.05); box-shadow: 0 6px 20px rgba(124,108,250,0.2); }
-        .skill-logo { width: 18px; height: 18px; object-fit: contain; display: block; transition: transform 0.3s; }
+        .skill-logo { width: 14px; height: 14px; object-fit: contain; display: block; transition: transform 0.3s; }
         .skill-pill:hover .skill-logo { transform: rotate(10deg) scale(1.2); }
 
         .edu-list { display: flex; flex-direction: column; gap: 16px; }
