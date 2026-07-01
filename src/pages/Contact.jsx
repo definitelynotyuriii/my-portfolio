@@ -202,6 +202,7 @@ export default function Contact() {
           justify-content: center;
           padding: 60px 20px;
           font-family: 'DM Sans', sans-serif;
+          box-sizing: border-box;
         }
 
         .contact-card {
@@ -314,6 +315,7 @@ export default function Contact() {
 
         .social-info {
           flex: 1; display: flex; flex-direction: column; gap: 2px;
+          min-width: 0;
         }
         .social-label {
           font-size: 13px; font-weight: 500;
@@ -322,6 +324,9 @@ export default function Contact() {
         .social-desc {
           font-size: 12px; color: var(--muted); font-weight: 300;
           transition: color 0.22s ease;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         .social-link:hover .social-desc { color: var(--text); }
 
@@ -350,6 +355,78 @@ export default function Contact() {
         .footer-text {
           font-size: 12px; color: var(--muted);
           font-weight: 300; letter-spacing: 0.2px;
+        }
+
+        /* ── Mobile fixes ── */
+        @media (max-width: 480px) {
+          .contact-root {
+            padding: 30px 12px;
+          }
+
+          .contact-card {
+            border-radius: 16px;
+          }
+
+          .card-header {
+            padding: 20px 16px 0;
+            gap: 8px;
+          }
+
+          .logo-wrap {
+            width: 88px; height: 88px;
+          }
+          .logo-svg { width: 88px; height: 88px; }
+
+          .heading {
+            font-size: 18px;
+          }
+
+          .subheading {
+            font-size: 12px;
+          }
+
+          .divider {
+            margin: 16px 16px 0;
+          }
+
+          .card-body {
+            padding: 16px 16px 20px;
+          }
+
+          .bio {
+            font-size: 12px;
+            margin: 0 0 16px;
+          }
+
+          .social-link {
+            padding: 10px 12px;
+            gap: 10px;
+          }
+
+          .icon-wrap {
+            width: 32px; height: 32px;
+            font-size: 15px;
+          }
+
+          .social-label {
+            font-size: 12px;
+          }
+
+          .social-desc {
+            font-size: 11px;
+          }
+
+          .arrow {
+            width: 13px; height: 13px;
+          }
+
+          .card-footer {
+            padding: 12px 16px;
+          }
+
+          .footer-text {
+            font-size: 11px;
+          }
         }
       `}</style>
     </motion.section>
