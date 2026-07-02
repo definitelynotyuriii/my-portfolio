@@ -1,10 +1,13 @@
 import { useState } from "react";
 
 // ─── PROJECT CARD ──────────────────────────────────────────────────────────────
-function ProjectCard({ title, description, tech = [], imageSrc, videoSrc, repo, demo, tag }) {
+function ProjectCard({ title, description, tech = [], imageSrc, videoSrc, repo, demo, tag, onImageClick }) {
   return (
     <div className="proj-card">
-      <div className="proj-media-wrap">
+      <div
+        className="proj-media-wrap"
+        onClick={() => !videoSrc && onImageClick(imageSrc, title)}
+      >
         {videoSrc ? (
           <video className="proj-media" controls poster={imageSrc}>
             <source src={videoSrc} type="video/mp4" />
@@ -77,6 +80,15 @@ const SOFTWARE = [
     repo: "https://www.roblox.com/games/82356767480264/Mount-Lumitaw-Revival",
     tag: "Game Dev",
   },
+    {
+    title: "To do List",
+    description:
+      "I created simple to do list website for my self, To monitor my tasks in home and schools.",
+    tech: ["React.JS", "JavaScript"],
+    imageSrc: "/imgs/todolist.jpg", 
+    repo: "https://todo-list-tawny-theta.vercel.app/",
+    tag: "Web",
+  },
 ];
 
 const HARDWARE = [
@@ -110,8 +122,16 @@ const HARDWARE = [
 // ─── PROJECTS PAGE ─────────────────────────────────────────────────────────────
 export default function Projects() {
   const [active, setActive] = useState("software");
+  const [lightbox, setLightbox] = useState(null); // { src, title } or null
 
   const projects = active === "software" ? SOFTWARE : HARDWARE;
+
+  const handleImageClick = (src, title) => {
+    setLightbox({
+      src: src || "https://via.placeholder.com/600x340/0d0d1a/7c6cfa?text=Project+Image",
+      title,
+    });
+  };
 
   return (
     <>
@@ -148,12 +168,25 @@ export default function Projects() {
         <div className="proj-grid">
           {projects.map((p, i) => (
             <div key={p.title} style={{ animationDelay: `${i * 0.08}s` }}>
-              <ProjectCard {...p} />
+              <ProjectCard {...p} onImageClick={handleImageClick} />
             </div>
           ))}
         </div>
 
       </section>
+
+      {/* LIGHTBOX */}
+      {lightbox && (
+        <div className="lightbox-overlay" onClick={() => setLightbox(null)}>
+          <button className="lightbox-close" onClick={() => setLightbox(null)}>✕</button>
+          <img
+            className="lightbox-img"
+            src={lightbox.src}
+            alt={lightbox.title}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap');
@@ -260,6 +293,7 @@ export default function Projects() {
           aspect-ratio: 16 / 9;
           overflow: hidden;
           background: #0a0a14;
+          cursor: pointer;
         }
         .proj-media {
           width: 100%;
@@ -352,6 +386,42 @@ export default function Projects() {
           border-color: rgba(255,255,255,0.2);
           transform: translateY(-2px);
         }
+
+        /* ── LIGHTBOX ───────────────────────────────────────────── */
+        .lightbox-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.85);
+          backdrop-filter: blur(4px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 999;
+          padding: 40px;
+          animation: fadeSlideUp 0.25s ease both;
+        }
+        .lightbox-img {
+          max-width: 90vw;
+          max-height: 85vh;
+          border-radius: 12px;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+          object-fit: contain;
+        }
+        .lightbox-close {
+          position: absolute;
+          top: 24px;
+          right: 32px;
+          background: rgba(255,255,255,0.1);
+          border: 1px solid rgba(255,255,255,0.2);
+          color: white;
+          font-size: 18px;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        .lightbox-close:hover { background: rgba(255,255,255,0.2); }
 
         /* ── ANIMATION ──────────────────────────────────────────── */
         @keyframes fadeSlideUp {
