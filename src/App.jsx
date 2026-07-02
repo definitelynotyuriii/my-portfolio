@@ -97,7 +97,7 @@ function IntroScreen({ onEnter }) {
           opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(10px)",
           transition: "opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s",
         }}>
-          Welcome to my World
+          Welcome to my 
         </p>
 
         <div style={{
@@ -211,10 +211,7 @@ function Navbar({ theme, toggleTheme }) {
             className="theme-toggle"
             onClick={toggleTheme}
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-              style={{
-              transform: "translateX(270px)", // Change 20px to whatever you want
-            }}
-            >
+          >
             {theme === "dark" ? (
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <circle cx="12" cy="12" r="4.5" />
@@ -663,7 +660,7 @@ export default function App() {
         .nav-inner { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; }
         .nav-brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--text); letter-spacing: -0.5px; }
         .brand-dot { color: var(--accent); }
-        .nav-links { display: flex; gap: 24px; }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
         .nav-links a { text-decoration: none; color: var(--muted); font-size: 14px; position: relative; transition: color 0.2s; padding: 4px 0; }
         .nav-links a:hover { color: var(--text); }
         .nav-links a::after { content: ""; position: absolute; left: 0; bottom: -2px; width: 0%; height: 1.5px; background: var(--accent); transition: width 0.25s ease; }
@@ -797,6 +794,13 @@ export default function App() {
           .edu-year { grid-column: 2; }
           .nav-inner { flex-direction: column; gap: 12px; }
           .nav-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+
+          .hero-tag,
+          .hero-name,
+          .hero-sub,
+          .hero-btns {
+            margin-left: 0;
+          }
         }
 
         .location-icon { color: #DC143C; font-size: 12px; margin-right: 0px; flex-shrink: 0; transform: translateY(-1px); }
