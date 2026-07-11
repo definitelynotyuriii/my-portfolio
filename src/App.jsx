@@ -6,6 +6,12 @@ import Contact from "./pages/Contact.jsx";
 import Footer from "./components/Footer.jsx";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import emailjs from "@emailjs/browser";
+import { ActivityCalendar } from "react-activity-calendar";
+
+const githubCalendarTheme = {
+  light: ["#ececf6", "#d9d4f5", "#b3a8ec", "#8c7ce3", "#7c6cfa"],
+  dark: ["#161626", "#2d2a5c", "#4d47a3", "#7c6cfa", "#a89ef5"],
+};
 
 function IntroScreen({ onEnter }) {
   const [loaded, setLoaded] = useState(false);
@@ -236,9 +242,12 @@ function Navbar({ theme, toggleTheme }) {
   );
 }
 
-function Home() {
+function Home({ theme }) {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState({ msg: "", type: "" });
+  const [calendarData, setCalendarData] = useState([]);
+  const [calendarLoading, setCalendarLoading] = useState(true);
+  const [calendarError, setCalendarError] = useState(null);
   const glitchRef = useRef(null);
 
   const photos = ["/imgs/YURIII.jpeg", "/imgs/YURI.jpeg"];
@@ -254,6 +263,17 @@ function Home() {
       }, 300);
     }, 3000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/github-contributions")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.error) throw new Error(json.error);
+        setCalendarData(json.data);
+      })
+      .catch((err) => setCalendarError(err.message))
+      .finally(() => setCalendarLoading(false));
   }, []);
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -493,9 +513,35 @@ function Home() {
 ))}
       </section>
 
-      <section className="section reveal" id="edu-sec">
+      <section className="section reveal" id="github-sec">
         <div className="section-header">
           <span className="section-num">02</span>
+          <span className="section-label">GitHub Activity</span>
+          <div className="section-line" />
+        </div>
+        <div className="contact-card github-card">
+          {calendarLoading ? (
+            <p style={{ color: "var(--muted)", fontSize: 13 }}>Loading contributions...</p>
+          ) : calendarError ? (
+            <p style={{ color: "var(--muted)", fontSize: 13 }}>
+              Couldn't load contributions: {calendarError}
+            </p>
+          ) : (
+            <ActivityCalendar
+              data={calendarData}
+              theme={githubCalendarTheme}
+              colorScheme={theme === "light" ? "light" : "dark"}
+              blockSize={11}
+              blockMargin={4}
+              fontSize={12}
+            />
+          )}
+        </div>
+      </section>
+
+      <section className="section reveal" id="edu-sec">
+        <div className="section-header">
+          <span className="section-num">03</span>
           <span className="section-label">Education</span>
           <div className="section-line" />
         </div>
@@ -518,7 +564,7 @@ function Home() {
 
       <section className="section reveal" id="timeline-sec">
         <div className="section-header">
-          <span className="section-num">03</span>
+          <span className="section-num">04</span>
           <span className="section-label">Timeline</span>
           <div className="section-line" />
         </div>
@@ -543,7 +589,7 @@ function Home() {
 
       <section className="section reveal" id="contact-sec">
         <div className="section-header">
-          <span className="section-num">04</span>
+          <span className="section-num">05</span>
           <span className="section-label">Send a Message</span>
           <div className="section-line" />
         </div>
@@ -599,7 +645,7 @@ export default function App() {
           <Navbar theme={theme} toggleTheme={toggleTheme} />
           <main className="container main-content">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Home theme={theme} />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/certificates" element={<Certificates />} />
               <Route path="/contact" element={<Contact />} />
@@ -779,6 +825,9 @@ export default function App() {
         .status-msg { font-size: 13px; color: var(--muted); }
         .status-ok { color: #34d399; }
         .status-err { color: #f87171; }
+
+        .github-card { overflow-x: auto; display: flex; justify-content: center; }
+        .github-card :global(.react-activity-calendar__legend-colors) { gap: 4px; }
 
         footer { text-align: center; padding: 30px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); margin-top: 60px; position: relative; z-index: 1; }
 
