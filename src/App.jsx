@@ -250,7 +250,7 @@ function Home({ theme }) {
   const [calendarError, setCalendarError] = useState(null);
   const glitchRef = useRef(null);
 
-  const photos = ["/imgs/YURIII.jpeg", "/imgs/YURI.jpeg"];
+  const photos = ["/imgs/MY-PICTURE.jpg", "/imgs/YURI.jpeg"];
   const [imgIndex, setImgIndex] = useState(0);
   const [isGlitching, setIsGlitching] = useState(false);
 
