@@ -370,7 +370,7 @@ function Home({ theme }) {
     skills: [
       { name: "VS Code",          logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" },
       { name: "Git",              logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
-      { name: "Github",           logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" },
+      { name: "Github",           logo: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" },
       { name: "Vercel",           logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg" },
     ],
   },
