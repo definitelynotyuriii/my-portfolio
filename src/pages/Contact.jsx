@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaGithub, FaInstagram, FaEnvelope, FaLinkedin } from "react-icons/fa";
+import { FaGithub, FaInstagram, FaEnvelope, FaLinkedin, FaTiktok } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
 const socials = [
@@ -29,12 +29,21 @@ const socials = [
   },
   {
     label: "Instagram",
-    href: "https://www.instagram.com/smthtrstn_/",
+    href: "https://www.instagram.com/cemenbakin_/",
     Icon: FaInstagram,
     accent: "#f472b6",
     glow: "rgba(244,114,182,0.18)",
-    desc: "@smthtrstn_",
+    desc: "@cemenbakin_",
   },
+    {
+    label: "Tiktok",
+    href: "https://www.tiktok.com/@diffyuriii",
+    Icon: FaTiktok,
+    accent: "#25F4EE",
+    glow: "rgba(37,244,238,0.18)",            
+    desc: "@diffyurii_",
+  },
+  
 ];
 
 // ── Replace with your actual image path or import ────────────────────────────
@@ -88,6 +97,7 @@ function Logo() {
         <circle cx="48" cy="26" r="2" fill="#38bdf8" opacity="0.5" />
         <circle cx="26" cy="48" r="2" fill="#f472b6" opacity="0.5" />
         <circle cx="4"  cy="26" r="2" fill="#a78bfa" opacity="0.5" />
+        <circle cx="2"  cy="2"  r="2" fill="#25F4EE" opacity="0.5" />
         <image
           href={AVATAR_SRC}
           x="10" y="10"
