@@ -4,6 +4,7 @@ import Projects from "./pages/Projects.jsx";
 import Certificates from "./pages/Certificates.jsx";
 import Contact from "./pages/Contact.jsx";
 import Footer from "./components/Footer.jsx";
+import ChatWidget from "./components/ChatWidget.jsx";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import emailjs from "@emailjs/browser";
 import { ActivityCalendar } from "react-activity-calendar";
@@ -476,8 +477,15 @@ function Home({ theme }) {
             <a href="/MY-CV.pdf" download className="btn-ghost">DOWNLOAD CV</a>
           </div>
         </div>
+        <div className="ai-chat">
+        <div className="main-content">
+          {/* your content */}
+        </div>
+        <div className="ai-chat-slot">
+          <ChatWidget />
+        </div>
+      </div>
       </section>
-
       <section className="section reveal" id="about-sec">
         <div className="section-header">
           <span className="section-num">01</span>
@@ -644,14 +652,16 @@ export default function App() {
           <div className="orb orb2" />
           <div className="orb orb3" />
           <Navbar theme={theme} toggleTheme={toggleTheme} />
-          <main className="container main-content">
-            <Routes>
-              <Route path="/" element={<Home theme={theme} />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/certificates" element={<Certificates />} />
-              <Route path="/contact" element={<Contact />} />
-            </Routes>
-          </main>
+    <div className="page-layout">
+            <main className="container main-content">
+              <Routes>
+                <Route path="/" element={<Home theme={theme} />} />
+                <Route path="/projects" element={<Projects />} />
+                <Route path="/certificates" element={<Certificates />} />
+                <Route path="/contact" element={<Contact />} />
+              </Routes>
+            </main>
+          </div>
           <Footer />
         </>
       )}
@@ -852,6 +862,180 @@ export default function App() {
             margin-left: 0;
           }
         }
+
+ .ai-chat {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.ai-chat .main-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.ai-chat-slot {
+  position: fixed;
+  top: 90px;
+  right: 24px;
+  width: 320px;
+  z-index: 100;
+  transform: translateX(100px);
+}
+
+@media (max-width: 1000px) {
+  .ai-chat {
+    flex-direction: column;
+  }
+
+  .ai-chat-slot {
+    position: fixed;
+  bottom: 0;
+  left: 0;
+  }
+}
+
+.chat-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: fit-content;
+}
+
+.chat-toggle-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(124,108,250,0.35);
+}
+
+.chat-toggle-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.chat-widget {
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  gap: 10px;
+  width: 320px;
+}
+
+.chat-widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-widget-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.chat-title-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--accent);
+}
+
+.chat-close-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+}
+
+.chat-close-btn:hover {
+  color: var(--text);
+}
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 200px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.chat-empty-msg {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  padding: 20px 0;
+}
+
+.chat-msg {
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  max-width: 90%;
+}
+
+.chat-msg.user {
+  align-self: flex-end;
+  background: var(--accent);
+  color: white;
+}
+
+.chat-msg.assistant {
+  align-self: flex-start;
+  background: var(--bg3);
+  color: var(--text);
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.chat-input-row input {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  outline: none;
+}
+
+.chat-input-row button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.chat-input-row button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+        
 
         .location-icon { color: #DC143C; font-size: 12px; margin-right: 0px; flex-shrink: 0; transform: translateY(-1px); }
       `}</style>
