@@ -364,12 +364,31 @@ function Lightbox({ images, startIndex, onClose }) {
 
   return (
     <div className="lightbox-overlay" ref={overlayRef} onClick={onClose}>
-      <button className="lightbox-close-mobile" onClick={onClose} aria-label="Close">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="18" y1="6" x2="6" y2="18" />
-        <line x1="6" y1="6" x2="18" y2="18" />
-      </svg>
-    </button>
+            <button
+        onClick={onClose}
+        aria-label="Close"
+        style={{
+          position: "fixed",
+          top: "80px",       // moved down from 16px
+          right: "24px",
+          width: "42px",
+          height: "42px",
+          borderRadius: "50%",
+          border: "1px solid rgba(255,255,255,0.25)",
+          background: "rgba(0,0,0,0.9)",
+          color: "#fff",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          zIndex: 999999999,
+        }}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
       <div className="lightbox-topbar" onClick={(e) => e.stopPropagation()}>
         <span className="lightbox-counter">{index + 1} / {images.length}</span>
 
@@ -1226,23 +1245,31 @@ export default function App() {
           font-size: 13px;
           letter-spacing: 0.05em;
         }
-          .lightbox-close-mobile {
-          position: fixed;
-          top: 14px;
-          right: 14px;
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          border: 1px solid rgba(255,255,255,0.15);
-          background: rgba(20,20,20,0.85);
-          color: #fff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          z-index: 10003;
-        }
-        .lightbox-close-mobile svg { width: 20px; height: 20px; }
+.lightbox-close-mobile {
+  position: fixed;
+  top: 80px;
+  right: 24px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.9);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999999999;
+}
+
+@media (max-width: 480px) {
+  .lightbox-close-mobile {
+    top: 20px;
+    right: 200px;
+    width: 38px;
+    height: 38px;
+  }
+}
 
         .lightbox-toolbar {
           display: flex;
