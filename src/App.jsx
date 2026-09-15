@@ -364,31 +364,6 @@ function Lightbox({ images, startIndex, onClose }) {
 
   return (
     <div className="lightbox-overlay" ref={overlayRef} onClick={onClose}>
-            <button
-        onClick={onClose}
-        aria-label="Close"
-        style={{
-          position: "fixed",
-          top: "80px",       // moved down from 16px
-          right: "24px",
-          width: "42px",
-          height: "42px",
-          borderRadius: "50%",
-          border: "1px solid rgba(255,255,255,0.25)",
-          background: "rgba(0,0,0,0.9)",
-          color: "#fff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-          zIndex: 999999999,
-        }}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-      </button>
       <div className="lightbox-topbar" onClick={(e) => e.stopPropagation()}>
         <span className="lightbox-counter">{index + 1} / {images.length}</span>
 
@@ -697,17 +672,10 @@ function Home({ theme }) {
   ];
 
    const gallery = [
-    { src: "/imgs/GALLERY1.jpg", caption: "Photo 1" },
-    { src: "/imgs/GALLERY2.jpg", caption: "Photo 2" },
-    { src: "/imgs/GALLERY3.jpg", caption: "Photo 3" },
-    { src: "/imgs/GALLERY4.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY5.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY6.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY7.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY8.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY9.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY10.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY11.jpg", caption: "Photo 4" },
+    { src: "/imgs/MY-PICTURE.jpg", caption: "Photo 1" },
+    { src: "/imgs/YURI.jpeg", caption: "Photo 2" },
+    { src: "/imgs/MY-PICTURE.jpg", caption: "Photo 3" },
+    { src: "/imgs/YURI.jpeg", caption: "Photo 4" },
   ];
   
 
@@ -910,36 +878,6 @@ function Home({ theme }) {
                 {gallery.map((g, i) => (
                   <div className="gallery-item" key={g.src + i} onClick={() => setLightboxImg(i)}>
                     <img src={g.src} alt={g.caption} className="gallery-img" />
-                    <div className="gallery-item-toolbar" onClick={(e) => e.stopPropagation()}>
-                      <button className="gallery-tool-btn" onClick={() => setLightboxImg(i)} aria-label="Zoom" title="Zoom">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="11" cy="11" r="7" />
-                          <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                          <line x1="11" y1="8" x2="11" y2="14" />
-                          <line x1="8" y1="11" x2="14" y2="11" />
-                        </svg>
-                      </button>
-                      <button className="gallery-tool-btn" onClick={() => setLightboxImg(i)} aria-label="Play" title="Play">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                          <polygon points="6 4 20 12 6 20 6 4" />
-                        </svg>
-                      </button>
-                      <button className="gallery-tool-btn" onClick={() => setLightboxImg(i)} aria-label="Fullscreen" title="Fullscreen">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="15 3 21 3 21 9" />
-                          <polyline points="9 21 3 21 3 15" />
-                          <line x1="21" y1="3" x2="14" y2="10" />
-                          <line x1="3" y1="21" x2="10" y2="14" />
-                        </svg>
-                      </button>
-                      <button className="gallery-tool-btn" onClick={() => setLightboxImg(i)} aria-label="View" title="View">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <rect x="3" y="4" width="18" height="14" rx="2" />
-                          <line x1="8" y1="21" x2="16" y2="21" />
-                          <line x1="12" y1="18" x2="12" y2="21" />
-                        </svg>
-                      </button>
-                    </div>
                   </div>
                 ))}
               </div>
@@ -1193,20 +1131,13 @@ export default function App() {
         .edu-year { font-size: 12px; color: var(--muted); white-space: nowrap; background: var(--bg3); padding: 4px 10px; border-radius: 6px; height: fit-content; }
         
         .timeline-gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
-        .timeline-gallery-grid > div { min-width: 0; }
 
-        .gallery-carousel-wrap { position: relative; display: flex; align-items: center; gap: 8px; width: 100%; max-width: 100%; }
-        .gallery-track { display: flex; gap: 12px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; padding: 4px 2px; flex: 1 1 0%; min-width: 0; }
+        .gallery-carousel-wrap { position: relative; display: flex; align-items: center; gap: 8px; }
+        .gallery-track { display: flex; gap: 12px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; padding: 4px 2px; }
         .gallery-track::-webkit-scrollbar { display: none; }
-        .gallery-item { position: relative; flex: 0 0 140px; min-width: 140px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s; }
+        .gallery-item { flex: 0 0 140px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s; }
         .gallery-item:hover { border-color: rgba(124,108,250,0.3); transform: translateY(-4px); box-shadow: 0 4px 24px rgba(124,108,250,0.08); }
         .gallery-img { width: 100%; height: 160px; object-fit: cover; display: block; }
-
-        .gallery-item-toolbar { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 2px; background: rgba(20,20,20,0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 4px; opacity: 0; transition: opacity 0.2s ease; z-index: 2; }
-        .gallery-item:hover .gallery-item-toolbar { opacity: 1; }
-        .gallery-tool-btn { width: 24px; height: 24px; border-radius: 5px; border: none; background: transparent; color: rgba(255,255,255,0.85); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s, color 0.15s; }
-        .gallery-tool-btn svg { width: 13px; height: 13px; }
-        .gallery-tool-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
 
         .gallery-arrow { flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); color: var(--text); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.2s, transform 0.2s, background 0.2s; }
         .gallery-arrow svg { width: 16px; height: 16px; }
@@ -1245,31 +1176,6 @@ export default function App() {
           font-size: 13px;
           letter-spacing: 0.05em;
         }
-.lightbox-close-mobile {
-  position: fixed;
-  top: 80px;
-  right: 24px;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.25);
-  background: rgba(0,0,0,0.9);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 999999999;
-}
-
-@media (max-width: 480px) {
-  .lightbox-close-mobile {
-    top: 20px;
-    right: 200px;
-    width: 38px;
-    height: 38px;
-  }
-}
 
         .lightbox-toolbar {
           display: flex;
