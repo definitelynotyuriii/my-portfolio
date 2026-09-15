@@ -672,10 +672,17 @@ function Home({ theme }) {
   ];
 
    const gallery = [
-    { src: "/imgs/MY-PICTURE.jpg", caption: "Photo 1" },
-    { src: "/imgs/YURI.jpeg", caption: "Photo 2" },
-    { src: "/imgs/MY-PICTURE.jpg", caption: "Photo 3" },
-    { src: "/imgs/YURI.jpeg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY1.jpg", caption: "Photo 1" },
+    { src: "/imgs/GALLERY2.jpg", caption: "Photo 2" },
+    { src: "/imgs/GALLERY3.jpg", caption: "Photo 3" },
+    { src: "/imgs/GALLERY4.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY5.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY6.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY7.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY8.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY9.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY10.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY11.jpg", caption: "Photo 4" },
   ];
   
 
