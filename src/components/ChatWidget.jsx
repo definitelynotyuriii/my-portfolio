@@ -42,7 +42,7 @@ export default function ChatWidget() {
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="chat-toggle-icon">
           <path d="M21 11.5a8.5 8.5 0 01-8.5 8.5 8.38 8.38 0 01-4-1L3 20l1.3-3.9a8.38 8.38 0 01-1-4A8.5 8.5 0 0111.5 3a8.38 8.38 0 018 6.5" />
         </svg>
-        Chat with AI
+        Chat with Yurii
       </button>
     );
   }
@@ -51,16 +51,14 @@ return (
   <div className="chat-widget">
     <div className="chat-widget-header">
       <div className="chat-widget-title">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="chat-title-icon">
-          <path d="M21 11.5a8.5 8.5 0 01-8.5 8.5 8.38 8.38 0 01-4-1L3 20l1.3-3.9a8.38 8.38 0 01-1-4A8.5 8.5 0 0111.5 3a8.38 8.38 0 018 6.5" />
-        </svg>
-        Chat with AI
+                <img src="/imgs/MY-PICTURE.jpg" alt="Profile" className="chat-title-avatar" />
+        Tristan Dela Cruz
       </div>
       <button className="chat-close-btn" onClick={() => setIsOpen(false)}>✕</button>
     </div>
     <div className="chat-messages">
       {messages.length === 0 && (
-        <p className="chat-empty-msg">Ask me anything about Tristan!</p>
+        <p className="chat-empty-msg">Ask me anything!</p>
       )}
       {messages.map((msg, i) => (
         <div key={i} className={`chat-msg ${msg.role}`}>

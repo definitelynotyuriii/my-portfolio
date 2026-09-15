@@ -472,20 +472,14 @@ function Home({ theme }) {
           <p className="hero-sub">
             Aspiring Software Engineer and Game Developer, focused on continuous learning and improving skills through consistent hard work and practice. Passionate about Designing, efficient code and developing immersive digital experiences. Always exploring new technologies and challenging myself to grow and become better in software and game development.
           </p>
-          <div className="hero-btns">
+                  <div className="hero-btns">
             <button className="btn-primary" onClick={() => scrollTo("contact-sec")}>✉ Get in touch</button>
             <a href="/MY-CV.pdf" download className="btn-ghost">DOWNLOAD CV</a>
           </div>
         </div>
-        <div className="ai-chat">
-        <div className="main-content">
-          {/* your content */}
-        </div>
-        <div className="ai-chat-slot">
-          <ChatWidget />
-        </div>
-      </div>
       </section>
+
+      <ChatWidget />
       <section className="section reveal" id="about-sec">
         <div className="section-header">
           <span className="section-num">01</span>
@@ -813,7 +807,11 @@ export default function App() {
         .skill-logo { width: 14px; height: 14px; object-fit: contain; display: block; transition: transform 0.3s; }
         .skill-pill:hover .skill-logo { transform: rotate(10deg) scale(1.2); }
 
-        .edu-list { display: flex; flex-direction: column; gap: 16px; }
+        .edu-list { 
+        display: flex; 
+        flex-direction: 
+        column; gap: 16px; 
+        }
         .edu-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; display: grid; grid-template-columns: 48px 1fr auto; gap: 16px; align-items: start; opacity: 0; transform: translateX(-20px); transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s, opacity 0.5s; }
         .edu-card.revealed { opacity: 1; transform: translateX(0); }
         .edu-card:hover { border-color: rgba(124,108,250,0.3); transform: translateX(5px); box-shadow: 0 4px 24px rgba(124,108,250,0.08); }
@@ -863,42 +861,11 @@ export default function App() {
           }
         }
 
- .ai-chat {
-  display: flex;
-  gap: 24px;
-  align-items: flex-start;
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.ai-chat .main-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.ai-chat-slot {
-  position: fixed;
-  top: 90px;
-  right: 24px;
-  width: 320px;
-  z-index: 100;
-  transform: translateX(100px);
-}
-
-@media (max-width: 1000px) {
-  .ai-chat {
-    flex-direction: column;
-  }
-
-  .ai-chat-slot {
-    position: fixed;
-  bottom: 0;
-  left: 0;
-  }
-}
-
 .chat-toggle-btn {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  z-index: 1000;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -926,6 +893,10 @@ export default function App() {
 }
 
 .chat-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
   background: var(--card);
@@ -934,8 +905,9 @@ export default function App() {
   padding: 16px;
   gap: 10px;
   width: 320px;
+  max-width: calc(100vw - 32px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.35);
 }
-
 .chat-widget-header {
   display: flex;
   justify-content: space-between;
@@ -1034,6 +1006,13 @@ export default function App() {
 .chat-input-row button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.chat-title-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
 }
         
 
