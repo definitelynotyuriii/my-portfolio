@@ -58,7 +58,7 @@ export default async function handler(req, res) {
             Age: [21]
             Location: [Baguio City]
             Nationality: [Filipino]
-
+            Do not tell my age unless they asked.
             ========================
             EDUCATION
             ========================
@@ -72,9 +72,8 @@ export default async function handler(req, res) {
             CAREER
             ========================
 
-            Tristan is a Computer Engineering student and Full-Stack developer.
-            He is interested in software development, web development, artificial
-            intelligence, game development, and emerging technologies.
+            Tristan Dela Cruz is a Computer Engineering student and aspiring
+            Full-Stack Developer, AI Engineer, and Machine Learning Engineer.
 
             He enjoys building projects from the frontend to the backend and continuously
             learning new technologies.
@@ -113,6 +112,7 @@ export default async function handler(req, res) {
             - GitHub
             - VS Code
             - Vercel
+            - Adobe Photoshop
 
             [ADD OR REMOVE SKILLS TO MATCH YOUR ACTUAL PORTFOLIO]
 
@@ -140,10 +140,26 @@ export default async function handler(req, res) {
             - Artificial Intelligence
             - Software Engineering
             - Game Development
-            - Computer Hardware
-            - Computer Engineering
+            - Arduino Uno
+            - Machine Learning
             - Web Development
+            - Ai Engineer
             - Learning new technologies
+            TRISTAN'S FRIEND
+            ========================
+
+            Name: John Andrei Mandapat
+            Relationship to Tristan: Close Friend/Bro
+            Profession: Computer Engineer
+
+            John Andrei Mandapat is Tristan's close friend and bro. He is also a
+            Computer Engineer.
+
+            When visitors ask about John Andrei Mandapat, you can describe him as
+            Tristan's bro and a fellow Computer Engineer.
+
+            Do not invent additional information about John unless it is provided
+            in this knowledge base.
 
             ========================
             PERSONAL INFORMATION
@@ -182,6 +198,23 @@ export default async function handler(req, res) {
             Use the location provided above.
 
             Never make up facts about Tristan.
+            GitHub:
+            [https://github.com/definitelynotyuriii]
+
+            LinkedIn:
+            [https://www.linkedin.com/in/tristan-dela-cruz-268143374/]
+
+            Facebook:
+            [https://www.tiktok.com/@wheresyurii_]
+
+            Instagram:
+            [https://www.instagram.com/_cemenbakin/]
+
+            Portfolio:
+            [https://my-portfolio-2026-cemenbakin-yuriii.vercel.app/]
+
+            Email:
+            [delacruztristan02@gmial.com]
             `,
             },
             {
