@@ -7,6 +7,7 @@ export default function ChatWidget() {
   const [loading, setLoading] = useState(false);
 
   const sendMessage = async () => {
+    console.log("SEND MESSAGE CLICKED");
     if (!input.trim()) return;
 
     const userMessage = input;
