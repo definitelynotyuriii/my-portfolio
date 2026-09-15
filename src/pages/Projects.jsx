@@ -71,15 +71,6 @@ const SOFTWARE = [
     repo: "https://baguio-tourist-system.vercel.app/",
     tag: "Fullstack",
   },
-  {
-    title: "Game Development",
-    description:
-      "Were created a Roblox mountain climbing game featuring a checkpoint system that saves player progress as they advance thorough challenging stages, obstacles, and sleep paths, making gameplay smoother, more rewarding, and fun players exploring the mountain adventure untill they reach the summit.",
-    tech: ["Lua", "Roblox Studio"],
-    imageSrc: "/imgs/roblox-images.png", 
-    repo: "https://www.roblox.com/games/82356767480264/Mount-Lumitaw-Revival",
-    tag: "Game Dev",
-  },
     {
     title: "To do List",
     description:

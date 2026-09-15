@@ -243,6 +243,248 @@ function Navbar({ theme, toggleTheme }) {
   );
 }
 
+function Lightbox({ images, startIndex, onClose }) {
+  const [index, setIndex] = useState(startIndex);
+  const [scale, setScale] = useState(1);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const dragRef = useRef({ dragging: false, startX: 0, startY: 0, origX: 0, origY: 0 });
+  const pinchRef = useRef({ dist: 0, scale: 1 });
+  const overlayRef = useRef(null);
+
+  const image = images[index];
+
+  const resetZoom = () => { setScale(1); setPos({ x: 0, y: 0 }); };
+
+  const goPrev = (e) => { e?.stopPropagation(); resetZoom(); setIndex((i) => (i - 1 + images.length) % images.length); };
+  const goNext = (e) => { e?.stopPropagation(); resetZoom(); setIndex((i) => (i + 1) % images.length); };
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") goPrev();
+      if (e.key === "ArrowRight") goNext();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [images.length, onClose]);
+
+  useEffect(() => {
+    if (!isPlaying || images.length <= 1) return;
+    const interval = setInterval(() => {
+      resetZoom();
+      setIndex((i) => (i + 1) % images.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, [isPlaying, images.length]);
+
+  useEffect(() => {
+    const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onFsChange);
+    return () => document.removeEventListener("fullscreenchange", onFsChange);
+  }, []);
+
+  const clampScale = (s) => Math.min(Math.max(s, 1), 5);
+
+  const togglePlay = (e) => {
+    e.stopPropagation();
+    setIsPlaying((p) => !p);
+  };
+
+  const zoomInStep = (e) => {
+    e.stopPropagation();
+    setScale((s) => clampScale(s + 0.75));
+  };
+
+  const fitToScreen = (e) => {
+    e.stopPropagation();
+    resetZoom();
+  };
+
+  const toggleFullscreen = (e) => {
+    e.stopPropagation();
+    if (!document.fullscreenElement) {
+      overlayRef.current?.requestFullscreen?.();
+    } else {
+      document.exitFullscreen?.();
+    }
+  };
+
+  const handleImgClick = (e) => {
+    e.stopPropagation();
+    if (scale === 1) setScale(2.5);
+    else resetZoom();
+  };
+
+  const handleWheel = (e) => {
+    e.preventDefault();
+    const next = clampScale(scale - e.deltaY * 0.0025);
+    setScale(next);
+    if (next === 1) setPos({ x: 0, y: 0 });
+  };
+
+  const handleMouseDown = (e) => {
+    if (scale === 1) return;
+    e.preventDefault();
+    dragRef.current = { dragging: true, startX: e.clientX, startY: e.clientY, origX: pos.x, origY: pos.y };
+  };
+  const handleMouseMove = (e) => {
+    if (!dragRef.current.dragging) return;
+    const dx = e.clientX - dragRef.current.startX;
+    const dy = e.clientY - dragRef.current.startY;
+    setPos({ x: dragRef.current.origX + dx, y: dragRef.current.origY + dy });
+  };
+  const handleMouseUp = () => { dragRef.current.dragging = false; };
+
+  const getTouchDist = (touches) => {
+    const [a, b] = touches;
+    return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+  };
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 2) {
+      pinchRef.current.dist = getTouchDist(e.touches);
+      pinchRef.current.scale = scale;
+    } else if (e.touches.length === 1 && scale > 1) {
+      dragRef.current = { dragging: true, startX: e.touches[0].clientX, startY: e.touches[0].clientY, origX: pos.x, origY: pos.y };
+    }
+  };
+  const handleTouchMove = (e) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const ratio = getTouchDist(e.touches) / pinchRef.current.dist;
+      setScale(clampScale(pinchRef.current.scale * ratio));
+    } else if (e.touches.length === 1 && dragRef.current.dragging) {
+      const dx = e.touches[0].clientX - dragRef.current.startX;
+      const dy = e.touches[0].clientY - dragRef.current.startY;
+      setPos({ x: dragRef.current.origX + dx, y: dragRef.current.origY + dy });
+    }
+  };
+  const handleTouchEnd = () => { dragRef.current.dragging = false; };
+
+  return (
+    <div className="lightbox-overlay" ref={overlayRef} onClick={onClose}>
+      <div className="lightbox-topbar" onClick={(e) => e.stopPropagation()}>
+        <span className="lightbox-counter">{index + 1} / {images.length}</span>
+
+        <div className="lightbox-toolbar">
+          <button className="lightbox-tool-btn" onClick={zoomInStep} aria-label="Zoom in" title="Zoom in">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              <line x1="11" y1="8" x2="11" y2="14" />
+              <line x1="8" y1="11" x2="14" y2="11" />
+            </svg>
+          </button>
+
+          {images.length > 1 && (
+            <button className="lightbox-tool-btn" onClick={togglePlay} aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"} title={isPlaying ? "Pause" : "Play"}>
+              {isPlaying ? (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <rect x="6" y="5" width="4" height="14" rx="1" />
+                  <rect x="14" y="5" width="4" height="14" rx="1" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="6 4 20 12 6 20 6 4" />
+                </svg>
+              )}
+            </button>
+          )}
+
+          <button className="lightbox-tool-btn" onClick={toggleFullscreen} aria-label="Toggle fullscreen" title="Fullscreen">
+            {isFullscreen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="4 14 10 14 10 20" />
+                <polyline points="20 10 14 10 14 4" />
+                <line x1="14" y1="10" x2="21" y2="3" />
+                <line x1="3" y1="21" x2="10" y2="14" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 3 21 3 21 9" />
+                <polyline points="9 21 3 21 3 15" />
+                <line x1="21" y1="3" x2="14" y2="10" />
+                <line x1="3" y1="21" x2="10" y2="14" />
+              </svg>
+            )}
+          </button>
+
+          <button className="lightbox-tool-btn" onClick={fitToScreen} aria-label="Fit to screen" title="Fit to screen">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="4" width="18" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="18" x2="12" y2="21" />
+            </svg>
+          </button>
+
+          <button className="lightbox-tool-btn" onClick={onClose} aria-label="Close" title="Close">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {images.length > 1 && (
+        <button className="lightbox-nav lightbox-nav-left" onClick={goPrev} aria-label="Previous">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+      )}
+
+      <div
+        className="lightbox-img-wrap"
+        onClick={(e) => e.stopPropagation()}
+        onWheel={handleWheel}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <img
+          src={image.src}
+          alt={image.caption}
+          className="lightbox-img"
+          onClick={handleImgClick}
+          style={{
+            transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`,
+            cursor: scale === 1 ? "zoom-in" : "grab",
+          }}
+          draggable={false}
+        />
+      </div>
+
+      {images.length > 1 && (
+        <button className="lightbox-nav lightbox-nav-right" onClick={goNext} aria-label="Next">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+      )}
+
+      {images.length > 1 && (
+        <div className="lightbox-thumbs" onClick={(e) => e.stopPropagation()}>
+          {images.map((img, i) => (
+            <div
+              key={img.src + i}
+              className={`lightbox-thumb ${i === index ? "lightbox-thumb-active" : ""}`}
+              onClick={() => { resetZoom(); setIndex(i); }}
+            >
+              <img src={img.src} alt={img.caption} />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Home({ theme }) {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState({ msg: "", type: "" });
@@ -250,10 +492,19 @@ function Home({ theme }) {
   const [calendarLoading, setCalendarLoading] = useState(true);
   const [calendarError, setCalendarError] = useState(null);
   const glitchRef = useRef(null);
+  const galleryRef = useRef(null);
+
+  const scrollGallery = (direction) => {
+    if (!galleryRef.current) return;
+    const scrollAmount = 220;
+    galleryRef.current.scrollBy({ left: direction * scrollAmount, behavior: "smooth" });
+  };
+  
 
   const photos = ["/imgs/MY-PICTURE.jpg", "/imgs/YURI.jpeg"];
   const [imgIndex, setImgIndex] = useState(0);
   const [isGlitching, setIsGlitching] = useState(false);
+  const [lightboxImg, setLightboxImg] = useState(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -378,14 +629,14 @@ function Home({ theme }) {
 ];
   const education = [
     {
-      icon: "🏛️",
+      done: false,
       school: "University of Baguio",
       degree: "Bachelor of Science in Computer Engineering",
       tags: ["Algorithms", "Logics", "Electronics", "Software&Hardware Engineering", "Calculus"],
       year: "2022 – Present",
     },
     {
-      icon: "🏫",
+      done: true,
       school: "TUAO VOCATIONAL AND TECHNICAL SCHOOL CULUNG ANNEX",
       degree: "ICT — Information Communication and Technology",
       tags: ["Hardware", "Computer System Servicing", "Software"],
@@ -393,32 +644,38 @@ function Home({ theme }) {
     },
   ];
 
-  const timeline = [
-     {
-      icon: "👩🏻‍💻",
+    const timeline = [
+    {
+      done: true,
       title: "Consistently Learning & Growing",
       tags: ["Self-Taught Developer"],
       period: "2026 – Present",
     },
     {
-      icon: "💻",
+      done: true,
       title: "Started Web Development/Game Development Journey",
       tags: ["Started Self-learning"],
       period: "2025",
     },
-     {
-      icon: "👋",
+    {
+      done: true,
       title: "Hello World",
       tags: ["Wrote my first line of code in Java and Python"],
       period: "2022",
     },
-    
     {
-      icon: "📚",
+      done: true,
       title: "Bachelor of Science in Computer Engineering",
       tags: ["University of Baguio"],
       period: "2022",
     },
+  ];
+
+   const gallery = [
+    { src: "/imgs/MY-PICTURE.jpg", caption: "Photo 1" },
+    { src: "/imgs/YURI.jpeg", caption: "Photo 2" },
+    { src: "/imgs/MY-PICTURE.jpg", caption: "Photo 3" },
+    { src: "/imgs/YURI.jpeg", caption: "Photo 4" },
   ];
   
 
@@ -453,7 +710,7 @@ function Home({ theme }) {
             </div>
           </div>
           <div className="avail-badge">
-            <span className="avail-dot" /> Available for hire
+            <span className="avail-dot" /> Available for freelance
           </div>
         </div>
 
@@ -470,7 +727,7 @@ function Home({ theme }) {
             <span className="accent2-text"></span>
           </h1>
           <p className="hero-sub">
-            Aspiring Software Engineer and Game Developer, focused on continuous learning and improving skills through consistent hard work and practice. Passionate about Designing, efficient code and developing immersive digital experiences. Always exploring new technologies and challenging myself to grow and become better in software and game development.
+             I'm a Computer Engineering student and Junior Full-Stack Developer offering freelance services in website development and UI/UX design. I create modern, responsive, and user-friendly websites and web applications tailored to each client's needs.
           </p>
                   <div className="hero-btns">
             <button className="btn-primary" onClick={() => scrollTo("contact-sec")}>✉ Get in touch</button>
@@ -551,7 +808,13 @@ function Home({ theme }) {
         <div className="edu-list">
           {education.map((e, i) => (
             <div className="edu-card reveal" key={e.school} style={{ animationDelay: `${i * 0.12}s` }}>
-              <div className="edu-icon">{e.icon}</div>
+              <div className="edu-icon">
+                {e.done ? (
+                  <div className="edu-checkbox edu-checkbox-filled" />
+                ) : (
+                  <div className="edu-checkbox" />
+                )}
+              </div>
               <div>
                 <div className="edu-school">{e.school}</div>
                 <div className="edu-degree">{e.degree}</div>
@@ -565,30 +828,73 @@ function Home({ theme }) {
         </div>
       </section>
 
-      <section className="section reveal" id="timeline-sec">
-        <div className="section-header">
-          <span className="section-num">04</span>
-          <span className="section-label">Timeline</span>
-          <div className="section-line" />
-        </div>
-        <div className="edu-list">
-          {timeline.map((t, i) => (
-            <div className="edu-card reveal" key={t.title} style={{ animationDelay: `${i * 0.12}s` }}>
-              <div className="edu-icon">{t.icon}</div>
-              <div>
-                <div className="edu-school">{t.title}</div>
-                <div className="edu-degree">{t.subtitle}</div>
-                {t.tags.length > 0 && (
-                  <div className="edu-tags">
-                    {t.tags.map((tag) => (<span className="edu-tag" key={tag}>{tag}</span>))}
-                  </div>
-                )}
-              </div>
-              <div className="edu-year">{t.period}</div>
+            <section className="section reveal" id="timeline-sec">
+        <div className="timeline-gallery-grid">
+          <div>
+            <div className="section-header">
+              <span className="section-num">04</span>
+              <span className="section-label">Timeline</span>
+              <div className="section-line" />
             </div>
-          ))}
+            <div className="edu-list">
+              {timeline.map((t, i) => (
+                <div className="edu-card reveal" key={t.title} style={{ animationDelay: `${i * 0.12}s` }}>
+                  <div className="edu-icon">
+                    {t.done ? (
+                      <div className="edu-checkbox edu-checkbox-filled" />
+                    ) : (
+                      <div className="edu-checkbox" />
+                    )}
+                  </div>
+                  <div>
+                    <div className="edu-school">{t.title}</div>
+                    <div className="edu-degree">{t.subtitle}</div>
+                    {t.tags.length > 0 && (
+                      <div className="edu-tags">
+                        {t.tags.map((tag) => (<span className="edu-tag" key={tag}>{tag}</span>))}
+                      </div>
+                    )}
+                  </div>
+                  <div className="edu-year">{t.period}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+             <div>
+            <div className="section-header">
+              <span className="section-num">05</span>
+              <span className="section-label">Gallery</span>
+              <div className="section-line" />
+            </div>
+            <div className="gallery-carousel-wrap">
+              <button className="gallery-arrow gallery-arrow-left" onClick={() => scrollGallery(-1)} aria-label="Scroll left">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </button>
+
+                <div className="gallery-track" ref={galleryRef}>
+                {gallery.map((g, i) => (
+                  <div className="gallery-item" key={g.src + i} onClick={() => setLightboxImg(i)}>
+                    <img src={g.src} alt={g.caption} className="gallery-img" />
+                  </div>
+                ))}
+              </div>
+
+              <button className="gallery-arrow gallery-arrow-right" onClick={() => scrollGallery(1)} aria-label="Scroll right">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
       </section>
+
+      {lightboxImg !== null && (
+        <Lightbox images={gallery} startIndex={lightboxImg} onClose={() => setLightboxImg(null)} />
+      )}
 
       <section className="section reveal" id="contact-sec">
         <div className="section-header">
@@ -815,13 +1121,173 @@ export default function App() {
         .edu-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; display: grid; grid-template-columns: 48px 1fr auto; gap: 16px; align-items: start; opacity: 0; transform: translateX(-20px); transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s, opacity 0.5s; }
         .edu-card.revealed { opacity: 1; transform: translateX(0); }
         .edu-card:hover { border-color: rgba(124,108,250,0.3); transform: translateX(5px); box-shadow: 0 4px 24px rgba(124,108,250,0.08); }
-        .edu-icon { width: 48px; height: 48px; background: rgba(124,108,250,0.1); border: 1px solid rgba(124,108,250,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-        .edu-school { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 3px; }
+        .edu-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; }
+        .edu-checkbox { width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--muted); opacity: 0.5; }
+        .edu-checkbox-filled { background: #000000; border-color: #000000; opacity: 1; }
         .edu-degree { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
         .edu-tags { display: flex; flex-wrap: wrap; gap: 6px; }
         .edu-tag { font-size: 11px; padding: 3px 10px; border-radius: 100px; background: rgba(124,108,250,0.1); border: 1px solid rgba(124,108,250,0.2); color: #a89ef5; transition: background 0.2s, transform 0.2s; }
         .edu-tag:hover { background: rgba(124,108,250,0.22); transform: scale(1.05); }
         .edu-year { font-size: 12px; color: var(--muted); white-space: nowrap; background: var(--bg3); padding: 4px 10px; border-radius: 6px; height: fit-content; }
+        
+        .timeline-gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+        .timeline-gallery-grid > div { min-width: 0; }
+
+        .gallery-carousel-wrap { position: relative; display: flex; align-items: center; gap: 8px; width: 100%; max-width: 100%; }
+        .gallery-track { display: flex; gap: 12px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; padding: 4px 2px; flex: 1 1 0%; min-width: 0; }
+        .gallery-track::-webkit-scrollbar { display: none; }
+        .gallery-item { flex: 0 0 140px; min-width: 140px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s; }
+        .gallery-item:hover { border-color: rgba(124,108,250,0.3); transform: translateY(-4px); box-shadow: 0 4px 24px rgba(124,108,250,0.08); }
+        .gallery-img { width: 100%; height: 160px; object-fit: cover; display: block; }
+
+        .gallery-arrow { flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); color: var(--text); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.2s, transform 0.2s, background 0.2s; }
+        .gallery-arrow svg { width: 16px; height: 16px; }
+        .gallery-arrow:hover { border-color: rgba(124,108,250,0.4); background: var(--bg3); transform: scale(1.06); }
+
+        .lightbox-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.95);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 10000;
+          animation: lightboxFadeIn 0.2s ease;
+        }
+
+        @keyframes lightboxFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .lightbox-topbar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 18px 24px;
+          z-index: 10002;
+        }
+
+        .lightbox-counter {
+          color: rgba(255,255,255,0.6);
+          font-size: 13px;
+          letter-spacing: 0.05em;
+        }
+
+        .lightbox-toolbar {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          background: rgba(20,20,20,0.9);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 10px;
+          padding: 6px;
+        }
+
+        .lightbox-tool-btn {
+          width: 34px;
+          height: 34px;
+          border-radius: 6px;
+          border: none;
+          background: transparent;
+          color: rgba(255,255,255,0.85);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: background 0.15s, color 0.15s;
+        }
+        .lightbox-tool-btn svg { width: 17px; height: 17px; }
+        .lightbox-tool-btn:hover {
+          background: rgba(255,255,255,0.12);
+          color: #fff;
+        }
+
+        .lightbox-nav {
+          position: fixed;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          border: 1px solid rgba(255,255,255,0.15);
+          background: rgba(255,255,255,0.06);
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          z-index: 10002;
+          transition: background 0.2s, transform 0.2s;
+        }
+        .lightbox-nav:hover { background: rgba(255,255,255,0.16); transform: translateY(-50%) scale(1.08); }
+        .lightbox-nav svg { width: 20px; height: 20px; }
+        .lightbox-nav-left { left: 20px; }
+        .lightbox-nav-right { right: 20px; }
+
+        .lightbox-img-wrap {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          touch-action: none;
+          padding: 90px 90px 130px;
+        }
+
+        .lightbox-img {
+          max-width: 100%;
+          max-height: 100%;
+          width: auto;
+          height: auto;
+          object-fit: contain;
+          border-radius: 6px;
+          box-shadow: 0 0 60px rgba(0,0,0,0.6);
+          animation: lightboxZoomIn 0.25s ease;
+          transition: transform 0.05s linear;
+          user-select: none;
+          -webkit-user-drag: none;
+        }
+
+        @keyframes lightboxZoomIn {
+          from { transform: scale(0.92); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+
+        .lightbox-thumbs {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          display: flex;
+          justify-content: center;
+          gap: 10px;
+          padding: 18px 24px 24px;
+          z-index: 10002;
+          overflow-x: auto;
+        }
+
+        .lightbox-thumb {
+          flex-shrink: 0;
+          width: 64px;
+          height: 64px;
+          border-radius: 8px;
+          overflow: hidden;
+          border: 2px solid transparent;
+          opacity: 0.45;
+          cursor: pointer;
+          transition: opacity 0.2s, border-color 0.2s, transform 0.2s;
+        }
+        .lightbox-thumb:hover { opacity: 0.8; transform: translateY(-2px); }
+        .lightbox-thumb-active { opacity: 1; border-color: var(--accent); }
+        .lightbox-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .timeline-gallery-grid { grid-template-columns: 1fr; gap: 24px; }
 
         .contact-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; transition: border-color 0.3s, box-shadow 0.3s; }
         .contact-card:hover { border-color: rgba(124,108,250,0.25); box-shadow: 0 0 30px rgba(124,108,250,0.07); }
@@ -861,160 +1327,22 @@ export default function App() {
           }
         }
 
-.chat-toggle-btn {
-  position: fixed;
-  bottom: 50px;
-  right: 50px;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 100px;
-  font-size: 13px;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 500;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  width: fit-content;
-}
+        @media (max-width: 480px) {
+          .hero { grid-template-columns: 1fr; }
+          .profile-card { width: 100%; }
+          .form-row { grid-template-columns: 1fr; }
+          .edu-card { grid-template-columns: 60px 1fr; }
+          .edu-year { grid-column: 2; }
+          .nav-inner { flex-direction: column; gap: 12px; }
+          .nav-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
 
-.chat-toggle-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(124,108,250,0.35);
-}
-
-.chat-toggle-icon {
-  width: 18px;
-  height: 18px;
-}
-
-.chat-widget {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px;
-  gap: 10px;
-  width: 320px;
-  max-width: calc(100vw - 32px);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.35);
-}
-.chat-widget-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.chat-widget-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 14px;
-}
-
-.chat-title-icon {
-  width: 16px;
-  height: 16px;
-  color: var(--accent);
-}
-
-.chat-close-btn {
-  background: none;
-  border: none;
-  color: var(--muted);
-  cursor: pointer;
-  font-size: 14px;
-  padding: 4px;
-}
-
-.chat-close-btn:hover {
-  color: var(--text);
-}
-
-.chat-messages {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-height: 200px;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.chat-empty-msg {
-  font-size: 12px;
-  color: var(--muted);
-  text-align: center;
-  padding: 20px 0;
-}
-
-.chat-msg {
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-size: 13px;
-  max-width: 90%;
-}
-
-.chat-msg.user {
-  align-self: flex-end;
-  background: var(--accent);
-  color: white;
-}
-
-.chat-msg.assistant {
-  align-self: flex-start;
-  background: var(--bg3);
-  color: var(--text);
-}
-
-.chat-input-row {
-  display: flex;
-  gap: 8px;
-}
-
-.chat-input-row input {
-  flex: 1;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 13px;
-  outline: none;
-}
-
-.chat-input-row button {
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: none;
-  background: var(--accent);
-  color: white;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.chat-input-row button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.chat-title-avatar {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-        
+          .hero-tag,
+          .hero-name,
+          .hero-sub,
+          .hero-btns {
+            margin-left: 0;
+          }
+        }
 
         .location-icon { color: #DC143C; font-size: 12px; margin-right: 0px; flex-shrink: 0; transform: translateY(-1px); }
       `}</style>
