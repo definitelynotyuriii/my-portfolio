@@ -261,24 +261,24 @@ function Lightbox({ images, startIndex, onClose }) {
   const goPrev = (e) => { e?.stopPropagation(); resetZoom(); setIndex((i) => (i - 1 + images.length) % images.length); };
   const goNext = (e) => { e?.stopPropagation(); resetZoom(); setIndex((i) => (i + 1) % images.length); };
 
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") goPrev();
-      if (e.key === "ArrowRight") goNext();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [images.length, onClose]);
+    useEffect(() => {
+      const onKey = (e) => {
+        if (e.key === "Escape") onClose();
+        if (e.key === "ArrowLeft") goPrev();
+        if (e.key === "ArrowRight") goNext();
+      };
+      window.addEventListener("keydown", onKey);
+      return () => window.removeEventListener("keydown", onKey);
+    }, [images.length, onClose]);
 
-  useEffect(() => {
-    if (!isPlaying || images.length <= 1) return;
-    const interval = setInterval(() => {
-      resetZoom();
-      setIndex((i) => (i + 1) % images.length);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, [isPlaying, images.length]);
+    useEffect(() => {
+      const preload = (i) => {
+        const img = new Image();
+        img.src = images[(i + images.length) % images.length].src;
+      };
+      preload(index + 1);
+      preload(index - 1);
+    }, [index, images]);
 
   useEffect(() => {
     const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -478,7 +478,7 @@ function Lightbox({ images, startIndex, onClose }) {
               className={`lightbox-thumb ${i === index ? "lightbox-thumb-active" : ""}`}
               onClick={() => { resetZoom(); setIndex(i); }}
             >
-              <img src={img.src} alt={img.caption} loading="lazy" decoding="async" />
+              <img src={img.thumb} alt={img.caption} loading="lazy" decoding="async" />
             </div>
           ))}
         </div>
