@@ -448,18 +448,18 @@ function Lightbox({ images, startIndex, onClose }) {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        <img
-          src={image.src}
-          alt={image.caption}
-          className="lightbox-img"
-          decoding="async"
-          onClick={handleImgClick}
-          style={{
-            transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`,
-            cursor: scale === 1 ? "zoom-in" : "grab",
-          }}
-          draggable={false}
-        />
+      <img
+        src={image.src}
+        alt={image.caption}
+        className="lightbox-img"
+        decoding="async"
+        onClick={handleImgClick}
+        style={{
+          transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`,
+          cursor: scale === 1 ? "zoom-in" : "grab",
+        }}
+        draggable={false}
+      />
       </div>
 
       {images.length > 1 && (
@@ -478,7 +478,7 @@ function Lightbox({ images, startIndex, onClose }) {
               className={`lightbox-thumb ${i === index ? "lightbox-thumb-active" : ""}`}
               onClick={() => { resetZoom(); setIndex(i); }}
             >
-              <img src={img.src} alt={img.caption} />
+              <img src={img.src} alt={img.caption} loading="lazy" decoding="async" />
             </div>
           ))}
         </div>
