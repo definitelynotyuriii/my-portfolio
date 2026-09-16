@@ -8,6 +8,7 @@ import ChatWidget from "./components/ChatWidget.jsx";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import emailjs from "@emailjs/browser";
 import { ActivityCalendar } from "react-activity-calendar";
+import { createPortal } from "react-dom";
 
 const githubCalendarTheme = {
   light: ["#ececf6", "#d9d4f5", "#b3a8ec", "#8c7ce3", "#7c6cfa"],
@@ -362,33 +363,8 @@ function Lightbox({ images, startIndex, onClose }) {
   };
   const handleTouchEnd = () => { dragRef.current.dragging = false; };
 
-  return (
+    return createPortal(
     <div className="lightbox-overlay" ref={overlayRef} onClick={onClose}>
-            <button
-        onClick={onClose}
-        aria-label="Close"
-        style={{
-          position: "fixed",
-          top: "80px",       // moved down from 16px
-          right: "24px",
-          width: "42px",
-          height: "42px",
-          borderRadius: "50%",
-          border: "1px solid rgba(255,255,255,0.25)",
-          background: "rgba(0,0,0,0.9)",
-          color: "#fff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-          zIndex: 999999999,
-        }}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-      </button>
       <div className="lightbox-topbar" onClick={(e) => e.stopPropagation()}>
         <span className="lightbox-counter">{index + 1} / {images.length}</span>
 
@@ -506,10 +482,10 @@ function Lightbox({ images, startIndex, onClose }) {
           ))}
         </div>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
-
 function Home({ theme }) {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState({ msg: "", type: "" });
@@ -1265,7 +1241,7 @@ export default function App() {
 @media (max-width: 480px) {
   .lightbox-close-mobile {
     top: 20px;
-    right: px;
+    right: 16px;
     width: 38px;
     height: 38px;
   }
