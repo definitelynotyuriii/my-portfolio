@@ -680,17 +680,17 @@ function Home({ theme }) {
     }, []);
 
    const gallery = [
-    { src: "/imgs/GALLERY1.jpg", caption: "Photo 1" },
-    { src: "/imgs/GALLERY2.jpg", caption: "Photo 2" },
-    { src: "/imgs/GALLERY3.jpg", caption: "Photo 3" },
-    { src: "/imgs/GALLERY4.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY5.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY6.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY7.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY8.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY9.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY10.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY11.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY1.jpg", thumb: "/imgs/GALLERY1-thumb.jpg", caption: "Photo 1" },
+    { src: "/imgs/GALLERY2.jpg", thumb: "/imgs/GALLERY2-thumb.jpg", caption: "Photo 2" },
+    { src: "/imgs/GALLERY3.jpg", thumb: "/imgs/GALLERY3-thumb.jpg", caption: "Photo 3" },
+    { src: "/imgs/GALLERY4.jpg", thumb: "/imgs/GALLERY4-thumb.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY5.jpg", thumb: "/imgs/GALLERY5-thumb.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY6.jpg", thumb: "/imgs/GALLERY6-thumb.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY7.jpg", thumb: "/imgs/GALLERY7-thumb.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY8.jpg", thumb: "/imgs/GALLERY8-thumb.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY9.jpg", thumb: "/imgs/GALLERY9-thumb.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY10.jpg", thumb: "/imgs/GALLERY10-thumb.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY11.jpg", thumb: "/imgs/GALLERY11-thumb.jpg", caption: "Photo 4" },
   ];
   
 
@@ -892,7 +892,7 @@ function Home({ theme }) {
                 <div className="gallery-track" ref={galleryRef}>
                 {gallery.map((g, i) => (
                   <div className="gallery-item" key={g.src + i} onClick={() => setLightboxImg(i)}>
-                    <img src={g.src} alt={g.caption} className="gallery-img" loading="lazy" decoding="async" />
+                    <img src={g.thumb} alt={g.caption} className="gallery-img" loading="lazy" decoding="async" />
                     <div className="gallery-item-toolbar" onClick={(e) => e.stopPropagation()}>
                       <button className="gallery-tool-btn" onClick={() => setLightboxImg(i)} aria-label="Zoom" title="Zoom">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
