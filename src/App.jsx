@@ -452,6 +452,7 @@ function Lightbox({ images, startIndex, onClose }) {
           src={image.src}
           alt={image.caption}
           className="lightbox-img"
+          decoding="async"
           onClick={handleImgClick}
           style={{
             transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`,
@@ -671,6 +672,12 @@ function Home({ theme }) {
       period: "2022",
     },
   ];
+      useEffect(() => {
+      gallery.forEach((g) => {
+        const img = new Image();
+        img.src = g.src;
+      });
+    }, []);
 
    const gallery = [
     { src: "/imgs/GALLERY1.jpg", caption: "Photo 1" },
@@ -885,7 +892,7 @@ function Home({ theme }) {
                 <div className="gallery-track" ref={galleryRef}>
                 {gallery.map((g, i) => (
                   <div className="gallery-item" key={g.src + i} onClick={() => setLightboxImg(i)}>
-                    <img src={g.src} alt={g.caption} className="gallery-img" />
+                    <img src={g.src} alt={g.caption} className="gallery-img" loading="lazy" decoding="async" />
                     <div className="gallery-item-toolbar" onClick={(e) => e.stopPropagation()}>
                       <button className="gallery-tool-btn" onClick={() => setLightboxImg(i)} aria-label="Zoom" title="Zoom">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
