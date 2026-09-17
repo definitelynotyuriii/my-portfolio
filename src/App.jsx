@@ -635,7 +635,7 @@ function Home({ theme }) {
       school: "University of Baguio",
       degree: "Bachelor of Science in Computer Engineering",
       tags: ["Algorithms", "Logics", "Electronics", "Software&Hardware Engineering", "Calculus"],
-      year: "2022 – Present",
+      year: "2023 – Present",
     },
     {
       done: true,
@@ -663,13 +663,13 @@ function Home({ theme }) {
       done: true,
       title: "Hello World",
       tags: ["Wrote my first line of code in Java and Python"],
-      period: "2022",
+      period: "2023",
     },
     {
       done: true,
       title: "Bachelor of Science in Computer Engineering",
       tags: ["University of Baguio"],
-      period: "2022",
+      period: "2023",
     },
   ];
       useEffect(() => {
@@ -684,13 +684,15 @@ function Home({ theme }) {
     { src: "/imgs/GALLERY2.jpg", thumb: "/imgs/GALLERY2-thumb.jpg", caption: "Photo 2" },
     { src: "/imgs/GALLERY3.jpg", thumb: "/imgs/GALLERY3-thumb.jpg", caption: "Photo 3" },
     { src: "/imgs/GALLERY4.jpg", thumb: "/imgs/GALLERY4-thumb.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY5.jpg", thumb: "/imgs/GALLERY5-thumb.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY6.jpg", thumb: "/imgs/GALLERY6-thumb.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY7.jpg", thumb: "/imgs/GALLERY7-thumb.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY8.jpg", thumb: "/imgs/GALLERY8-thumb.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY9.jpg", thumb: "/imgs/GALLERY9-thumb.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY10.jpg", thumb: "/imgs/GALLERY10-thumb.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY11.jpg", thumb: "/imgs/GALLERY11-thumb.jpg", caption: "Photo 4" },
+    { src: "/imgs/GALLERY5.jpg", thumb: "/imgs/GALLERY5-thumb.jpg", caption: "Photo 5" },
+    { src: "/imgs/GALLERY6.jpg", thumb: "/imgs/GALLERY6-thumb.jpg", caption: "Photo 6" },
+    { src: "/imgs/GALLERY7.jpg", thumb: "/imgs/GALLERY7-thumb.jpg", caption: "Photo 7" },
+    { src: "/imgs/GALLERY8.jpg", thumb: "/imgs/GALLERY8-thumb.jpg", caption: "Photo 8" },
+    { src: "/imgs/GALLERY9.jpg", thumb: "/imgs/GALLERY9-thumb.jpg", caption: "Photo 9" },
+    { src: "/imgs/GALLERY10.jpg", thumb: "/imgs/GALLERY10-thumb.jpg", caption: "Photo 10" },
+    { src: "/imgs/GALLERY11.jpg", thumb: "/imgs/GALLERY11-thumb.jpg", caption: "Photo 11" },
+    { src: "/imgs/GALLERY12.jpg", thumb: "/imgs/GALLERY12-thumb.jpg", caption: "Photo 12" },
+    
   ];
   
 
@@ -754,7 +756,6 @@ function Home({ theme }) {
       <ChatWidget />
       <section className="section reveal" id="about-sec">
         <div className="section-header">
-          <span className="section-num">01</span>
           <span className="section-label">Skills</span>
           <div className="section-line" />
         </div>
@@ -790,7 +791,6 @@ function Home({ theme }) {
 
       <section className="section reveal" id="github-sec">
         <div className="section-header">
-          <span className="section-num">02</span>
           <span className="section-label">GitHub Activity</span>
           <div className="section-line" />
         </div>
@@ -816,7 +816,6 @@ function Home({ theme }) {
 
       <section className="section reveal" id="edu-sec">
         <div className="section-header">
-          <span className="section-num">03</span>
           <span className="section-label">Education</span>
           <div className="section-line" />
         </div>
@@ -847,7 +846,6 @@ function Home({ theme }) {
         <div className="timeline-gallery-grid">
           <div>
             <div className="section-header">
-              <span className="section-num">04</span>
               <span className="section-label">Timeline</span>
               <div className="section-line" />
             </div>
@@ -878,7 +876,6 @@ function Home({ theme }) {
 
              <div>
             <div className="section-header">
-              <span className="section-num">05</span>
               <span className="section-label">Gallery</span>
               <div className="section-line" />
             </div>
@@ -943,7 +940,6 @@ function Home({ theme }) {
 
       <section className="section reveal" id="contact-sec">
         <div className="section-header">
-          <span className="section-num">05</span>
           <span className="section-label">Send a Message</span>
           <div className="section-line" />
         </div>
@@ -1149,7 +1145,6 @@ export default function App() {
         .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
         .section-line { flex: 1; height: 1px; background: var(--border); }
         .section-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; white-space: nowrap; }
-        .section-num { font-size: 11px; color: var(--accent); font-weight: 500; letter-spacing: 0.1em; }
 
         .skills-grid { display: flex; flex-wrap: wrap; gap: 22px; }
         .skill-pill { background: var(--bg3); border: 1px solid var(--border); padding: 8px 18px; border-radius: 100px; font-size: 13px; color: var(--text); display: flex; align-items: center; gap: 8px; opacity: 0; transform: translateY(16px) scale(0.95); animation: pillPop 0.4s ease forwards; transition: background 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s; cursor: default; }

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-
+import { createPortal } from 'react-dom';
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
@@ -43,7 +43,7 @@ export default function ChatWidget() {
     if (e.key === 'Enter') sendMessage();
   };
 
-  return (
+  return createPortal(
     <>
       <style>{CHAT_WIDGET_STYLES}</style>
 
@@ -121,7 +121,8 @@ export default function ChatWidget() {
           </div>
         </div>
       )}
-    </>
+    </>,
+    document.body
   );
 }
 

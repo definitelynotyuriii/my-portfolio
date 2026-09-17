@@ -17,7 +17,7 @@ const socials = [
     Icon: FaLinkedin,
     accent: "#38bdf8",
     glow: "rgba(56,189,248,0.18)",
-    desc: "tristan-dela-cruz",
+    desc: "Tristan-Dela-Cruz",
   },
   {
     label: "GitHub",
@@ -29,19 +29,19 @@ const socials = [
   },
   {
     label: "Instagram",
-    href: "https://www.instagram.com/cemenbakin_/",
+    href: "https://www.instagram.com/_cemenbakin/",
     Icon: FaInstagram,
     accent: "#f472b6",
     glow: "rgba(244,114,182,0.18)",
-    desc: "@cemenbakin_",
+    desc: "_cemenbakin",
   },
     {
     label: "Tiktok",
-    href: "https://www.tiktok.com/@diffyuriii",
+    href: "https://www.tiktok.com/@wheresyurii_",
     Icon: FaTiktok,
     accent: "#25F4EE",
     glow: "rgba(37,244,238,0.18)",            
-    desc: "@diffyurii_",
+    desc: "wheresyurii_",
   },
   
 ];

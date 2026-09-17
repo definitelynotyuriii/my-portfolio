@@ -1,6 +1,27 @@
 import { useState } from "react";
 
-// ─── PROJECT CARD ──────────────────────────────────────────────────────────────
+const TECH_LOGOS = {
+  "HTML": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
+  "Node.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+  "CSS": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
+  "JavaScript": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+  "React.js": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+  "Tailwind.CSS": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
+  "PostgreSQL": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
+  "C++": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg",
+  "Python": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+  "Arduino": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg",
+};
+const TECH_EMOJIS = {
+  "IC": "",
+  "Breadboard": "🧩",
+  "MB-102": "",
+  "PCB": "",
+  "Wirings": "",
+  "18V Transformer": "",
+  "PS case": "",
+};
+
 function ProjectCard({ title, description, tech = [], imageSrc, videoSrc, repo, demo, tag, onImageClick }) {
   return (
     <div className="proj-card">
@@ -27,18 +48,26 @@ function ProjectCard({ title, description, tech = [], imageSrc, videoSrc, repo, 
         <p className="proj-desc">{description}</p>
         <div className="proj-tech">
           {tech.map((t) => (
-            <span key={t} className="proj-pill">{t}</span>
+            <span key={t} className="proj-pill">
+              {TECH_LOGOS[t] && (
+                <img src={TECH_LOGOS[t]} alt={t} className="proj-pill-logo" />
+              )}
+              {!TECH_LOGOS[t] && TECH_EMOJIS[t] && (
+                <span className="proj-pill-emoji">{TECH_EMOJIS[t]}</span>
+              )}
+              {t}
+            </span>
           ))}
         </div>
         <div className="proj-links">
           {repo && (
             <a className="proj-btn-ghost" href={repo} target="_blank" rel="noreferrer">
-              ↗ Visit
+               Visit
             </a>
           )}
           {demo && (
             <a className="proj-btn-primary" href={demo} target="_blank" rel="noreferrer">
-              ▶ Live Demo
+               Live Demo
             </a>
           )}
         </div>
@@ -47,17 +76,13 @@ function ProjectCard({ title, description, tech = [], imageSrc, videoSrc, repo, 
   );
 }
 
-// ─── DATA ──────────────────────────────────────────────────────────────────────
-// 👇 To change an image: replace the imageSrc value with your own path
-//    Example: imageSrc: "/imgs/portfolio.png"
-//    To add a video: add videoSrc: "/videos/demo.mp4"
 
 const SOFTWARE = [
   {
     title: "Portfolio Website",
     description:
       "A clean, responsive personal portfolio built with React. Features smooth animations, dark theme, and a fully custom CSS design.",
-    tech: ["HTML", "CSS", "JavaScript", "React"],
+    tech: ["HTML", "CSS", "JavaScript", "React.js", "Node.js"],
     imageSrc: "/imgs/my-portfolio.jpg", 
     repo: "https://my-portfolio-2026-cemenbakin-yuriii.vercel.app/",
     tag: "Web",
@@ -66,7 +91,7 @@ const SOFTWARE = [
     title: "Baguio-Tourist-System",
     description:
       "We built this website together with my collaborator to help users easily explore tourist spots in Baguio. It features an AI chatbot system that provides quick suggestions, travel information, and guidance. The platform makes discovering attractions simple, interactive, and convenient, giving users a smooth and enjoyable experience when planning their visit.",
-    tech: ["HTML", "CSS", "JavaScript", "SQL"],
+    tech: ["React.js", "Tailwind.CSS", "JavaScript", "Node.js", "PostgreSQL"],
     imageSrc: "/imgs/logos.png", 
     repo: "https://baguio-tourist-system.vercel.app/",
     tag: "Fullstack",
@@ -75,7 +100,7 @@ const SOFTWARE = [
     title: "To do List",
     description:
       "I created simple to do list website for my self, To monitor my tasks in home and schools.",
-    tech: ["React.JS", "JavaScript"],
+    tech: ["React.js", "JavaScript"],
     imageSrc: "/imgs/todolist.jpg", 
     repo: "https://todo-list-tawny-theta.vercel.app/",
     tag: "Web",
@@ -110,10 +135,9 @@ const HARDWARE = [
   
 ];
 
-// ─── PROJECTS PAGE ─────────────────────────────────────────────────────────────
 export default function Projects() {
   const [active, setActive] = useState("software");
-  const [lightbox, setLightbox] = useState(null); // { src, title } or null
+  const [lightbox, setLightbox] = useState(null); 
 
   const projects = active === "software" ? SOFTWARE : HARDWARE;
 
@@ -128,13 +152,11 @@ export default function Projects() {
     <>
       <section className="projects-wrap">
 
-        {/* HEADER */}
         <div className="projects-header">
           <div className="projects-eyebrow">my work</div>
           <h2 className="projects-title">Projects</h2>
         </div>
 
-        {/* TABS */}
         <div className="tabs-wrap">
           <button
             className={`tab-btn ${active === "software" ? "tab-active" : ""}`}
@@ -150,12 +172,10 @@ export default function Projects() {
           </button>
         </div>
 
-        {/* COUNT */}
         <div className="proj-count">
           {projects.length} project{projects.length !== 1 ? "s" : ""}
         </div>
 
-        {/* GRID */}
         <div className="proj-grid">
           {projects.map((p, i) => (
             <div key={p.title} style={{ animationDelay: `${i * 0.08}s` }}>
@@ -166,7 +186,6 @@ export default function Projects() {
 
       </section>
 
-      {/* LIGHTBOX */}
       {lightbox && (
         <div className="lightbox-overlay" onClick={() => setLightbox(null)}>
           <button className="lightbox-close" onClick={() => setLightbox(null)}>✕</button>
@@ -182,14 +201,11 @@ export default function Projects() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
-        /* ── PAGE ───────────────────────────────────────────────── */
         .projects-wrap {
           font-family: 'DM Sans', sans-serif;
           padding: 0 0 80px;
           animation: fadeSlideUp 0.5s ease both;
         }
-
-        /* ── HEADER ─────────────────────────────────────────────── */
         .projects-header { margin-bottom: 36px; }
         .projects-eyebrow {
           font-size: 11px;
@@ -215,7 +231,6 @@ export default function Projects() {
           line-height: 1.7;
         }
 
-        /* ── TABS ───────────────────────────────────────────────── */
         .tabs-wrap {
           display: flex;
           gap: 6px;
@@ -244,22 +259,18 @@ export default function Projects() {
           color: white !important;
         }
 
-        /* ── COUNT ──────────────────────────────────────────────── */
         .proj-count {
           font-size: 12px;
           color: var(--muted, #8885a8);
           margin-bottom: 24px;
           letter-spacing: 0.04em;
         }
-
-        /* ── GRID ───────────────────────────────────────────────── */
         .proj-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
           gap: 22px;
         }
 
-        /* ── CARD ───────────────────────────────────────────────── */
         .proj-card {
           background: rgba(13,13,26,0.92);
           border: 1px solid rgba(255,255,255,0.07);
@@ -277,7 +288,6 @@ export default function Projects() {
           box-shadow: 0 16px 40px rgba(124,108,250,0.1);
         }
 
-        /* ── MEDIA ──────────────────────────────────────────────── */
         .proj-media-wrap {
           position: relative;
           width: 100%;
@@ -295,7 +305,6 @@ export default function Projects() {
         }
         .proj-card:hover .proj-media { transform: scale(1.05); }
 
-        /* ── TAG ────────────────────────────────────────────────── */
         .proj-tag {
           position: absolute;
           top: 12px;
@@ -311,7 +320,6 @@ export default function Projects() {
           backdrop-filter: blur(6px);
         }
 
-        /* ── BODY ───────────────────────────────────────────────── */
         .proj-body {
           padding: 20px;
           display: flex;
@@ -334,8 +342,9 @@ export default function Projects() {
           flex: 1;
         }
 
-        /* ── TECH PILLS ─────────────────────────────────────────── */
+
         .proj-tech { display: flex; flex-wrap: wrap; gap: 6px; }
+        
         .proj-pill {
           font-size: 11px;
           padding: 3px 10px;
@@ -343,9 +352,22 @@ export default function Projects() {
           background: rgba(124,108,250,0.1);
           border: 1px solid rgba(124,108,250,0.2);
           color: #a89ef5;
+          display: flex;
+          align-items: center;
+          gap: 6px;
         }
 
-        /* ── LINKS ──────────────────────────────────────────────── */
+        .proj-pill-logo {
+          width: 12px;
+          height: 12px;
+          object-fit: contain;
+          display: block;
+        }
+          .proj-pill-emoji {
+          font-size: 12px;
+          line-height: 1;
+        }
+
         .proj-links { display: flex; gap: 8px; margin-top: 4px; }
         .proj-btn-primary {
           background: var(--accent, #7c6cfa);
@@ -378,7 +400,6 @@ export default function Projects() {
           transform: translateY(-2px);
         }
 
-        /* ── LIGHTBOX ───────────────────────────────────────────── */
         .lightbox-overlay {
           position: fixed;
           inset: 0;
@@ -414,13 +435,12 @@ export default function Projects() {
         }
         .lightbox-close:hover { background: rgba(255,255,255,0.2); }
 
-        /* ── ANIMATION ──────────────────────────────────────────── */
+
         @keyframes fadeSlideUp {
           from { opacity: 0; transform: translateY(20px); }
           to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* ── RESPONSIVE ─────────────────────────────────────────── */
         @media (max-width: 600px) {
           .proj-grid { grid-template-columns: 1fr; }
           .tabs-wrap { width: 100%; }
