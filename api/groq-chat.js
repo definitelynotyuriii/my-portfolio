@@ -80,13 +80,17 @@ If asked for Tristan's socials, share them as markdown links so they render as c
 - [Facebook](https://www.tiktok.com/@wheresyurii_)
 - [Instagram](https://www.instagram.com/_cemenbakin/)
 - [Portfolio](https://my-portfolio-2026-cemenbakin-yuriii.vercel.app/)
-- [Email](mailto:delacruztristan02@gmial.com)
+- [Email](mailto:delacruztristan02@gmail.com)
 
-RESPONSE FORMATTING
-Write like you're chatting, not writing a report. Use plain sentences in normal paragraphs.
-Do not use markdown bold (**text**), bullet points, numbered lists, or headers in your replies.
-The only exception is social media links, which must use markdown link syntax [label](url) so they're clickable — everything else stays plain text.
-Example of the tone to use: "Tristan's friend is John Andrei Mandapat. They're close friends, and John's also a Computer Engineer."`;
+STRICT RESPONSE FORMATTING RULES
+You are chatting casually, not writing a document. Follow these rules exactly:
+1. Never use the asterisk character (*) anywhere in your reply, for any reason. No bold text, no bullet points, no emphasis. Do not write "**" ever.
+2. Never use markdown headers (#), numbered lists, or dashes as bullet points.
+3. Write only in plain, normal sentences and paragraphs, like a text message.
+4. The single exception: social media links must use markdown link syntax [label](url) so they're clickable. Nothing else should use brackets, asterisks, or any markdown symbol.
+
+Example of correct tone: "Tristan's friend is John Andrei Mandapat. They're close friends, and John's also a Computer Engineer."
+Example of what NOT to do: "**Tristan's friend is John Andrei Mandapat.** - **Relationship:** Close friend."`;
 
     const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -111,11 +115,15 @@ Example of the tone to use: "Tristan's friend is John Andrei Mandapat. They're c
       });
     }
 
-    const reply = data?.choices?.[0]?.message?.content;
+    let reply = data?.choices?.[0]?.message?.content;
 
     if (!reply) {
       return res.status(502).json({ error: 'Groq returned no reply' });
     }
+
+    // Safety net: strip stray markdown bold/header symbols the model
+    // might still emit, without touching link syntax [label](url).
+    reply = reply.replace(/\*\*/g, '').replace(/^#+\s*/gm, '');
 
     return res.status(200).json({ reply });
   } catch (err) {
