@@ -137,7 +137,7 @@ function IntroScreen({ onEnter }) {
           transition: "opacity 0.6s ease 1.1s, transform 0.6s ease 1.1s",
           letterSpacing: "2px",
         }}>
-          Tristan · Software Engineer &amp; Game Developer
+          Full-Stack Developer &amp; Software Engineer
         </p>
 
         <div style={{
@@ -680,11 +680,10 @@ function Home({ theme }) {
     }, []);
 
    const gallery = [
-    { src: "/imgs/GALLERY1.jpg", thumb: "/imgs/GALLERY1-thumb.jpg", caption: "Photo 1" },
+    
     { src: "/imgs/GALLERY2.jpg", thumb: "/imgs/GALLERY2-thumb.jpg", caption: "Photo 2" },
     { src: "/imgs/GALLERY3.jpg", thumb: "/imgs/GALLERY3-thumb.jpg", caption: "Photo 3" },
     { src: "/imgs/GALLERY4.jpg", thumb: "/imgs/GALLERY4-thumb.jpg", caption: "Photo 4" },
-    { src: "/imgs/GALLERY5.jpg", thumb: "/imgs/GALLERY5-thumb.jpg", caption: "Photo 5" },
     { src: "/imgs/GALLERY6.jpg", thumb: "/imgs/GALLERY6-thumb.jpg", caption: "Photo 6" },
     { src: "/imgs/GALLERY7.jpg", thumb: "/imgs/GALLERY7-thumb.jpg", caption: "Photo 7" },
     { src: "/imgs/GALLERY8.jpg", thumb: "/imgs/GALLERY8-thumb.jpg", caption: "Photo 8" },
@@ -756,7 +755,7 @@ function Home({ theme }) {
       <ChatWidget />
       <section className="section reveal" id="about-sec">
         <div className="section-header">
-          <span className="section-label">Skills</span>
+          <span className="section-label">Tech Stacks</span>
           <div className="section-line" />
         </div>
       {skillGroups.map((group) => (
@@ -946,8 +945,8 @@ function Home({ theme }) {
         <div className="contact-card">
           <div className="form-row">
             <div className="field">
-              <label>Your name</label>
-              <input name="name" placeholder="Juan dela Cruz" value={form.name} onChange={onChange} />
+              <label>Name</label>
+              <input name="name" placeholder="YURI BIRKEN" value={form.name} onChange={onChange} />
             </div>
             <div className="field">
               <label>Email address</label>
@@ -956,7 +955,7 @@ function Home({ theme }) {
           </div>
           <div className="field" style={{ marginTop: 16 }}>
             <label>Message</label>
-            <textarea name="message" rows={5} placeholder="Tell me about your project or just say hi..." value={form.message} onChange={onChange} />
+            <textarea name="message" rows={5} placeholder="Message Me!" value={form.message} onChange={onChange} />
           </div>
           <div className="form-foot">
             <button className="btn-primary" onClick={onSubmit}>✉ Send Message</button>

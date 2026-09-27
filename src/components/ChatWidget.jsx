@@ -77,7 +77,7 @@ export default function ChatWidget() {
           <div className="chat-messages">
             {messages.length === 0 && !loading && (
               <div className="chat-empty-state">
-                <span className="chat-empty-emoji">👋</span>
+                <span className="chat-empty-emoji">...</span>
                 <p className="chat-empty-msg">Ask me anything!</p>
               </div>
             )}

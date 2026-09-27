@@ -99,9 +99,9 @@ const SOFTWARE = [
     {
     title: "To do List",
     description:
-      "I created simple to do list website for my self, To monitor my tasks in home and schools.",
-    tech: ["React.js", "JavaScript"],
-    imageSrc: "/imgs/todolist.jpg", 
+      "I created taskly-app including, notebook, music all in one for studying and peaceful while using it.",
+    tech: ["React.js", "Node.js"],
+    imageSrc: "/imgs/TASKLY.jpg", 
     repo: "https://todo-list-tawny-theta.vercel.app/",
     tag: "Web",
   },

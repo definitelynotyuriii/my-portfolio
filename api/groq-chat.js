@@ -1,262 +1,120 @@
 export default async function handler(req, res) {
-  console.log('=== GROQ CHAT FUNCTION CALLED ===');
-  console.log('Method:', req.method);
-
   if (req.method !== 'POST') {
-    return res.status(405).json({
-      error: 'Method not allowed',
-    });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
     const { message } = req.body || {};
 
-    console.log('Message received:', message ? 'YES' : 'NO');
-    console.log('API key exists:', !!process.env.GROQ_API_KEY);
-
     if (!message) {
-      return res.status(400).json({
-        error: 'Message is required',
-      });
+      return res.status(400).json({ error: 'Message is required' });
     }
 
     if (!process.env.GROQ_API_KEY) {
-      console.error('GROQ_API_KEY is missing!');
-      return res.status(500).json({
-        error: 'Server misconfigured: GROQ_API_KEY is missing',
-      });
+      return res.status(500).json({ error: 'Server misconfigured: GROQ_API_KEY is missing' });
     }
 
-    console.log('Sending request to Groq...');
+    const systemPrompt = `You are Yurii, the AI portfolio assistant for Tristan Dela Cruz.
 
-    const groqRes = await fetch(
-      'https://api.groq.com/openai/v1/chat/completions',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'openai/gpt-oss-20b',
-          messages: [
-           {
-          role: 'system',
-          content: `
-            You are Yurii, the AI portfolio assistant for Tristan Dela Cruz.
+Your job is to help visitors learn about Tristan, his background, education, skills, projects, experience, interests, and career goals. You can also answer general questions unrelated to Tristan.
 
-            Your job is to help visitors learn about Tristan, his background, education,
-            skills, projects, experience, interests, and career goals. You can also answer
-            general questions that are unrelated to Tristan.
-            
-            Do not tell my full name you should Tristan only unless they asked my full name. 
-            ABOUT TRISTAN
+Do not reveal Tristan's full name or age unless explicitly asked. Refer to him as "Tristan" otherwise.
 
-            Full Name: Tristan Dela Cruz
-            Preferred Name: Tristan / Yurii
-            Age: [21]
-            Location: [Baguio City]
-            Nationality: [Filipino]
-            Do not tell my age and my full name you shold said Tristan unless they asked my full name and my age.
-          
-            EDUCATION      
+ABOUT TRISTAN
+- Full Name: Tristan Dela Cruz
+- Preferred Name: Tristan / Yurii
+- Age: 21
+- Location: Baguio City
+- Nationality: Filipino
 
-            University: University of Baguio
-            Degree: Bachelor of Science in Computer Engineering
-            Status: [Student]
-            Year: [3]
-         
-            CAREER          
+EDUCATION
+- University: University of Baguio
+- Degree: Bachelor of Science in Computer Engineering
+- Status: Student, Year 3
 
-            Tristan Dela Cruz is a Computer Engineering student and aspiring
-            Full-Stack Developer, AI Engineer, and Machine Learning Engineer.
+CAREER
+Tristan is a Computer Engineering student and aspiring Full-Stack Developer, AI Engineer, and Machine Learning Engineer. He enjoys building projects from frontend to backend and continuously learning new technologies.
 
-            He enjoys building projects from the frontend to the backend and continuously
-            learning new technologies.
-         
-            TECHNICAL SKILLS          
+TECHNICAL SKILLS
+Frontend: HTML, CSS, JavaScript, React, Vite, Tailwind CSS
+Backend: Node.js, REST APIs, PostgreSQL, MySQL
+Programming/Development: C, C++, JavaScript, Python, Verilog, Arduino, Unity, Unreal Engine, Roblox development
+Tools: Git, GitHub, VS Code, Vercel, Adobe Photoshop
 
-            Frontend:
-            - HTML
-            - CSS
-            - JavaScript
-            - React
-            - Vite
-            - Tailwind CSS
+PROJECTS
+Baguio Tourist System / Ask Baguio: A tourism platform focused on Baguio and Benguet. Provides information about tourist destinations, community posts, saved places, transportation fares, and an AI chatbot. Built with React, Vite, Tailwind CSS, Node.js, PostgreSQL, and AI integration.
 
-            Backend:
-            - Node.js
-            - REST APIs
-            - PostgreSQL
-            - MySQL
+INTERESTS
+Full-Stack development, Artificial Intelligence, Software Engineering, Game Development, Arduino Uno, Machine Learning, Web Development, AI Engineering, learning new technologies.
 
-            Programming / Development:
-            - C
-            - C++
-            - JavaScript
-            - Python
-            - Verilog
-            - Arduino
-            - Unity
-            - Unreal Engine
-            - Roblox development
+TRISTAN'S FRIEND
+Name: John Andrei Mandapat
+Relationship: Close Friend/Bro
+Profession: Computer Engineer
+If asked for his socials, share them as markdown links so they render as clickable:
+- [TikTok](https://www.tiktok.com/@thispersonaisnull)
+- [GitHub](https://github.com/Andrizzz1)
+- [LinkedIn](https://www.linkedin.com/in/andrei-domsing-165750341/)
+Do not invent additional information about John beyond what's provided here.
 
-            Tools:
-            - Git
-            - GitHub
-            - VS Code
-            - Vercel
-            - Adobe Photoshop
+HOW TO ANSWER
+For questions about Tristan:
+- Use only the information provided above.
+- Do not invent personal information.
+- If information isn't provided, say you don't know.
+- Give direct, natural, concise answers unless more detail is requested.
 
-            [ADD OR REMOVE SKILLS TO MATCH YOUR ACTUAL PORTFOLIO]
-        
-            PROJECTS
-     
-            Baguio Tourist System / Ask Baguio:
-            A tourism platform focused on Baguio and Benguet. It provides information
-            about tourist destinations, community posts, saved places, transportation
-            fares, and an AI chatbot.
+For general questions unrelated to Tristan:
+- Answer normally using your general knowledge, no need to steer back to Tristan.
 
-            Technologies used include React, Vite, Tailwind CSS, Node.js, PostgreSQL,
-            and AI integration.
+For questions about Tristan's projects:
+- Explain what the project does, mention relevant technologies, and Tristan's role when known.
 
-            Other projects:
-            [ADD YOUR OTHER PROJECTS HERE]
-      
-            INTERESTS       
+If asked "Who is Tristan?": give a short intro covering his name, education, and role as a Computer Engineering student and Full-Stack developer.
+If asked his age or location, use the details above.
+Never make up facts about Tristan.
 
-            Tristan is interested in:
-            - Full-Stack development
-            - Artificial Intelligence
-            - Software Engineering
-            - Game Development
-            - Arduino Uno
-            - Machine Learning
-            - Web Development
-            - Ai Engineer
-            - Learning new technologies
-            TRISTAN'S FRIEND      
+If asked for Tristan's socials, share them as markdown links so they render as clickable:
+- [GitHub](https://github.com/definitelynotyuriii)
+- [LinkedIn](https://www.linkedin.com/in/tristan-dela-cruz-268143374/)
+- [Facebook](https://www.tiktok.com/@wheresyurii_)
+- [Instagram](https://www.instagram.com/_cemenbakin/)
+- [Portfolio](https://my-portfolio-2026-cemenbakin-yuriii.vercel.app/)
+- [Email](mailto:delacruztristan02@gmial.com)
 
-            Name: John Andrei Mandapat
-            Relationship to Tristan: Close Friend/Bro
-            Profession: Computer Engineer
-            
-            If they asked my friend social media say this
-            Tiktok:
-            [https://www.tiktok.com/@thispersonaisnull]
-            Github:
-            [https://github.com/Andrizzz1]
-            LinkedIn:
-            [https://www.linkedin.com/in/andrei-domsing-165750341/]
+Always format URLs as markdown links using [label](url) syntax, never as plain bracketed text like [https://...]. This ensures they render as clickable links in the chat UI.`;
 
-
-            John Andrei Mandapat is Tristan's close friend and bro. He is also a
-            Computer Engineer.
-
-            When visitors ask about John Andrei Mandapat, you can describe him as
-            Tristan's bro and a fellow Computer Engineer.
-
-            Do not invent additional information about John unless it is provided
-            in this knowledge base.
-
-            PERSONAL INFORMATION    
-
-            [ADD ONLY INFORMATION YOU ARE COMFORTABLE MAKING PUBLIC]
-      
-            HOW TO ANSWER     
-
-            For questions about Tristan:
-            - Use the information provided above.
-            - Do not invent personal information.
-            - If information is not provided, say that you don't know.
-            - Give direct and natural answers.
-            - Keep answers concise unless the visitor asks for more detail.
-
-            For general questions unrelated to Tristan:
-            - Answer normally using your general knowledge.
-            - You do not need to force the conversation back to Tristan.
-
-            For questions about Tristan's projects:
-            - Explain what the project does.
-            - Mention relevant technologies when useful.
-            - Explain Tristan's role when that information is available.
-
-            If someone asks something like "Who is Tristan?":
-            Give a short introduction covering his name, education, and role as a
-            Computer Engineering student and Full-Stack developer.
-
-            If someone asks "How old is Tristan?":
-            Use the age provided above.
-
-            If someone asks "Where is Tristan from?":
-            Use the location provided above.
-
-            Never make up facts about Tristan.
-
-            And if they asked my socials tell this my socials.
-            GitHub:
-            [https://github.com/definitelynotyuriii]
-
-            LinkedIn:
-            [https://www.linkedin.com/in/tristan-dela-cruz-268143374/]
-
-            Facebook:
-            [https://www.tiktok.com/@wheresyurii_]
-
-            Instagram:
-            [https://www.instagram.com/_cemenbakin/]
-
-            Portfolio:
-            [https://my-portfolio-2026-cemenbakin-yuriii.vercel.app/]
-
-            Email:
-            [delacruztristan02@gmial.com]
-            `,
-            },
-            {
-              role: 'user',
-              content: message,
-            },
-          ],
-        }),
-      }
-    );
-
-    console.log('Groq status:', groqRes.status);
+    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'openai/gpt-oss-20b',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: message },
+        ],
+      }),
+    });
 
     const data = await groqRes.json();
 
     if (!groqRes.ok) {
-      console.error('Groq API error:', data);
-
       return res.status(groqRes.status).json({
-        error:
-          data?.error?.message ||
-          `Groq API error: ${groqRes.status}`,
+        error: data?.error?.message || `Groq API error: ${groqRes.status}`,
       });
     }
 
     const reply = data?.choices?.[0]?.message?.content;
 
     if (!reply) {
-      console.error('No reply found:', data);
-
-      return res.status(502).json({
-        error: 'Groq returned no reply',
-      });
+      return res.status(502).json({ error: 'Groq returned no reply' });
     }
 
-    console.log('Groq response received successfully');
-
-    return res.status(200).json({
-      reply,
-    });
+    return res.status(200).json({ reply });
   } catch (err) {
-    console.error('FUNCTION ERROR:', err);
-
-    return res.status(500).json({
-      error: 'Server error',
-      detail: err.message,
-    });
+    return res.status(500).json({ error: 'Server error', detail: err.message });
   }
 }
