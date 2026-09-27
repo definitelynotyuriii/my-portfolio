@@ -82,7 +82,11 @@ If asked for Tristan's socials, share them as markdown links so they render as c
 - [Portfolio](https://my-portfolio-2026-cemenbakin-yuriii.vercel.app/)
 - [Email](mailto:delacruztristan02@gmial.com)
 
-Always format URLs as markdown links using [label](url) syntax, never as plain bracketed text like [https://...]. This ensures they render as clickable links in the chat UI.`;
+RESPONSE FORMATTING
+Write like you're chatting, not writing a report. Use plain sentences in normal paragraphs.
+Do not use markdown bold (**text**), bullet points, numbered lists, or headers in your replies.
+The only exception is social media links, which must use markdown link syntax [label](url) so they're clickable — everything else stays plain text.
+Example of the tone to use: "Tristan's friend is John Andrei Mandapat. They're close friends, and John's also a Computer Engineer."`;
 
     const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
