@@ -11,6 +11,8 @@ const TECH_LOGOS = {
   "C++": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg",
   "Python": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
   "Arduino": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg",
+  "Tailwind CSS": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
+  "Supabase": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg",
 };
 const TECH_EMOJIS = {
   "IC": "",
@@ -81,8 +83,8 @@ const SOFTWARE = [
   {
     title: "Portfolio Website",
     description:
-      "A clean, responsive personal portfolio built with React. Features smooth animations, dark theme, and a fully custom CSS design.",
-    tech: ["HTML", "CSS", "JavaScript", "React.js", "Node.js"],
+      "I created a personal portfolio using React.js, JavaScript, and Node.js to showcase my skills, projects, and experience as a developer. It features a clean, responsive design, smooth animations, a dark theme, and custom CSS styling, providing an interactive and professional experience across different devices.",
+    tech: ["React.js", "JavaScript", "Node.js"],
     imageSrc: "/imgs/my-portfolio.jpg", 
     repo: "https://my-portfolio-2026-cemenbakin-yuriii.vercel.app/",
     tag: "Web",
@@ -90,7 +92,7 @@ const SOFTWARE = [
   {
     title: "Baguio-Tourist-System",
     description:
-      "We built this website together with my collaborator to help users easily explore tourist spots in Baguio. It features an AI chatbot system that provides quick suggestions, travel information, and guidance. The platform makes discovering attractions simple, interactive, and convenient, giving users a smooth and enjoyable experience when planning their visit.",
+      "We build this website together with my collaborator to help users easily explore tourist spots in Baguio. It features an AI chatbot system that provides quick suggestions, travel information, and guidance. The platform makes discovering attractions simple, interactive, and convenient, giving users a smooth and enjoyable experience when planning their visit.",
     tech: ["React.js", "Tailwind.CSS", "JavaScript", "Node.js", "PostgreSQL"],
     imageSrc: "/imgs/logos.png", 
     repo: "https://baguio-tourist-system.vercel.app/",
@@ -99,13 +101,24 @@ const SOFTWARE = [
     {
     title: "To do List",
     description:
-      "I created taskly-app including, notebook, music all in one for studying and peaceful while using it.",
+      "I created Taskly, an all-in-one productivity app designed to make studying more organized, productive, and peaceful. It features a to-do list for managing tasks, a notebook for writing notes, and a music player for listening to relaxing music while studying, helping users stay focused, manage their time, and enjoy a better learning experience.",
     tech: ["React.js", "Node.js"],
     imageSrc: "/imgs/TASKLY.jpg", 
-    repo: "https://todo-list-tawny-theta.vercel.app/",
+    repo: "https://taskly-app-ashy.vercel.app/",
+    tag: "Web",
+  },
+      {
+    title: "Coramdeo-Church",
+    description:
+      "I created Coramdeo Christian Church website, a faith-centered website designed to share the Gospel, strengthen the church community, and help people build a deeper relationship with God. It features Home, About Us, Ministries, Give, and Contact sections, providing visitors with opportunities to grow in faith, connect with others, and participate in church activities.",
+    tech: ["React.js", "Tailwind.CSS", "Node.js", "Supabase",],
+    imageSrc: "/imgs/CORAMDEOCHURCH.jpg", 
+    repo: "https://taskly-app-ashy.vercel.app/",
     tag: "Web",
   },
 ];
+
+
 
 const HARDWARE = [
   {
