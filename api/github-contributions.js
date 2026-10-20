@@ -36,8 +36,10 @@ export default async function handler(req, res) {
 
     const json = await ghResponse.json();
 
-    if (json.errors) {
-      return res.status(500).json({ error: json.errors[0].message });
+    if (!ghResponse.ok || json.errors || !json.data || !json.data.user) {
+      return res.status(500).json({
+        error: json.message || json.errors?.[0]?.message || "GitHub API error",
+      });
     }
 
     const weeks = json.data.user.contributionsCollection.contributionCalendar.weeks;
